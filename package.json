@@ -8,6 +8,7 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "test": "jest --watchAll",
+    "format": "yarn prettier 'src/**/*.{ts,tsx,json}' --write",
     "lint": "eslint app"
   },
   "jest": {
