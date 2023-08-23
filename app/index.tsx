@@ -1,26 +1,46 @@
 import { Text, TextInput, TouchableOpacity, View } from 'react-native'
 import NotificationsIllustration from '../assets/vectors/illustration-push-notifications.svg'
 import { Link } from 'expo-router'
+import colors from 'tailwindcss/colors'
+import { useMaskedInput } from '../assets/hooks/useMaskedInput'
+import { EInputMasks } from '../models/constants/EInputMasks'
 
 export default function SignIn() {
+  const [phoneNumber, handlePhoneNumberChange, isPhoneNumberValid] = useMaskedInput(
+    EInputMasks.PHONE_NUMBER,
+  )
+
   return (
     <View className="flex-1 bg-white p-6">
-      <View className="w-fit items-center my-8">
+      <View className="my-8 w-fit items-center">
         <NotificationsIllustration height={112} />
       </View>
       <Text className="text-xl font-medium">Qual o número do seu celular?</Text>
       <Text className="text-base font-normal text-gray-500">Você receberá um código por SMS</Text>
-      <View className="my-6 h-12 px-3 rounded border border-gray-200 justify-center flex-row">
-        <Text className="self-center text-base text-gray-400 mr-2">+55</Text>
-        <TextInput
-          placeholder="(71) 90000-0000"
-          keyboardType="phone-pad"
-          className="flex-1 text-base"
-          style={{ lineHeight: 0 }} // TODO: Fix 'Text not centered when using text-base class
-        />
+      <View
+        data-test={isPhoneNumberValid}
+        className="my-6 h-12 flex-row justify-center rounded border border-gray-200 px-3"
+      >
+        <Text className="mr-2 self-center text-base text-gray-400" style={{ lineHeight: 20 }}>
+          +55
+        </Text>
+        <View style={{ flex: 1, justifyContent: 'center' }}>
+          <TextInput
+            value={phoneNumber}
+            onChangeText={handlePhoneNumberChange}
+            placeholder="(71) 90000-0000"
+            keyboardType="phone-pad"
+            className="flex-1"
+            placeholderTextColor={colors.gray[400]}
+            style={{ fontSize: 16 }} // TODO: Remove default lineHeight from tailwind so that `text-base` class can be used
+          />
+        </View>
       </View>
-      <TouchableOpacity className="h-12 rounded bg-blue-700 justify-center items-center">
-        <Link href="/otpConfirmation" className="text-white font-semibold text-base">
+      <TouchableOpacity
+        className="h-12 items-center justify-center rounded bg-blue-700"
+        disabled={!isPhoneNumberValid}
+      >
+        <Link href="/otpConfirmation" className="text-base font-semibold text-white">
           Receber SMS
         </Link>
       </TouchableOpacity>
