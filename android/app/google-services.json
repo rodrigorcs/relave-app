@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "146340825006",
+    "project_id": "lavei-firebase",
+    "storage_bucket": "lavei-firebase.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:146340825006:android:1f8e1da7496e9da4efea3f",
+        "android_client_info": {
+          "package_name": "com.rodrigorcs.laveiapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "146340825006-vp4jtnapaf24lasi3ucmhc7ujgemliiv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_V7JSN9QkcN4KPTE3viYqXBw4KyuK8_4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "146340825006-vp4jtnapaf24lasi3ucmhc7ujgemliiv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "146340825006-s8ja6h0nb4lucdl541otjn6f5nsmglnu.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.rodrigorcs.laveiapp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

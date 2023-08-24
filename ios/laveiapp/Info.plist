@@ -31,6 +31,12 @@
           <string>com.rodrigorcs.laveiapp</string>
         </array>
       </dict>
+      <dict>
+        <key>CFBundleURLSchemes</key>
+        <array>
+          <string>com.googleusercontent.apps.146340825006-s8ja6h0nb4lucdl541otjn6f5nsmglnu</string>
+        </array>
+      </dict>
     </array>
     <key>CFBundleVersion</key>
     <string>1</string>
