@@ -1,9 +1,9 @@
-import { Text, TextInput, TouchableOpacity, View } from 'react-native'
-import NotificationsIllustration from '../assets/vectors/illustration-push-notifications.svg'
-import { Link } from 'expo-router'
-import colors from 'tailwindcss/colors'
 import { useMaskedInput } from '../assets/hooks/useMaskedInput'
+import NotificationsIllustration from '../assets/vectors/illustration-push-notifications.svg'
 import { EInputMasks } from '../models/constants/EInputMasks'
+import { Link } from 'expo-router'
+import { Text, TextInput, TouchableOpacity, View } from 'react-native'
+import colors from 'tailwindcss/colors'
 
 export default function SignIn() {
   const [phoneNumber, handlePhoneNumberChange, isPhoneNumberValid] = useMaskedInput(

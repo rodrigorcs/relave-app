@@ -1,6 +1,6 @@
+import { Feather } from '@expo/vector-icons'
 import { Link } from 'expo-router'
 import { Text, View } from 'react-native'
-import { Feather } from '@expo/vector-icons'
 
 export default function OTPConfirmation() {
   return (
