@@ -2,6 +2,7 @@ import { useMaskedInput } from '../assets/hooks/useMaskedInput'
 import NotificationsIllustration from '../assets/vectors/illustration-push-notifications.svg'
 import { EInputMasks } from '../models/constants/EInputMasks'
 import { cn } from '../utils/cn'
+import auth from '@react-native-firebase/auth'
 import { router } from 'expo-router'
 import { useEffect, useState } from 'react'
 import { SafeAreaView, Text, TextInput, TouchableOpacity, View } from 'react-native'
@@ -13,9 +14,11 @@ export default function SignIn() {
   )
   const [showError, setShowError] = useState(false)
 
-  const handleReceiveOTP = () => {
+  const handleReceiveOTP = async () => {
     if (!isPhoneNumberValid) return setShowError(true)
-    router.push('/otpConfirmation')
+    const confirmation = await auth().signInWithPhoneNumber(`+55 ${phoneNumber}`)
+    console.log('confirmation', confirmation)
+    // router.push('/otpConfirmation')
   }
 
   useEffect(() => {
