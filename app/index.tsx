@@ -1,54 +1,31 @@
 import { useMaskedInput } from '../assets/hooks/useMaskedInput'
 import NotificationsIllustration from '../assets/vectors/illustration-push-notifications.svg'
 import { EInputMasks } from '../models/constants/EInputMasks'
+import { sendOTPToken } from '../state/slices/auth'
 import { cn } from '../utils/cn'
-import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth'
 import { router } from 'expo-router'
 import { useEffect, useState } from 'react'
 import { SafeAreaView, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { useDispatch } from 'react-redux'
 import colors from 'tailwindcss/colors'
 
 export default function SignIn() {
+  const dispach = useDispatch()
+
   const [phoneNumber, handlePhoneNumberChange, isPhoneNumberValid] = useMaskedInput(
     EInputMasks.PHONE_NUMBER,
   )
   const [showError, setShowError] = useState(false)
 
-  // If null, no SMS has been sent
-  const [confirm, setConfirm] = useState<FirebaseAuthTypes.ConfirmationResult | null>(null)
-
-  // Handle login
-  function onAuthStateChanged(user) {
-    if (user) {
-      // Some Android devices can automatically process the verification code (OTP) message, and the user would NOT need to enter the code.
-      // Actually, if he/she tries to enter it, he/she will get an error message because the code was already used in the background.
-      // In this function, make sure you hide the component(s) for entering the code and/or navigate away from this screen.
-      // It is also recommended to display a message to the user informing him/her that he/she has successfully logged in.
-    }
-  }
-
-  useEffect(() => {
-    const subscriber = auth().onAuthStateChanged(onAuthStateChanged)
-    return subscriber // unsubscribe on unmount
-  }, [])
-
-  async function signInWithPhoneNumber(phoneNumber: string) {
-    const confirmation = await auth().signInWithPhoneNumber(phoneNumber)
-    console.log('confirmation', confirmation)
-    setConfirm(confirmation)
-  }
-
-  const handleReceiveOTP = async () => {
-    if (!isPhoneNumberValid) return setShowError(true)
-    const phoneToSignIn = `+55 ${phoneNumber}`
-    console.log('phoneToSignIn', phoneToSignIn)
-    await signInWithPhoneNumber(phoneToSignIn)
-    // router.push('/otpConfirmation')
-  }
-
   useEffect(() => {
     setShowError(false)
   }, [phoneNumber])
+
+  const handleReceiveOTP = async () => {
+    if (!isPhoneNumberValid) return setShowError(true)
+    dispach(sendOTPToken(phoneNumber))
+    router.push('/otpConfirmation')
+  }
 
   return (
     <SafeAreaView className="flex flex-1 bg-white">

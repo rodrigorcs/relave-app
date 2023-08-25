@@ -1,14 +1,18 @@
 import MessagesIllustration from '../assets/vectors/illustration-messages.svg'
 import OTPInput from '../components/OTPInput'
+import { getOTPConfirmation } from '../state/slices/auth'
 import { cn } from '../utils/cn'
 import { useEffect, useState } from 'react'
 import { SafeAreaView, Text, TouchableOpacity, View } from 'react-native'
+import { useSelector } from 'react-redux'
 
 export default function OTPConfirmation() {
   const [otpCode, setOTPCode] = useState('')
   const [isPinReady, setIsPinReady] = useState(false)
   const maximumCodeLength = 4
   const [showError, setShowError] = useState(false)
+  const smsConfirmation = useSelector(getOTPConfirmation)
+  console.log('smsConfirmation', smsConfirmation)
 
   const handleConfirmOTP = () => {
     if (!isPinReady) return setShowError(true)
