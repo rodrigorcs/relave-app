@@ -7,7 +7,8 @@ const isLetter = (char: string) => LETTERS.test(char);
 const isNumber = (char: string) => NUMBERS.test(char);
 
 export const useMaskedInput = (maskPattern: string, initialValue = '') => {
-  const [value, setValue] = useState(initialValue);
+  const [maskedValue, setMaskedValue] = useState(initialValue);
+  const [unmaskedValue, setUnmaskedValue] = useState(initialValue);
   const [isValid, setIsValid] = useState(false);
 
   const checkValidity = (maskedValue: string, pattern: string) => {
@@ -51,11 +52,17 @@ export const useMaskedInput = (maskPattern: string, initialValue = '') => {
     return maskedValue;
   };
 
+  const removeMask = (inputValue: string) => {
+    return inputValue.split('').filter(char => isLetter(char) || isNumber(char)).join('');
+  };
+
   const handleInputChange = (text: string) => {
     const maskedInput = applyMask(text, maskPattern);
-    setValue(maskedInput);
+    const unmaskedInput = removeMask(text)
+    setMaskedValue(maskedInput);
+    setUnmaskedValue(unmaskedInput);
     setIsValid(checkValidity(maskedInput, maskPattern));
   };
 
-  return [value, handleInputChange, isValid] as const
+  return [maskedValue, unmaskedValue, handleInputChange, isValid] as const
 };

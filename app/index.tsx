@@ -1,5 +1,5 @@
-import { useMaskedInput } from '../assets/hooks/useMaskedInput'
 import NotificationsIllustration from '../assets/vectors/illustration-push-notifications.svg'
+import { useMaskedInput } from '../hooks/useMaskedInput'
 import { EInputMasks } from '../models/constants/EInputMasks'
 import { sendOTPToken } from '../state/slices/auth'
 import { cn } from '../utils/cn'
@@ -7,23 +7,23 @@ import { router } from 'expo-router'
 import { useEffect, useState } from 'react'
 import { SafeAreaView, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { useDispatch } from 'react-redux'
+import { AnyAction } from 'redux'
 import colors from 'tailwindcss/colors'
 
 export default function SignIn() {
   const dispach = useDispatch()
 
-  const [phoneNumber, handlePhoneNumberChange, isPhoneNumberValid] = useMaskedInput(
-    EInputMasks.PHONE_NUMBER,
-  )
+  const [maskedPhoneNumber, unmaskedPhoneNumber, handlePhoneNumberChange, isPhoneNumberValid] =
+    useMaskedInput(EInputMasks.PHONE_NUMBER)
   const [showError, setShowError] = useState(false)
 
   useEffect(() => {
     setShowError(false)
-  }, [phoneNumber])
+  }, [unmaskedPhoneNumber])
 
   const handleReceiveOTP = async () => {
     if (!isPhoneNumberValid) return setShowError(true)
-    dispach(sendOTPToken(phoneNumber))
+    dispach(sendOTPToken(unmaskedPhoneNumber) as unknown as AnyAction)
     router.push('/otpConfirmation')
   }
 
@@ -47,7 +47,7 @@ export default function SignIn() {
             </Text>
             <View style={{ flex: 1 }}>
               <TextInput
-                value={phoneNumber}
+                value={maskedPhoneNumber}
                 onChangeText={handlePhoneNumberChange}
                 placeholder="(71) 90000-0000"
                 keyboardType="phone-pad"

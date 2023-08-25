@@ -15,7 +15,7 @@ interface ISingleDigitProps {
 const SingleDigit: FC<ISingleDigitProps> = ({ digit, isFocused, customClassName }) => (
   <View
     className={cn(
-      'h-12 justify-center items-center rounded border bg-white border-gray-200 w-12 shadow-md',
+      'h-12 justify-center items-center rounded border bg-white border-gray-200 w-11 shadow shadow-gray-200',
       isFocused && 'border-gray-300',
       customClassName,
     )}
@@ -28,7 +28,7 @@ interface IOTPInputProps {
   code: string
   setCode: (code: string) => void
   maximumLength: number
-  setIsPinReady: (isReady: boolean) => void
+  setIsCodeReady: (isReady: boolean) => void
   customClassName?: ClassNameValue
   showError?: boolean
 }
@@ -37,7 +37,7 @@ const OTPInput: FC<IOTPInputProps> = ({
   code,
   setCode,
   maximumLength,
-  setIsPinReady,
+  setIsCodeReady,
   customClassName,
   showError,
 }) => {
@@ -51,16 +51,13 @@ const OTPInput: FC<IOTPInputProps> = ({
     inputRef?.current?.focus()
   }
 
-  useEffect(() => {
-    setIsPinReady(code.length === maximumLength)
-    return () => setIsPinReady(false)
-  }, [code])
-
   const handleTextChange = (newCode: string) => {
     const action = determineAction(code, newCode)
     if (action === 'add') {
+      setIsCodeReady(newCode.length === maximumLength)
       setCurrentIndex((prevIndex) => Math.min(prevIndex + 1, maximumLength - 1))
     } else if (action === 'delete') {
+      setIsCodeReady(false)
       setCurrentIndex((prevIndex) => Math.max(prevIndex - 1, 0))
     }
     setCode(newCode)
@@ -79,7 +76,7 @@ const OTPInput: FC<IOTPInputProps> = ({
               digit={digit}
               isFocused={isValueFocused}
               customClassName={cn(
-                index < maximumLength - 1 && 'mr-3',
+                index < maximumLength - 1 && 'mr-2',
                 showError && 'border-red-500',
               )}
             />
