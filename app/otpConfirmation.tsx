@@ -24,7 +24,7 @@ export default function OTPConfirmation() {
   }, [isTokenReady])
 
   return (
-    <SafeAreaView className="flex flex-1 bg-white">
+    <SafeAreaView className="flex flex-1 bg-defaultBackground">
       <View className="flex-1 px-6 py-2">
         <View className="my-8 w-fit items-center">
           <MessagesIllustration height={112} pointerEvents="none" />

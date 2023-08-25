@@ -1,5 +1,5 @@
 import { cn } from '../utils/cn'
-import React, { useRef, useState, useEffect, FC } from 'react'
+import React, { useRef, useState, FC } from 'react'
 import { Pressable, Text, TextInput, View } from 'react-native'
 import { ClassNameValue } from 'tailwind-merge'
 
@@ -15,7 +15,7 @@ interface ISingleDigitProps {
 const SingleDigit: FC<ISingleDigitProps> = ({ digit, isFocused, customClassName }) => (
   <View
     className={cn(
-      'h-12 justify-center items-center rounded border bg-white border-gray-200 w-11 shadow shadow-gray-200',
+      'h-12 justify-center items-center rounded border bg-white border-gray-200 w-11 shadow',
       isFocused && 'border-gray-300',
       customClassName,
     )}
