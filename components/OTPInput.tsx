@@ -15,8 +15,8 @@ interface ISingleDigitProps {
 const SingleDigit: FC<ISingleDigitProps> = ({ digit, isFocused, customClassName }) => (
   <View
     className={cn(
-      'h-12 justify-center items-center rounded border bg-white border-gray-200 w-11 shadow',
-      isFocused && 'border-gray-300',
+      'h-12 justify-center items-center rounded border bg-neutrals-white border-neutrals-200 w-11 shadow',
+      isFocused && 'border-neutrals-300',
       customClassName,
     )}
   >
@@ -33,6 +33,7 @@ interface IOTPInputProps {
   showError?: boolean
 }
 
+// TODO: [FIX] When backspacing the parenthesis+space, it doesn't allow to delete the parenthesis
 const OTPInput: FC<IOTPInputProps> = ({
   code,
   setCode,
@@ -64,7 +65,7 @@ const OTPInput: FC<IOTPInputProps> = ({
   }
 
   return (
-    <View className={cn('self-center text-base text-gray-400', customClassName)}>
+    <View className={cn('self-center text-base text-neutrals-400', customClassName)}>
       <Pressable onPress={handleOnPress} className="flex-row justify-between">
         {singleDigitsArray.map((_, index) => {
           const digit = code[index] || ''
@@ -77,7 +78,7 @@ const OTPInput: FC<IOTPInputProps> = ({
               isFocused={isValueFocused}
               customClassName={cn(
                 index < maximumLength - 1 && 'mr-2',
-                showError && 'border-red-500',
+                showError && 'border-feedback-negative-300',
               )}
             />
           )

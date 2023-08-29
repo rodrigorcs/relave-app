@@ -6,6 +6,7 @@
     "start": "expo start",
     "android": "expo run:android",
     "ios": "expo run:ios",
+    "ios:clear": "rm -rf node_modules && yarn cache clean && yarn && rm -rf $TMPDIR/metro-cache && yarn ios",
     "web": "expo start --web",
     "test": "jest --watchAll",
     "format": "yarn prettier 'src/**/*.{ts,tsx,json}' --write",
