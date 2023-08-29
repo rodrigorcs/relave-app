@@ -1,5 +1,5 @@
 import { Unmatched, router, useGlobalSearchParams } from 'expo-router'
-import { useEffect } from 'react'
+import React, { useEffect } from 'react'
 
 const UnmatchedRoute = () => {
   const param = useGlobalSearchParams()
