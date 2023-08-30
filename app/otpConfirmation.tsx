@@ -1,17 +1,22 @@
 import MessagesIllustration from '../assets/vectors/illustration-messages.svg'
 import OTPInput from '../components/OTPInput'
-import { confirmOTPToken } from '../state/slices/auth'
+import { confirmOTPToken, getCurrentUser } from '../state/slices/auth'
+import { IAppState } from '../state/store'
 import { cn } from '../utils/cn'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView, Text, TouchableOpacity, View } from 'react-native'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { AnyAction } from 'redux'
 
 export default function OTPConfirmation() {
+  const dispatch = useDispatch()
+  const currentUser = useSelector(({ auth }: IAppState) => getCurrentUser(auth))
+
   const [otpToken, setOTPToken] = useState('')
   const [isTokenReady, setIsTokenReady] = useState(false)
   const [showError, setShowError] = useState(false)
-  const dispatch = useDispatch()
+
+  console.log('user in otpConfirmation', currentUser)
 
   const handleConfirmOTP = () => {
     if (!isTokenReady) return setShowError(true)

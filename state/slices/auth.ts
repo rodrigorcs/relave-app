@@ -1,9 +1,10 @@
 import { FirebaseAuthTypes } from '@react-native-firebase/auth';
-import { Dispatch, PayloadAction, createSlice } from '@reduxjs/toolkit'
+import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import auth from '@react-native-firebase/auth'
+import { IUser } from '../../models/contracts/user';
 
 interface IAuthState {
-  credentials: FirebaseAuthTypes.UserCredential | null
+  credentials: IUser | null
 }
 
 const initialState: IAuthState = {
@@ -14,7 +15,7 @@ export const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    storeCredentials: (state, action: PayloadAction<FirebaseAuthTypes.UserCredential>) => {
+    storeCredentials: (state, action: PayloadAction<IUser>) => {
       state.credentials = action.payload
     },
   },
@@ -30,11 +31,17 @@ export const sendOTPToken = (phoneNumber: string) => async () => {
   smsConfirmationObj = confirmation
 }
 
-export const confirmOTPToken = (code: string) => async (dispatch: Dispatch) => {
-  if (smsConfirmationObj === null) return console.error('No confirmation from OTP token sent')
-  const credentials = await smsConfirmationObj.confirm(code)
-  console.log('credentials', credentials)
-  if (credentials) dispatch(storeCredentials(credentials))
+export const confirmOTPToken = (code: string) => async () => {
+  try {
+    await smsConfirmationObj?.confirm(code)
+  } catch (error) {
+    // TODO: Add error handling
+    console.error(error)
+  }
 }
+
+export const logout = () => { }
+
+export const getCurrentUser = (state: IAuthState) => state.credentials
 
 export const authReducer = authSlice.reducer
