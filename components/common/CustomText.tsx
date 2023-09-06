@@ -4,7 +4,9 @@ import { Text } from 'react-native'
 
 export enum ECustomTextVariants {
   HEADING1 = 'text-xl font-medium text-neutrals-800',
-  SUBTITLE = 'text-base font-normal text-neutrals-500',
+  SUBTITLE1 = 'text-base font-normal text-neutrals-500',
+  SUBTITLE2 = 'text-xs font-normal text-neutrals-500',
+  SUBTITLE2_ACTION = 'text-xs underline text-brand-700',
 }
 
 interface ICustomTextProps {

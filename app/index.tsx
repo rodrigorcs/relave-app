@@ -14,14 +14,14 @@ export default function SignIn() {
 
   const [maskedPhoneNumber, unmaskedPhoneNumber, handlePhoneNumberChange, isPhoneNumberValid] =
     useMaskedInput(EInputMasks.PHONE_NUMBER)
-  const [showError, setShowError] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    setShowError(false)
+    setError(null)
   }, [unmaskedPhoneNumber])
 
   const handleReceiveOTP = async () => {
-    if (!isPhoneNumberValid) return setShowError(true)
+    if (!isPhoneNumberValid) return setError('Número invalido, verifique.')
     dispach(sendOTPToken(unmaskedPhoneNumber) as unknown as AnyAction)
     router.push('/otpConfirmation')
   }
@@ -35,13 +35,16 @@ export default function SignIn() {
         <CustomText variant={ECustomTextVariants.HEADING1}>
           Qual o número do seu celular?
         </CustomText>
-        <CustomText variant={ECustomTextVariants.SUBTITLE}>
+        <CustomText variant={ECustomTextVariants.SUBTITLE1}>
           Você receberá um código por SMS
         </CustomText>
         <CustomInput
-          hasError={showError}
-          maskedPhoneNumber={maskedPhoneNumber}
-          handlePhoneNumberChange={handlePhoneNumberChange}
+          error={error}
+          value={maskedPhoneNumber}
+          handleValueChange={handlePhoneNumberChange}
+          placeholder="(71) 90000-0000"
+          keyboardType="phone-pad"
+          prefix="+55"
         />
         <CustomButton isDisabled={!isPhoneNumberValid} onPress={handleReceiveOTP}>
           Receber SMS
