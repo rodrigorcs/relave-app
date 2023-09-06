@@ -1,4 +1,4 @@
-import { cn } from '../utils/cn'
+import { cn } from '../../utils/cn'
 import React, { useRef, useState, FC } from 'react'
 import { Pressable, Text, TextInput, View } from 'react-native'
 import { ClassNameValue } from 'tailwind-merge'
@@ -34,7 +34,7 @@ interface IOTPInputProps {
 }
 
 // TODO: [FIX] When backspacing the parenthesis+space, it doesn't allow to delete the parenthesis
-const OTPInput: FC<IOTPInputProps> = ({
+export const OTPInput: FC<IOTPInputProps> = ({
   code,
   setCode,
   maximumLength,
@@ -95,5 +95,3 @@ const OTPInput: FC<IOTPInputProps> = ({
     </View>
   )
 }
-
-export default OTPInput

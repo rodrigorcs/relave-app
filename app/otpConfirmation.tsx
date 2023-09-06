@@ -1,5 +1,5 @@
 import MessagesIllustration from '../assets/vectors/illustration-messages.svg'
-import OTPInput from '../components/OTPInput'
+import { OTPInput } from '../components/otpConfirmation'
 import { confirmOTPToken, getCurrentUser } from '../state/slices/auth'
 import { IAppState } from '../state/store'
 import { cn } from '../utils/cn'

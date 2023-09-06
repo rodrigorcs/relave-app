@@ -1,12 +1,11 @@
 import NotificationsIllustration from '../assets/vectors/illustration-push-notifications.svg'
+import { CustomButton, CustomInput, CustomText, ECustomTextVariants } from '../components/common'
 import { useMaskedInput } from '../hooks/useMaskedInput'
 import { EInputMasks } from '../models/constants/EInputMasks'
 import { sendOTPToken } from '../state/slices/auth'
-import { theme } from '../theme'
-import { cn } from '../utils/cn'
 import { router } from 'expo-router'
 import React, { useEffect, useState } from 'react'
-import { SafeAreaView, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { SafeAreaView, View } from 'react-native'
 import { useDispatch } from 'react-redux'
 import { AnyAction } from 'redux'
 
@@ -33,51 +32,20 @@ export default function SignIn() {
         <View className="my-8 w-fit items-center">
           <NotificationsIllustration height={112} pointerEvents="none" />
         </View>
-        <Text className="text-xl font-medium text-neutrals-800">Qual o número do seu celular?</Text>
-        <Text className="text-base font-normal text-neutrals-500">
+        <CustomText variant={ECustomTextVariants.HEADING1}>
+          Qual o número do seu celular?
+        </CustomText>
+        <CustomText variant={ECustomTextVariants.SUBTITLE}>
           Você receberá um código por SMS
-        </Text>
-        <View>
-          <View
-            className={cn(
-              'mt-6 h-12 flex-row justify-center rounded border border-neutrals-200 px-3',
-              showError && 'border-feedback-negative-300',
-            )}
-          >
-            <Text
-              className="mr-2 self-center text-base text-neutrals-400"
-              style={{ lineHeight: 20 }}
-            >
-              +55
-            </Text>
-            <View style={{ flex: 1 }}>
-              <TextInput
-                value={maskedPhoneNumber}
-                onChangeText={handlePhoneNumberChange}
-                placeholder="(71) 90000-0000"
-                keyboardType="phone-pad"
-                className="flex-1"
-                placeholderTextColor={theme.colors['neutrals-400']}
-                style={{ fontSize: 16 }} // TODO: Remove default lineHeight from tailwind so that `text-base` class can be used
-              />
-            </View>
-          </View>
-          {showError && (
-            <Text className="mt-1 text-xs font-normal text-feedback-negative-300">
-              Número invalido, verifique.
-            </Text>
-          )}
-        </View>
-        <TouchableOpacity
-          className={cn(
-            'mt-6 h-12 items-center justify-center rounded bg-brand-500',
-            !isPhoneNumberValid && 'bg-brand-300',
-          )}
-          onPress={handleReceiveOTP}
-          activeOpacity={!isPhoneNumberValid ? 1 : 0.2}
-        >
-          <Text className="text-base font-semibold text-neutrals-white">Receber SMS</Text>
-        </TouchableOpacity>
+        </CustomText>
+        <CustomInput
+          hasError={showError}
+          maskedPhoneNumber={maskedPhoneNumber}
+          handlePhoneNumberChange={handlePhoneNumberChange}
+        />
+        <CustomButton isDisabled={!isPhoneNumberValid} onPress={handleReceiveOTP}>
+          Receber SMS
+        </CustomButton>
       </View>
     </SafeAreaView>
   )
