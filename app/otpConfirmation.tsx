@@ -1,14 +1,17 @@
 import MessagesIllustration from '../assets/vectors/illustration-messages.svg'
 import { CustomButton, CustomText, ECustomTextVariants } from '../components/common'
 import { OTPInput } from '../components/otpConfirmation'
-import { confirmOTPToken } from '../state/slices/auth'
+import { confirmOTPToken, getIsUserSignedIn } from '../state/slices/auth'
+import { IAppState } from '../state/store'
+import { router } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView, Text, View } from 'react-native'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { AnyAction } from 'redux'
 
 export default function OTPConfirmation() {
   const dispatch = useDispatch()
+  const isUserSignedIn = useSelector(({ auth }: IAppState) => getIsUserSignedIn(auth))
 
   const [otpToken, setOTPToken] = useState('')
   const [isTokenReady, setIsTokenReady] = useState(false)
@@ -20,13 +23,17 @@ export default function OTPConfirmation() {
   }
 
   useEffect(() => {
+    setShowError(false)
+  }, [otpToken])
+
+  useEffect(() => {
     handleConfirmOTP()
     setShowError(false)
   }, [isTokenReady])
 
   useEffect(() => {
-    setShowError(false)
-  }, [otpToken])
+    if (isUserSignedIn) router.push('/home')
+  }, [isUserSignedIn])
 
   return (
     <SafeAreaView className="flex flex-1 bg-common-background">

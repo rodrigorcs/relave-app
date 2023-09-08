@@ -2,7 +2,7 @@ import NotificationsIllustration from '../assets/vectors/illustration-push-notif
 import { CustomButton, CustomInput, CustomText, ECustomTextVariants } from '../components/common'
 import { useMaskedInput } from '../hooks/useMaskedInput'
 import { EInputMasks } from '../models/constants/EInputMasks'
-import { sendOTPToken } from '../state/slices/auth'
+import { sendOTPToken, signOut } from '../state/slices/auth'
 import { router } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView, View } from 'react-native'
@@ -10,7 +10,7 @@ import { useDispatch } from 'react-redux'
 import { AnyAction } from 'redux'
 
 export default function SignIn() {
-  const dispach = useDispatch()
+  const dispatch = useDispatch()
 
   const [maskedPhoneNumber, unmaskedPhoneNumber, handlePhoneNumberChange, isPhoneNumberValid] =
     useMaskedInput(EInputMasks.PHONE_NUMBER)
@@ -22,7 +22,7 @@ export default function SignIn() {
 
   const handleReceiveOTP = async () => {
     if (!isPhoneNumberValid) return setError('Número invalido, verifique.')
-    dispach(sendOTPToken(unmaskedPhoneNumber) as unknown as AnyAction)
+    dispatch(sendOTPToken(unmaskedPhoneNumber) as unknown as AnyAction)
     router.push('/otpConfirmation')
   }
 
@@ -49,6 +49,7 @@ export default function SignIn() {
         <CustomButton isDisabled={!isPhoneNumberValid} onPress={handleReceiveOTP}>
           Receber SMS
         </CustomButton>
+        <CustomButton onPress={() => dispatch(signOut as unknown as AnyAction)}>Sair</CustomButton>
       </View>
     </SafeAreaView>
   )

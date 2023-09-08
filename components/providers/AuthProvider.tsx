@@ -1,4 +1,4 @@
-import { storeCredentials, logout } from '../../state/slices/auth'
+import { storeCredentials, clearCredentials } from '../../state/slices/auth'
 import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth'
 import React, { FC, ReactNode, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
@@ -12,7 +12,7 @@ export const AuthProvider: FC<IProps> = ({ children }) => {
   const dispatch = useDispatch()
 
   function onAuthStateChanged(user: FirebaseAuthTypes.User | null) {
-    if (!user) return dispatch(logout() as unknown as AnyAction)
+    if (!user) return dispatch(clearCredentials() as unknown as AnyAction)
 
     dispatch(
       storeCredentials({

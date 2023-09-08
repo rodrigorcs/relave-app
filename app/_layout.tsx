@@ -9,9 +9,10 @@ export default function Layout() {
   return (
     <ReduxProvider store={store}>
       <AuthProvider>
-        <Stack screenOptions={{ headerTitle: '', headerShadowVisible: false }}>
-          <Stack.Screen name="index" />
-          <Stack.Screen name="otpConfirmation" />
+        <Stack>
+          <Stack.Screen name="index" options={{ title: 'Cadastro' }} />
+          <Stack.Screen name="otpConfirmation" options={{ title: 'Confirmação' }} />
+          <Stack.Screen name="home" options={{ title: 'Lavei' }} />
         </Stack>
       </AuthProvider>
     </ReduxProvider>

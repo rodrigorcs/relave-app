@@ -3,7 +3,7 @@ import React, { FC, ReactNode } from 'react'
 import { TouchableOpacity, Text } from 'react-native'
 
 interface IProps {
-  isDisabled: boolean
+  isDisabled?: boolean
   onPress: () => void
   children: ReactNode
 }

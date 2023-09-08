@@ -5,10 +5,12 @@ import { IUser } from '../../models/contracts/user';
 
 interface IAuthState {
   credentials: IUser | null
+  isUserSignedIn: boolean
 }
 
 const initialState: IAuthState = {
   credentials: null,
+  isUserSignedIn: false
 }
 
 export const authSlice = createSlice({
@@ -17,11 +19,16 @@ export const authSlice = createSlice({
   reducers: {
     storeCredentials: (state, action: PayloadAction<IUser>) => {
       state.credentials = action.payload
+      state.isUserSignedIn = !!action.payload.id
+    },
+    clearCredentials: (state) => {
+      state.credentials = null
+      state.isUserSignedIn = false
     },
   },
 })
 
-export const { storeCredentials } = authSlice.actions
+export const { storeCredentials, clearCredentials } = authSlice.actions
 
 let smsConfirmationObj: FirebaseAuthTypes.ConfirmationResult | null = null; // TODO: Alternative - Can't put into slice as it's not serializable
 
@@ -40,8 +47,9 @@ export const confirmOTPToken = (code: string) => async () => {
   }
 }
 
-export const logout = () => { }
+export const signOut = () => auth().signOut()
 
 export const getCurrentUser = (state: IAuthState) => state.credentials
+export const getIsUserSignedIn = (state: IAuthState) => state.isUserSignedIn
 
 export const authReducer = authSlice.reducer
