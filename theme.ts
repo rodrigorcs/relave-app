@@ -1,5 +1,5 @@
 // TODO: Remove duplicate theme declaration, use tailwind.config.js instead
-import { white, black, gray } from 'tailwindcss/colors'
+import { white, black } from 'tailwindcss/colors'
 
 export const theme = {
   colors: {
@@ -17,18 +17,22 @@ export const theme = {
     'feedback-negative-300': '#CC153F',
     'feedback-negative-100': '#FFE0E8',
 
+    'feedback-info-500': '#004C52',
+    'feedback-info-300': '#138991',
+    'feedback-info-100': '#E0FDFF',
+
     'neutrals-900': '#171B21',
     'neutrals-800': '#2B2F36',
     'neutrals-700': '#43464D',
     'neutrals-600': '#5C6069',
     'neutrals-500': '#6C717A',
     'neutrals-400': '#A0A4AD',
-    'neutrals-300': gray[300],
-    'neutrals-200': gray[200],
-    'neutrals-100': gray[100],
+    'neutrals-300': '#C1C4C9',
+    'neutrals-200': '#D7DBE0',
+    'neutrals-100': '#F0F1F5',
     'neutrals-white': white,
     'neutrals-black': black,
 
-    'common-background': '#FCFDFF',
+    'common-background': white,
   },
 } as const

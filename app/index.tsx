@@ -49,11 +49,22 @@ export default function SignIn() {
           keyboardType="phone-pad"
           prefix="+55"
         />
-        <CustomButton isDisabled={!isPhoneNumberValid} onPress={handleReceiveOTP}>
+        <CustomButton
+          isDisabled={!isPhoneNumberValid}
+          onPress={handleReceiveOTP}
+          customClassName="mt-6"
+        >
           Receber SMS
         </CustomButton>
-        <CustomButton onPress={() => dispatch(signOut as unknown as AnyAction)}>Sair</CustomButton>
-        <CustomButton onPress={() => router.push('/home')}>Ir para Home</CustomButton>
+        <CustomButton
+          onPress={() => dispatch(signOut as unknown as AnyAction)}
+          customClassName="mt-6"
+        >
+          Sair
+        </CustomButton>
+        <CustomButton onPress={() => router.push('/home')} customClassName="mt-2">
+          Ir para Home
+        </CustomButton>
       </View>
     </SafeAreaView>
   )

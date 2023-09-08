@@ -5059,6 +5059,11 @@ hyphenate-style-name@^1.0.3:
   resolved "https://registry.npmjs.org/hyphenate-style-name/-/hyphenate-style-name-1.0.4.tgz"
   integrity sha512-ygGZLjmXfPHj+ZWh6LwbC37l43MhfztxetbFCoYTM2VjkIUpeHgSNn7QIyVFj7YQ1Wl9Cbw5sholVJPzWvC2MQ==
 
+iconoir-react-native@^6.11.0:
+  version "6.11.0"
+  resolved "https://registry.yarnpkg.com/iconoir-react-native/-/iconoir-react-native-6.11.0.tgz#edd50d2ca2570dd5f4cad1e2aa376f0284a7e3be"
+  integrity sha512-YV2GwudmlBUpUa1US+t8H//QlsHLMDTpspr9U8tgzAl6BFmqmNlgsrzJQ3K4cByHeLGkAxcxeMPoTJmWpK5FdA==
+
 iconv-lite@0.4.24:
   version "0.4.24"
   resolved "https://registry.npmjs.org/iconv-lite/-/iconv-lite-0.4.24.tgz"

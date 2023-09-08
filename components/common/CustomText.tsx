@@ -36,8 +36,11 @@ interface ICustomTextProps {
   children: ReactNode
   variant: ECustomTextVariants
   customClassName?: ClassNameValue
+  white?: boolean
 }
 
-export const CustomText: FC<ICustomTextProps> = ({ children, variant, customClassName }) => {
-  return <Text className={cn(variant, customClassName)}>{children}</Text>
+export const CustomText: FC<ICustomTextProps> = ({ children, variant, customClassName, white }) => {
+  return (
+    <Text className={cn(variant, customClassName, white && 'text-neutrals-white')}>{children}</Text>
+  )
 }
