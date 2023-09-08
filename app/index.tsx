@@ -32,10 +32,13 @@ export default function SignIn() {
         <View className="my-8 w-fit items-center">
           <NotificationsIllustration height={112} pointerEvents="none" />
         </View>
-        <CustomText variant={ECustomTextVariants.HEADING1}>
+        <CustomText variant={ECustomTextVariants.HEADING3}>
           Qual o número do seu celular?
         </CustomText>
-        <CustomText variant={ECustomTextVariants.SUBTITLE1}>
+        <CustomText
+          variant={ECustomTextVariants.SUBHEADING2}
+          customClassName="font-normal text-neutrals-500"
+        >
           Você receberá um código por SMS
         </CustomText>
         <CustomInput
@@ -50,6 +53,7 @@ export default function SignIn() {
           Receber SMS
         </CustomButton>
         <CustomButton onPress={() => dispatch(signOut as unknown as AnyAction)}>Sair</CustomButton>
+        <CustomButton onPress={() => router.push('/home')}>Ir para Home</CustomButton>
       </View>
     </SafeAreaView>
   )
