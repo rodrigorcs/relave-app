@@ -12,7 +12,7 @@ export default function Layout() {
         <Stack>
           <Stack.Screen name="index" options={{ title: 'Cadastro' }} />
           <Stack.Screen name="otpConfirmation" options={{ title: 'Confirmação' }} />
-          <Stack.Screen name="home" options={{ title: 'Lavei' }} />
+          <Stack.Screen name="home" options={{ title: 'Lavei', headerBackVisible: false }} />
         </Stack>
       </AuthProvider>
     </ReduxProvider>

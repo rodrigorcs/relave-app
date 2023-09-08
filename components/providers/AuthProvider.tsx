@@ -36,5 +36,9 @@ export const AuthProvider: FC<IProps> = ({ children }) => {
     return subscriber
   }, [])
 
+  useEffect(() => {
+    auth().setLanguageCode('pt')
+  }, [])
+
   return <>{children}</>
 }
