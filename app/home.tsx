@@ -8,6 +8,7 @@ import { theme } from '../theme'
 import { cn } from '../utils/cn'
 import {
   ArrowRight as ArrowRightIcon,
+  Plus as PlusIcon,
   Check as CheckIcon,
   Flash as FlashIcon,
   DropletHalf as DropletIcon,
@@ -79,7 +80,6 @@ export default function Home() {
                     'h-32 w-32 bg-neutrals-100 rounded-2xl items-center justify-center',
                     index > 0 && 'ml-2',
                     index === 0 && 'ml-4',
-                    index === vehicles.length - 1 && 'mr-4',
                   )}
                 >
                   <CustomText variant={ECustomTextVariants.EYEBROW2}>{vehicle.brand}</CustomText>
@@ -87,6 +87,16 @@ export default function Home() {
                 </View>
               )
             })}
+            <View
+              className={cn(
+                'h-32 w-32 bg-neutrals-100 rounded-2xl items-center justify-center ml-2 mr-4',
+              )}
+            >
+              <PlusIcon color={theme.colors['neutrals-800']} width={24} height={24} />
+              <CustomText variant={ECustomTextVariants.BODY3} customClassName="mt-2 text-center">
+                {`Adicionar\ncarro`}
+              </CustomText>
+            </View>
           </ScrollView>
         </View>
         <View className="flex-1 py-8 bg-brand-500">
