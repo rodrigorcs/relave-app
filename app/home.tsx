@@ -16,6 +16,7 @@ import {
   Spark as SparkIcon,
 } from 'iconoir-react-native'
 import React from 'react'
+import { Image } from 'react-native'
 import { SafeAreaView, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 
@@ -29,14 +30,17 @@ const vehicles = [
   {
     brand: 'BMW',
     model: '530i',
+    logo: require('../assets/images/vehicleBrands/bmw.png'),
   },
   {
     brand: 'Mercedes',
     model: 'CLS 450',
+    logo: require('../assets/images/vehicleBrands/mercedes_benz.png'),
   },
   {
     brand: 'Tesla',
     model: 'Model S',
+    logo: require('../assets/images/vehicleBrands/tesla.png'),
   },
 ]
 
@@ -82,6 +86,7 @@ export default function Home() {
                     index === 0 && 'ml-4',
                   )}
                 >
+                  <Image source={vehicle.logo} resizeMode="center" className="h-8 w-8 mb-4" />
                   <CustomText variant={ECustomTextVariants.EYEBROW2}>{vehicle.brand}</CustomText>
                   <CustomText variant={ECustomTextVariants.BODY3}>{vehicle.model}</CustomText>
                 </View>
