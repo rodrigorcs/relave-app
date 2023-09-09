@@ -1,6 +1,7 @@
 import { theme } from '../../theme'
 import { cn } from '../../utils/cn'
-import React, { FC, RefObject } from 'react'
+import { IconoirProvider } from 'iconoir-react-native'
+import React, { FC, ReactNode, RefObject } from 'react'
 import { View, TextInput, Text, KeyboardTypeOptions } from 'react-native'
 import { ClassNameValue } from 'tailwind-merge'
 
@@ -14,6 +15,8 @@ interface IProps {
   customClassName?: ClassNameValue
   onFocus?: () => void
   inputRef?: RefObject<TextInput>
+  iconLeft?: ReactNode
+  iconRight?: ReactNode
 }
 
 export const CustomInput: FC<IProps> = ({
@@ -26,12 +29,14 @@ export const CustomInput: FC<IProps> = ({
   customClassName,
   onFocus,
   inputRef,
+  iconLeft,
+  iconRight,
 }) => {
   return (
     <View>
       <View
         className={cn(
-          'h-12 flex-row justify-center rounded-xl border border-neutrals-200 px-3',
+          'h-12 flex-row justify-center items-center rounded-xl border border-neutrals-200 px-3',
           error && 'border-feedback-negative-300',
           customClassName,
         )}
@@ -41,19 +46,29 @@ export const CustomInput: FC<IProps> = ({
             {prefix}
           </Text>
         )}
-        <View style={{ flex: 1 }}>
-          <TextInput
-            ref={inputRef}
-            value={value}
-            onChangeText={handleValueChange}
-            placeholder={placeholder}
-            keyboardType={keyboardType}
-            className="flex-1"
-            placeholderTextColor={theme.colors['neutrals-400']}
-            onFocus={onFocus}
-            style={{ fontSize: 16 }} // TODO: Remove default lineHeight from tailwind so that `text-base` class can be used
-          />
-        </View>
+        <IconoirProvider
+          iconProps={{
+            width: 24,
+            height: 24,
+            color: theme.colors['neutrals-600'],
+          }}
+        >
+          {iconLeft && iconLeft}
+          <View style={{ flex: 1 }}>
+            <TextInput
+              ref={inputRef}
+              value={value}
+              onChangeText={handleValueChange}
+              placeholder={placeholder}
+              keyboardType={keyboardType}
+              className="flex-1"
+              placeholderTextColor={theme.colors['neutrals-400']}
+              onFocus={onFocus}
+              style={{ fontSize: 16 }} // TODO: Remove default lineHeight from tailwind so that `text-base` class can be used
+            />
+          </View>
+          {iconRight && iconRight}
+        </IconoirProvider>
       </View>
       {error && (
         <Text className="mt-1 text-xs font-normal text-feedback-negative-300">{error}</Text>

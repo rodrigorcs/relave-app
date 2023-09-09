@@ -1,6 +1,6 @@
 import {
+  Autocomplete,
   CustomButton,
-  CustomInput,
   CustomText,
   ECustomButtonVariants,
   ECustomTextVariants,
@@ -18,7 +18,7 @@ import {
   Spark as SparkIcon,
 } from 'iconoir-react-native'
 import React, { useCallback, useRef, useState } from 'react'
-import { Image, TouchableOpacity, SafeAreaView, View, FlatList, TextInput } from 'react-native'
+import { Image, TouchableOpacity, SafeAreaView, View } from 'react-native'
 import { GestureHandlerRootView, ScrollView } from 'react-native-gesture-handler'
 
 const tierIcons = Object.freeze({
@@ -27,7 +27,7 @@ const tierIcons = Object.freeze({
   3: <DropletIcon />,
 })
 
-const brands = [
+const brands: IBrand[] = [
   { id: 'audi', name: 'Audi' },
   { id: 'bmw', name: 'BMW' },
   { id: 'mercedes', name: 'Mercedes' },
@@ -36,6 +36,12 @@ const brands = [
   { id: 'fiat', name: 'Fiat' },
   { id: 'chevrolet', name: 'Chevrolet' },
 ]
+
+interface IBrand {
+  id: string
+  name: string
+  [key: string]: string
+}
 
 const vehicles = [
   {
@@ -83,11 +89,8 @@ const services = [
 
 export default function Home() {
   const [selectedVehicleId, setSelectedVehicleId] = useState(vehicles[0].id)
-  const [brandInput, setBrandInput] = useState('')
-  const [selectedBrandId, setSelectedBrandId] = useState<string | null>(null)
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+  const [selectedBrand, setSelectedBrand] = useState<IBrand | null>(null)
   const bottomSheetRef = useRef<IBottomSheetRefProps>(null)
-  const inputRef = useRef<TextInput>(null)
 
   const onPress = useCallback(() => {
     bottomSheetRef?.current?.scrollTo(0)
@@ -95,13 +98,6 @@ export default function Home() {
 
   const handleChangeVehicle = (vehicleId: string) => {
     setSelectedVehicleId(vehicleId)
-  }
-
-  const handleChangeBrand = (brand: { id: string; name: string }) => {
-    setSelectedBrandId(brand.id)
-    setBrandInput(brand.name)
-    setIsDropdownOpen(false)
-    inputRef.current?.blur()
   }
 
   return (
@@ -242,43 +238,11 @@ export default function Home() {
         <BottomSheet ref={bottomSheetRef} height={400}>
           <View className="flex-1">
             <CustomText variant={ECustomTextVariants.HEADING4}>Adicionar carro</CustomText>
-            <CustomText variant={ECustomTextVariants.HEADING5} customClassName="mt-4">
-              Marca
-            </CustomText>
-            <CustomInput
-              value={brandInput}
-              handleValueChange={setBrandInput}
-              error={null}
-              placeholder="Selecione a marca"
-              customClassName="mt-1"
-              onFocus={() => setIsDropdownOpen(true)}
-              inputRef={inputRef}
+            <Autocomplete<IBrand>
+              options={brands}
+              selectedOption={selectedBrand}
+              setSelectedOption={setSelectedBrand}
             />
-            {isDropdownOpen && (
-              <View className="rounded-lg shadow bg-neutrals-white mt-1">
-                <FlatList
-                  data={
-                    brandInput.length >= 2
-                      ? brands.filter((brand) =>
-                          brand.name.toLowerCase().includes(brandInput.toLowerCase()),
-                        )
-                      : brands
-                  }
-                  className="h-40"
-                  renderItem={({ item: brand }) => {
-                    return (
-                      <TouchableOpacity
-                        key={brand.id}
-                        onPress={() => handleChangeBrand(brand)}
-                        className="px-4 py-3 border-b border-neutrals-100"
-                      >
-                        <CustomText variant={ECustomTextVariants.BODY2}>{brand.name}</CustomText>
-                      </TouchableOpacity>
-                    )
-                  }}
-                ></FlatList>
-              </View>
-            )}
             <CustomButton onPress={() => {}} customClassName="mt-8">
               Confirmar escolha
             </CustomButton>
