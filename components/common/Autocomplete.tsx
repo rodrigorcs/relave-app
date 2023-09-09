@@ -10,17 +10,6 @@ import {
 import React, { Dispatch, FC, SetStateAction, useRef, useState } from 'react'
 import { View, FlatList, TouchableOpacity, TextInput } from 'react-native'
 
-interface IOption extends Record<string, unknown> {
-  id: string
-  name: string
-}
-
-interface IProps<T extends IOption> {
-  options: T[]
-  selectedOption: T | null
-  setSelectedOption?: Dispatch<SetStateAction<T | null>>
-}
-
 interface IDropdownExpandButtonProps {
   isDropdownOpen: boolean
   setIsDropdownOpen: Dispatch<SetStateAction<boolean>>
@@ -39,10 +28,25 @@ const DropdownExpandButton: FC<IDropdownExpandButtonProps> = ({
   )
 }
 
+interface IOption extends Record<string, unknown> {
+  id: string
+  name: string
+}
+
+interface IProps<T extends IOption> {
+  options: T[]
+  selectedOption: T | null
+  setSelectedOption?: Dispatch<SetStateAction<T | null>>
+  title?: string
+  placeholder?: string
+}
+
 export const Autocomplete = <T extends IOption>({
   options,
   selectedOption,
   setSelectedOption,
+  title,
+  placeholder = '',
 }: IProps<T>) => {
   const [input, setInput] = useState('')
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
@@ -65,14 +69,16 @@ export const Autocomplete = <T extends IOption>({
 
   return (
     <>
-      <CustomText variant={ECustomTextVariants.HEADING5} customClassName="mt-4">
-        Marca
-      </CustomText>
+      {title && (
+        <CustomText variant={ECustomTextVariants.HEADING5} customClassName="mt-4">
+          {title}
+        </CustomText>
+      )}
       <CustomInput
         value={input}
         handleValueChange={handleInputChange}
         error={null}
-        placeholder="Selecione a marca"
+        placeholder={placeholder}
         customClassName="mt-1"
         onFocus={() => setIsDropdownOpen(true)}
         inputRef={inputRef}

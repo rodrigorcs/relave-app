@@ -6,6 +6,8 @@ import {
   ECustomTextVariants,
 } from '../components/common'
 import { BottomSheet, IBottomSheetRefProps } from '../components/common/BottomSheet'
+import { vehicleBrands } from '../models/constants/vehicleBrands'
+import { IVehicleBrand } from '../models/contracts/vehicleBrand'
 import { theme } from '../theme'
 import { cn } from '../utils/cn'
 import {
@@ -26,22 +28,6 @@ const tierIcons = Object.freeze({
   2: <SparkIcon />,
   3: <DropletIcon />,
 })
-
-const brands: IBrand[] = [
-  { id: 'audi', name: 'Audi' },
-  { id: 'bmw', name: 'BMW' },
-  { id: 'mercedes', name: 'Mercedes' },
-  { id: 'ford', name: 'Ford' },
-  { id: 'byd', name: 'BYD' },
-  { id: 'fiat', name: 'Fiat' },
-  { id: 'chevrolet', name: 'Chevrolet' },
-]
-
-interface IBrand {
-  id: string
-  name: string
-  [key: string]: string
-}
 
 const vehicles = [
   {
@@ -89,7 +75,7 @@ const services = [
 
 export default function Home() {
   const [selectedVehicleId, setSelectedVehicleId] = useState(vehicles[0].id)
-  const [selectedBrand, setSelectedBrand] = useState<IBrand | null>(null)
+  const [selectedBrand, setSelectedBrand] = useState<IVehicleBrand | null>(null)
   const bottomSheetRef = useRef<IBottomSheetRefProps>(null)
 
   const onPress = useCallback(() => {
@@ -238,10 +224,13 @@ export default function Home() {
         <BottomSheet ref={bottomSheetRef} height={400}>
           <View className="flex-1">
             <CustomText variant={ECustomTextVariants.HEADING4}>Adicionar carro</CustomText>
-            <Autocomplete<IBrand>
-              options={brands}
+            {/* @ts-expect-error // FIXME: IVehicleBrand does not satisfy IOption */}
+            <Autocomplete<IVehicleBrand>
+              options={vehicleBrands}
               selectedOption={selectedBrand}
               setSelectedOption={setSelectedBrand}
+              title="Marca"
+              placeholder="Digite a marca..."
             />
             <CustomButton onPress={() => {}} customClassName="mt-8">
               Confirmar escolha
