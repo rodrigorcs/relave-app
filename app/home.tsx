@@ -15,8 +15,8 @@ import {
   IconoirProvider,
   Spark as SparkIcon,
 } from 'iconoir-react-native'
-import React from 'react'
-import { Image } from 'react-native'
+import React, { useState } from 'react'
+import { Image, TouchableOpacity } from 'react-native'
 import { SafeAreaView, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 
@@ -28,16 +28,19 @@ const tierIcons = Object.freeze({
 
 const vehicles = [
   {
+    id: 'bmw-530i',
     brand: 'BMW',
     model: '530i',
     logo: require('../assets/images/vehicleBrands/bmw.png'),
   },
   {
+    id: 'mercedes-cls450',
     brand: 'Mercedes',
     model: 'CLS 450',
     logo: require('../assets/images/vehicleBrands/mercedes_benz.png'),
   },
   {
+    id: 'tesla-models',
     brand: 'Tesla',
     model: 'Model S',
     logo: require('../assets/images/vehicleBrands/tesla.png'),
@@ -68,6 +71,12 @@ const services = [
 ]
 
 export default function Home() {
+  const [selectedVehicleId, setSelectedVehicleId] = useState(vehicles[0].id)
+
+  const handleChangeVehicle = (vehicleId: string) => {
+    setSelectedVehicleId(vehicleId)
+  }
+
   return (
     <SafeAreaView className="flex flex-1 bg-brand-500">
       <View className="flex-1">
@@ -77,22 +86,36 @@ export default function Home() {
           </CustomText>
           <ScrollView horizontal showsHorizontalScrollIndicator={false} className="flex-row mt-4">
             {vehicles.map((vehicle, index) => {
+              const isSelected = vehicle.id === selectedVehicleId
               return (
-                <View
-                  key={`${vehicle.brand}-${vehicle.model}`}
-                  className={cn(
-                    'h-32 w-32 bg-neutrals-100 rounded-2xl items-center justify-center',
-                    index > 0 && 'ml-2',
-                    index === 0 && 'ml-4',
+                <View className={cn(index > 0 && 'ml-2', index === 0 && 'ml-4')}>
+                  <TouchableOpacity
+                    key={vehicle.id}
+                    className={cn(
+                      'h-32 w-32 mb-2 bg-neutrals-100 rounded-2xl items-center justify-center',
+                      isSelected && 'border border-brand-500',
+                    )}
+                    activeOpacity={0.6}
+                    onPress={() => handleChangeVehicle(vehicle.id)}
+                  >
+                    <Image source={vehicle.logo} resizeMode="center" className="h-8 w-8 mb-4" />
+                    <CustomText variant={ECustomTextVariants.EYEBROW2}>{vehicle.brand}</CustomText>
+                    <CustomText variant={ECustomTextVariants.BODY3}>{vehicle.model}</CustomText>
+                  </TouchableOpacity>
+                  {isSelected && (
+                    <View className="w-5 h-5 bg-brand-500 rounded-full items-center justify-center absolute bottom-0 left-[54]">
+                      <CheckIcon
+                        width={16}
+                        height={16}
+                        strokeWidth={2}
+                        color={theme.colors['neutrals-white']}
+                      />
+                    </View>
                   )}
-                >
-                  <Image source={vehicle.logo} resizeMode="center" className="h-8 w-8 mb-4" />
-                  <CustomText variant={ECustomTextVariants.EYEBROW2}>{vehicle.brand}</CustomText>
-                  <CustomText variant={ECustomTextVariants.BODY3}>{vehicle.model}</CustomText>
                 </View>
               )
             })}
-            <View
+            <TouchableOpacity
               className={cn(
                 'h-32 w-32 bg-neutrals-100 rounded-2xl items-center justify-center ml-2 mr-4',
               )}
@@ -101,7 +124,7 @@ export default function Home() {
               <CustomText variant={ECustomTextVariants.BODY3} customClassName="mt-2 text-center">
                 {`Adicionar\ncarro`}
               </CustomText>
-            </View>
+            </TouchableOpacity>
           </ScrollView>
         </View>
         <View className="flex-1 py-8 bg-brand-500">
