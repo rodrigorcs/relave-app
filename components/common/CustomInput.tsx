@@ -2,6 +2,7 @@ import { theme } from '../../theme'
 import { cn } from '../../utils/cn'
 import React, { FC } from 'react'
 import { View, TextInput, Text, KeyboardTypeOptions } from 'react-native'
+import { ClassNameValue } from 'tailwind-merge'
 
 interface IProps {
   error: string | null
@@ -10,6 +11,7 @@ interface IProps {
   placeholder: string
   keyboardType?: KeyboardTypeOptions
   prefix?: string
+  customClassName?: ClassNameValue
 }
 
 export const CustomInput: FC<IProps> = ({
@@ -19,13 +21,15 @@ export const CustomInput: FC<IProps> = ({
   placeholder,
   keyboardType,
   prefix,
+  customClassName,
 }) => {
   return (
     <View>
       <View
         className={cn(
-          'mt-6 h-12 flex-row justify-center rounded border border-neutrals-200 px-3',
+          'h-12 flex-row justify-center rounded-xl border border-neutrals-200 px-3',
           error && 'border-feedback-negative-300',
+          customClassName,
         )}
       >
         {prefix && (

@@ -1,9 +1,11 @@
 import {
   CustomButton,
+  CustomInput,
   CustomText,
   ECustomButtonVariants,
   ECustomTextVariants,
 } from '../components/common'
+import { BottomSheet, BottomSheetRefProps } from '../components/common/BottomSheet'
 import { theme } from '../theme'
 import { cn } from '../utils/cn'
 import {
@@ -15,16 +17,21 @@ import {
   IconoirProvider,
   Spark as SparkIcon,
 } from 'iconoir-react-native'
-import React, { useState } from 'react'
-import { Image, TouchableOpacity } from 'react-native'
-import { SafeAreaView, View } from 'react-native'
-import { ScrollView } from 'react-native-gesture-handler'
+import React, { useCallback, useRef, useState } from 'react'
+import { Image, TouchableOpacity, SafeAreaView, View } from 'react-native'
+import { GestureHandlerRootView, ScrollView } from 'react-native-gesture-handler'
 
 const tierIcons = Object.freeze({
   1: <FlashIcon />,
   2: <SparkIcon />,
   3: <DropletIcon />,
 })
+
+const brands = [
+  { id: 'audi', name: 'Audi' },
+  { id: 'bmw', name: 'BMW' },
+  { id: 'mercedes', name: 'Mercedes' },
+]
 
 const vehicles = [
   {
@@ -72,143 +79,193 @@ const services = [
 
 export default function Home() {
   const [selectedVehicleId, setSelectedVehicleId] = useState(vehicles[0].id)
+  const [brandInput, setBrandInput] = useState('')
+  const [selectedBrandId, setSelectedBrandId] = useState<string | null>(null)
+  const ref = useRef<BottomSheetRefProps>(null)
+
+  const onPress = useCallback(() => {
+    const isActive = ref?.current?.isActive()
+    if (isActive) {
+      ref?.current?.scrollTo(0)
+    } else {
+      ref?.current?.scrollTo(-500)
+    }
+  }, [])
 
   const handleChangeVehicle = (vehicleId: string) => {
     setSelectedVehicleId(vehicleId)
   }
 
+  const handleChangeBrand = (brand: { id: string; name: string }) => {
+    setSelectedBrandId(brand.id)
+    setBrandInput(brand.name)
+  }
+
   return (
-    <SafeAreaView className="flex flex-1 bg-brand-500">
-      <View className="flex-1">
-        <View className="py-8 bg-common-background">
-          <CustomText variant={ECustomTextVariants.HEADING3} customClassName="ml-4">
-            Selecione seu carro
-          </CustomText>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} className="flex-row mt-4">
-            {vehicles.map((vehicle, index) => {
-              const isSelected = vehicle.id === selectedVehicleId
-              return (
-                <View className={cn(index > 0 && 'ml-2', index === 0 && 'ml-4')}>
-                  <TouchableOpacity
-                    key={vehicle.id}
-                    className={cn(
-                      'h-32 w-32 mb-2 bg-neutrals-100 rounded-2xl items-center justify-center',
-                      isSelected && 'border border-brand-500',
-                    )}
-                    activeOpacity={0.6}
-                    onPress={() => handleChangeVehicle(vehicle.id)}
-                  >
-                    <Image source={vehicle.logo} resizeMode="center" className="h-8 w-8 mb-4" />
-                    <CustomText variant={ECustomTextVariants.EYEBROW2}>{vehicle.brand}</CustomText>
-                    <CustomText variant={ECustomTextVariants.BODY3}>{vehicle.model}</CustomText>
-                  </TouchableOpacity>
-                  {isSelected && (
-                    <View className="w-5 h-5 bg-brand-500 rounded-full items-center justify-center absolute bottom-0 left-[54]">
-                      <CheckIcon
-                        width={16}
-                        height={16}
-                        strokeWidth={2}
-                        color={theme.colors['neutrals-white']}
-                      />
-                    </View>
-                  )}
-                </View>
-              )
-            })}
-            <TouchableOpacity
-              className={cn(
-                'h-32 w-32 bg-neutrals-100 rounded-2xl items-center justify-center ml-2 mr-4',
-              )}
-            >
-              <PlusIcon color={theme.colors['neutrals-800']} width={24} height={24} />
-              <CustomText variant={ECustomTextVariants.BODY3} customClassName="mt-2 text-center">
-                {`Adicionar\ncarro`}
-              </CustomText>
-            </TouchableOpacity>
-          </ScrollView>
-        </View>
-        <View className="flex-1 py-8 bg-brand-500">
-          <CustomText variant={ECustomTextVariants.HEADING3} customClassName="ml-4" white>
-            Serviços
-          </CustomText>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} className="flex-row mt-4">
-            {services.map((service, index) => {
-              return (
-                <View
-                  key={service.name}
-                  className={cn(
-                    'w-[272] bg-neutrals-white rounded-2xl ml-4',
-                    index === vehicles.length - 1 && 'mr-4',
-                  )}
-                >
-                  <View className="flex-row justify-between items-center border-b border-neutrals-200 px-6 py-5">
-                    <View className="w-10 h-10 items-center justify-center rounded-full bg-brand-300">
-                      <IconoirProvider
-                        iconProps={{
-                          width: 20,
-                          height: 20,
-                          color: theme.colors['brand-500'],
-                          fill: theme.colors['brand-500'],
-                        }}
-                      >
-                        {tierIcons[service.tier as 1 | 2 | 3]}
-                      </IconoirProvider>
-                    </View>
-                    <CustomText variant={ECustomTextVariants.HEADING2}>
-                      {`R$${service.price / 100}`}
-                    </CustomText>
-                  </View>
-                  <View className="p-6 flex-1">
-                    <CustomText variant={ECustomTextVariants.HEADING4} customClassName="mb-4">
-                      {service.name}
-                    </CustomText>
-                    <View className="flex-1">
-                      {service.features.map((feature, index) => {
-                        return (
-                          <View
-                            key={feature}
-                            className={cn('flex-row items-center', index > 0 && 'mt-3')}
-                          >
-                            <View className="w-5 h-5 bg-brand-500 rounded-full items-center justify-center">
-                              <CheckIcon
-                                width={16}
-                                height={16}
-                                strokeWidth={2}
-                                color={theme.colors['neutrals-white']}
-                              />
-                            </View>
-                            <CustomText
-                              key={feature}
-                              variant={ECustomTextVariants.BODY3}
-                              customClassName="ml-2"
-                            >
-                              {feature}
-                            </CustomText>
-                          </View>
-                        )
-                      })}
-                    </View>
-                    <CustomButton
-                      variant={ECustomButtonVariants.SECONDARY}
-                      onPress={() => {}}
-                      IconRight={
-                        <ArrowRightIcon
-                          width={20}
-                          height={20}
-                          strokeWidth={2}
-                          color={theme.colors['brand-500']}
-                        />
-                      }
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <SafeAreaView className="flex flex-1 bg-brand-500">
+        <View className="flex-1">
+          <View className="py-8 bg-common-background">
+            <CustomText variant={ECustomTextVariants.HEADING3} customClassName="ml-4">
+              Selecione seu carro
+            </CustomText>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} className="flex-row mt-4">
+              {vehicles.map((vehicle, index) => {
+                const isSelected = vehicle.id === selectedVehicleId
+                return (
+                  <View key={vehicle.id} className={cn(index > 0 && 'ml-2', index === 0 && 'ml-4')}>
+                    <TouchableOpacity
+                      className={cn(
+                        'h-32 w-32 mb-2 bg-neutrals-100 rounded-2xl items-center justify-center',
+                        isSelected && 'border border-brand-500',
+                      )}
+                      activeOpacity={0.6}
+                      onPress={() => handleChangeVehicle(vehicle.id)}
                     >
-                      Escolher
-                    </CustomButton>
+                      <Image source={vehicle.logo} resizeMode="center" className="h-8 w-8 mb-4" />
+                      <CustomText variant={ECustomTextVariants.EYEBROW2}>
+                        {vehicle.brand}
+                      </CustomText>
+                      <CustomText variant={ECustomTextVariants.BODY3}>{vehicle.model}</CustomText>
+                    </TouchableOpacity>
+                    {isSelected && (
+                      <View className="w-5 h-5 bg-brand-500 rounded-full items-center justify-center absolute bottom-0 left-[54]">
+                        <CheckIcon
+                          width={16}
+                          height={16}
+                          strokeWidth={2}
+                          color={theme.colors['neutrals-white']}
+                        />
+                      </View>
+                    )}
                   </View>
-                </View>
-              )
-            })}
-          </ScrollView>
+                )
+              })}
+              <TouchableOpacity
+                className={cn(
+                  'h-32 w-32 bg-neutrals-100 rounded-2xl items-center justify-center ml-2 mr-4',
+                )}
+                onPress={onPress}
+              >
+                <PlusIcon color={theme.colors['neutrals-800']} width={24} height={24} />
+                <CustomText variant={ECustomTextVariants.BODY3} customClassName="mt-2 text-center">
+                  {`Adicionar\ncarro`}
+                </CustomText>
+              </TouchableOpacity>
+            </ScrollView>
+          </View>
+          <View className="flex-1 py-8 bg-brand-500">
+            <CustomText variant={ECustomTextVariants.HEADING3} customClassName="ml-4" white>
+              Serviços
+            </CustomText>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} className="flex-row mt-4">
+              {services.map((service, index) => {
+                return (
+                  <View
+                    key={service.name}
+                    className={cn(
+                      'w-[272] bg-neutrals-white rounded-2xl ml-4',
+                      index === vehicles.length - 1 && 'mr-4',
+                    )}
+                  >
+                    <View className="flex-row justify-between items-center border-b border-neutrals-200 px-6 py-5">
+                      <View className="w-10 h-10 items-center justify-center rounded-full bg-brand-300">
+                        <IconoirProvider
+                          iconProps={{
+                            width: 20,
+                            height: 20,
+                            color: theme.colors['brand-500'],
+                            fill: theme.colors['brand-500'],
+                          }}
+                        >
+                          {tierIcons[service.tier as 1 | 2 | 3]}
+                        </IconoirProvider>
+                      </View>
+                      <CustomText variant={ECustomTextVariants.HEADING2}>
+                        {`R$${service.price / 100}`}
+                      </CustomText>
+                    </View>
+                    <View className="p-6 flex-1">
+                      <CustomText variant={ECustomTextVariants.HEADING4} customClassName="mb-4">
+                        {service.name}
+                      </CustomText>
+                      <View className="flex-1">
+                        {service.features.map((feature, index) => {
+                          return (
+                            <View
+                              key={feature}
+                              className={cn('flex-row items-center', index > 0 && 'mt-3')}
+                            >
+                              <View className="w-5 h-5 bg-brand-500 rounded-full items-center justify-center">
+                                <CheckIcon
+                                  width={16}
+                                  height={16}
+                                  strokeWidth={2}
+                                  color={theme.colors['neutrals-white']}
+                                />
+                              </View>
+                              <CustomText
+                                key={feature}
+                                variant={ECustomTextVariants.BODY3}
+                                customClassName="ml-2"
+                              >
+                                {feature}
+                              </CustomText>
+                            </View>
+                          )
+                        })}
+                      </View>
+                      <CustomButton
+                        variant={ECustomButtonVariants.SECONDARY}
+                        onPress={() => {}}
+                        IconRight={
+                          <ArrowRightIcon
+                            width={20}
+                            height={20}
+                            strokeWidth={2}
+                            color={theme.colors['brand-500']}
+                          />
+                        }
+                      >
+                        Escolher
+                      </CustomButton>
+                    </View>
+                  </View>
+                )
+              })}
+            </ScrollView>
+          </View>
+          <BottomSheet ref={ref}>
+            <View className="flex-1">
+              <CustomText variant={ECustomTextVariants.HEADING4}>Adicionar carro</CustomText>
+              <CustomText variant={ECustomTextVariants.HEADING5} customClassName="mt-4">
+                Marca
+              </CustomText>
+              <CustomInput
+                value={brandInput}
+                handleValueChange={setBrandInput}
+                error={null}
+                placeholder="Selecione a marca"
+                customClassName="mt-1"
+              />
+              <View>
+                {brands
+                  .filter((brand) => brandInput.length > 2 && brand.name.includes(brandInput))
+                  .map((brand) => {
+                    return (
+                      <TouchableOpacity onPress={() => handleChangeBrand(brand)}>
+                        <CustomText variant={ECustomTextVariants.BODY2}>{brand.name}</CustomText>
+                      </TouchableOpacity>
+                    )
+                  })}
+              </View>
+              <CustomButton onPress={() => {}} customClassName="mt-8">
+                Confirmar escolha
+              </CustomButton>
+            </View>
+          </BottomSheet>
         </View>
-      </View>
-    </SafeAreaView>
+      </SafeAreaView>
+    </GestureHandlerRootView>
   )
 }
