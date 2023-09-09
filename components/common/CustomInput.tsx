@@ -1,6 +1,6 @@
 import { theme } from '../../theme'
 import { cn } from '../../utils/cn'
-import React, { FC } from 'react'
+import React, { FC, RefObject } from 'react'
 import { View, TextInput, Text, KeyboardTypeOptions } from 'react-native'
 import { ClassNameValue } from 'tailwind-merge'
 
@@ -12,6 +12,8 @@ interface IProps {
   keyboardType?: KeyboardTypeOptions
   prefix?: string
   customClassName?: ClassNameValue
+  onFocus?: () => void
+  inputRef?: RefObject<TextInput>
 }
 
 export const CustomInput: FC<IProps> = ({
@@ -22,6 +24,8 @@ export const CustomInput: FC<IProps> = ({
   keyboardType,
   prefix,
   customClassName,
+  onFocus,
+  inputRef,
 }) => {
   return (
     <View>
@@ -39,12 +43,14 @@ export const CustomInput: FC<IProps> = ({
         )}
         <View style={{ flex: 1 }}>
           <TextInput
+            ref={inputRef}
             value={value}
             onChangeText={handleValueChange}
             placeholder={placeholder}
             keyboardType={keyboardType}
             className="flex-1"
             placeholderTextColor={theme.colors['neutrals-400']}
+            onFocus={onFocus}
             style={{ fontSize: 16 }} // TODO: Remove default lineHeight from tailwind so that `text-base` class can be used
           />
         </View>

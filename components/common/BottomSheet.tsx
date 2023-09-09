@@ -27,7 +27,7 @@ const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 
 export const BottomSheet = React.forwardRef<IBottomSheetRefProps, IBottomSheetProps>(
   ({ children, height }, ref) => {
-    const MAX_TRANSLATE_Y = height + 50
+    const MAX_TRANSLATE_Y = height + 60
     const translateY = useSharedValue(MAX_TRANSLATE_Y)
     const active = useSharedValue(true)
     const [isOpen, setIsOpen] = useState(active.value)

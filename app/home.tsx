@@ -18,7 +18,7 @@ import {
   Spark as SparkIcon,
 } from 'iconoir-react-native'
 import React, { useCallback, useRef, useState } from 'react'
-import { Image, TouchableOpacity, SafeAreaView, View, FlatList } from 'react-native'
+import { Image, TouchableOpacity, SafeAreaView, View, FlatList, TextInput } from 'react-native'
 import { GestureHandlerRootView, ScrollView } from 'react-native-gesture-handler'
 
 const tierIcons = Object.freeze({
@@ -85,10 +85,12 @@ export default function Home() {
   const [selectedVehicleId, setSelectedVehicleId] = useState(vehicles[0].id)
   const [brandInput, setBrandInput] = useState('')
   const [selectedBrandId, setSelectedBrandId] = useState<string | null>(null)
-  const ref = useRef<IBottomSheetRefProps>(null)
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+  const bottomSheetRef = useRef<IBottomSheetRefProps>(null)
+  const inputRef = useRef<TextInput>(null)
 
   const onPress = useCallback(() => {
-    ref?.current?.scrollTo(0)
+    bottomSheetRef?.current?.scrollTo(0)
   }, [])
 
   const handleChangeVehicle = (vehicleId: string) => {
@@ -98,6 +100,8 @@ export default function Home() {
   const handleChangeBrand = (brand: { id: string; name: string }) => {
     setSelectedBrandId(brand.id)
     setBrandInput(brand.name)
+    setIsDropdownOpen(false)
+    inputRef.current?.blur()
   }
 
   return (
@@ -235,7 +239,7 @@ export default function Home() {
             </ScrollView>
           </View>
         </View>
-        <BottomSheet ref={ref} height={400}>
+        <BottomSheet ref={bottomSheetRef} height={400}>
           <View className="flex-1">
             <CustomText variant={ECustomTextVariants.HEADING4}>Adicionar carro</CustomText>
             <CustomText variant={ECustomTextVariants.HEADING5} customClassName="mt-4">
@@ -247,26 +251,34 @@ export default function Home() {
               error={null}
               placeholder="Selecione a marca"
               customClassName="mt-1"
+              onFocus={() => setIsDropdownOpen(true)}
+              inputRef={inputRef}
             />
-            <View className="rounded-lg shadow">
-              <FlatList
-                data={brands.filter(
-                  (brand) => brandInput.length === 0 || brand.name.includes(brandInput),
-                )}
-                className="h-40"
-                renderItem={({ item: brand }) => {
-                  return (
-                    <TouchableOpacity
-                      key={brand.id}
-                      onPress={() => handleChangeBrand(brand)}
-                      className="p-4 border-b border-neutrals-100"
-                    >
-                      <CustomText variant={ECustomTextVariants.BODY2}>{brand.name}</CustomText>
-                    </TouchableOpacity>
-                  )
-                }}
-              ></FlatList>
-            </View>
+            {isDropdownOpen && (
+              <View className="rounded-lg shadow bg-neutrals-white mt-1">
+                <FlatList
+                  data={
+                    brandInput.length >= 2
+                      ? brands.filter((brand) =>
+                          brand.name.toLowerCase().includes(brandInput.toLowerCase()),
+                        )
+                      : brands
+                  }
+                  className="h-40"
+                  renderItem={({ item: brand }) => {
+                    return (
+                      <TouchableOpacity
+                        key={brand.id}
+                        onPress={() => handleChangeBrand(brand)}
+                        className="px-4 py-3 border-b border-neutrals-100"
+                      >
+                        <CustomText variant={ECustomTextVariants.BODY2}>{brand.name}</CustomText>
+                      </TouchableOpacity>
+                    )
+                  }}
+                ></FlatList>
+              </View>
+            )}
             <CustomButton onPress={() => {}} customClassName="mt-8">
               Confirmar escolha
             </CustomButton>
