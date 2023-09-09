@@ -1,35 +1,40 @@
-import React, { useCallback, useImperativeHandle } from 'react'
-import { Dimensions, StyleSheet } from 'react-native'
+import { theme } from '../../theme'
+import { Cancel as CloseIcon } from 'iconoir-react-native'
+import React, { useCallback, useImperativeHandle, useState } from 'react'
+import { Pressable, TouchableOpacity } from 'react-native'
 import { Gesture, GestureDetector } from 'react-native-gesture-handler'
 import Animated, {
   Extrapolate,
   interpolate,
+  runOnJS,
   useAnimatedStyle,
+  useDerivedValue,
   useSharedValue,
   withSpring,
 } from 'react-native-reanimated'
 
-const { height: SCREEN_HEIGHT } = Dimensions.get('window')
-
-const MAX_TRANSLATE_Y = -SCREEN_HEIGHT + 50
-
-type BottomSheetProps = {
+interface IBottomSheetProps {
   children?: React.ReactNode
+  height: number
 }
 
-export type BottomSheetRefProps = {
+export interface IBottomSheetRefProps {
   scrollTo: (destination: number) => void
   isActive: () => boolean
 }
 
-export const BottomSheet = React.forwardRef<BottomSheetRefProps, BottomSheetProps>(
-  ({ children }, ref) => {
-    const translateY = useSharedValue(0)
-    const active = useSharedValue(false)
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
+
+export const BottomSheet = React.forwardRef<IBottomSheetRefProps, IBottomSheetProps>(
+  ({ children, height }, ref) => {
+    const MAX_TRANSLATE_Y = height + 50
+    const translateY = useSharedValue(MAX_TRANSLATE_Y)
+    const active = useSharedValue(true)
+    const [isOpen, setIsOpen] = useState(active.value)
 
     const scrollTo = useCallback((destination: number) => {
       'worklet'
-      active.value = destination !== 0
+      active.value = destination === 0
       translateY.value = withSpring(destination, { damping: 50 })
     }, [])
 
@@ -46,53 +51,59 @@ export const BottomSheet = React.forwardRef<BottomSheetRefProps, BottomSheetProp
       })
       .onUpdate((event) => {
         translateY.value = event.translationY + context.value.y
-        translateY.value = Math.max(translateY.value, MAX_TRANSLATE_Y)
+        translateY.value = Math.max(translateY.value, 0)
       })
       .onEnd(() => {
-        if (translateY.value > -SCREEN_HEIGHT / 3) {
-          scrollTo(0)
-        } else if (translateY.value < -SCREEN_HEIGHT / 1.5) {
+        if (translateY.value > MAX_TRANSLATE_Y / 3) {
           scrollTo(MAX_TRANSLATE_Y)
+        } else if (translateY.value < MAX_TRANSLATE_Y / 1.5) {
+          scrollTo(0)
         }
       })
 
-    const rBottomSheetStyle = useAnimatedStyle(() => {
-      const borderRadius = interpolate(
-        translateY.value,
-        [MAX_TRANSLATE_Y + 50, MAX_TRANSLATE_Y],
-        [25, 5],
-        Extrapolate.CLAMP,
-      )
-
-      return {
-        borderRadius,
-        transform: [{ translateY: translateY.value }],
-      }
-    })
+    const rBottomSheetStyle = useAnimatedStyle(() => ({
+      transform: [{ translateY: translateY.value }],
+    }))
 
     const rOverlayStyle = useAnimatedStyle(() => {
       const opacity = interpolate(
         translateY.value,
-        [0, MAX_TRANSLATE_Y],
-        [0, 0.7],
+        [MAX_TRANSLATE_Y, 0],
+        [0, 0.5],
         Extrapolate.CLAMP,
       )
 
       return { opacity }
     })
 
+    useDerivedValue(() => {
+      runOnJS(setIsOpen)(active.value)
+    }, [])
+
     return (
       <>
-        <Animated.View
+        <AnimatedPressable
           className="absolute top-0 left-0 right-0 bottom-0 bg-neutrals-black opacity-0"
           style={rOverlayStyle}
-          pointerEvents="none"
+          pointerEvents={isOpen ? 'auto' : 'none'}
+          onPress={() => scrollTo(MAX_TRANSLATE_Y)}
         />
         <GestureDetector gesture={gesture}>
           <Animated.View
-            className="w-full bg-neutrals-white absolute rounded-3xl p-6 pt-14"
-            style={[styles.bottomSheetContainer, rBottomSheetStyle]}
+            className="w-full bg-neutrals-white absolute rounded-t-3xl p-6 pt-14 bottom-0"
+            style={rBottomSheetStyle}
           >
+            <TouchableOpacity
+              className="absolute top-6 right-6 w-6 h-6 rounded-full items-center justify-center bg-neutrals-100"
+              onPress={() => scrollTo(MAX_TRANSLATE_Y)}
+            >
+              <CloseIcon
+                width={16}
+                height={16}
+                strokeWidth={2}
+                color={theme.colors['neutrals-800']}
+              />
+            </TouchableOpacity>
             {children}
           </Animated.View>
         </GestureDetector>
@@ -100,10 +111,3 @@ export const BottomSheet = React.forwardRef<BottomSheetRefProps, BottomSheetProp
     )
   },
 )
-
-const styles = StyleSheet.create({
-  bottomSheetContainer: {
-    height: SCREEN_HEIGHT,
-    top: SCREEN_HEIGHT,
-  },
-})

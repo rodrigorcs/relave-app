@@ -5,7 +5,7 @@ import {
   ECustomButtonVariants,
   ECustomTextVariants,
 } from '../components/common'
-import { BottomSheet, BottomSheetRefProps } from '../components/common/BottomSheet'
+import { BottomSheet, IBottomSheetRefProps } from '../components/common/BottomSheet'
 import { theme } from '../theme'
 import { cn } from '../utils/cn'
 import {
@@ -18,7 +18,7 @@ import {
   Spark as SparkIcon,
 } from 'iconoir-react-native'
 import React, { useCallback, useRef, useState } from 'react'
-import { Image, TouchableOpacity, SafeAreaView, View } from 'react-native'
+import { Image, TouchableOpacity, SafeAreaView, View, FlatList } from 'react-native'
 import { GestureHandlerRootView, ScrollView } from 'react-native-gesture-handler'
 
 const tierIcons = Object.freeze({
@@ -31,6 +31,10 @@ const brands = [
   { id: 'audi', name: 'Audi' },
   { id: 'bmw', name: 'BMW' },
   { id: 'mercedes', name: 'Mercedes' },
+  { id: 'ford', name: 'Ford' },
+  { id: 'byd', name: 'BYD' },
+  { id: 'fiat', name: 'Fiat' },
+  { id: 'chevrolet', name: 'Chevrolet' },
 ]
 
 const vehicles = [
@@ -81,15 +85,10 @@ export default function Home() {
   const [selectedVehicleId, setSelectedVehicleId] = useState(vehicles[0].id)
   const [brandInput, setBrandInput] = useState('')
   const [selectedBrandId, setSelectedBrandId] = useState<string | null>(null)
-  const ref = useRef<BottomSheetRefProps>(null)
+  const ref = useRef<IBottomSheetRefProps>(null)
 
   const onPress = useCallback(() => {
-    const isActive = ref?.current?.isActive()
-    if (isActive) {
-      ref?.current?.scrollTo(0)
-    } else {
-      ref?.current?.scrollTo(-500)
-    }
+    ref?.current?.scrollTo(0)
   }, [])
 
   const handleChangeVehicle = (vehicleId: string) => {
@@ -235,36 +234,44 @@ export default function Home() {
               })}
             </ScrollView>
           </View>
-          <BottomSheet ref={ref}>
-            <View className="flex-1">
-              <CustomText variant={ECustomTextVariants.HEADING4}>Adicionar carro</CustomText>
-              <CustomText variant={ECustomTextVariants.HEADING5} customClassName="mt-4">
-                Marca
-              </CustomText>
-              <CustomInput
-                value={brandInput}
-                handleValueChange={setBrandInput}
-                error={null}
-                placeholder="Selecione a marca"
-                customClassName="mt-1"
-              />
-              <View>
-                {brands
-                  .filter((brand) => brandInput.length > 2 && brand.name.includes(brandInput))
-                  .map((brand) => {
-                    return (
-                      <TouchableOpacity onPress={() => handleChangeBrand(brand)}>
-                        <CustomText variant={ECustomTextVariants.BODY2}>{brand.name}</CustomText>
-                      </TouchableOpacity>
-                    )
-                  })}
-              </View>
-              <CustomButton onPress={() => {}} customClassName="mt-8">
-                Confirmar escolha
-              </CustomButton>
-            </View>
-          </BottomSheet>
         </View>
+        <BottomSheet ref={ref} height={400}>
+          <View className="flex-1">
+            <CustomText variant={ECustomTextVariants.HEADING4}>Adicionar carro</CustomText>
+            <CustomText variant={ECustomTextVariants.HEADING5} customClassName="mt-4">
+              Marca
+            </CustomText>
+            <CustomInput
+              value={brandInput}
+              handleValueChange={setBrandInput}
+              error={null}
+              placeholder="Selecione a marca"
+              customClassName="mt-1"
+            />
+            <View className="rounded-lg shadow">
+              <FlatList
+                data={brands.filter(
+                  (brand) => brandInput.length === 0 || brand.name.includes(brandInput),
+                )}
+                className="h-40"
+                renderItem={({ item: brand }) => {
+                  return (
+                    <TouchableOpacity
+                      key={brand.id}
+                      onPress={() => handleChangeBrand(brand)}
+                      className="p-4 border-b border-neutrals-100"
+                    >
+                      <CustomText variant={ECustomTextVariants.BODY2}>{brand.name}</CustomText>
+                    </TouchableOpacity>
+                  )
+                }}
+              ></FlatList>
+            </View>
+            <CustomButton onPress={() => {}} customClassName="mt-8">
+              Confirmar escolha
+            </CustomButton>
+          </View>
+        </BottomSheet>
       </SafeAreaView>
     </GestureHandlerRootView>
   )
