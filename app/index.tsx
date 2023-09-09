@@ -48,6 +48,7 @@ export default function SignIn() {
           placeholder="(71) 90000-0000"
           keyboardType="phone-pad"
           prefix="+55"
+          customClassName="mt-6"
         />
         <CustomButton
           isDisabled={!isPhoneNumberValid}

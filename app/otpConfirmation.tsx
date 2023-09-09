@@ -41,12 +41,23 @@ export default function OTPConfirmation() {
         <View className="my-8 w-fit items-center">
           <MessagesIllustration height={112} pointerEvents="none" />
         </View>
-        <CustomText variant={ECustomTextVariants.HEADING1}>
+        <CustomText variant={ECustomTextVariants.HEADING3}>
           Digite o código de 6 dígitos que enviamos por SMS
         </CustomText>
-        <CustomText variant={ECustomTextVariants.SUBTITLE1}>
-          SMS enviado para +55 (71) 99315-8381
-        </CustomText>
+        <View className="flex-row">
+          <CustomText
+            variant={ECustomTextVariants.SUBHEADING2}
+            customClassName="font-normal text-neutrals-500"
+          >
+            SMS enviado para&nbsp;
+          </CustomText>
+          <CustomText
+            variant={ECustomTextVariants.SUBHEADING2}
+            customClassName="font-normal text-neutrals-500 underline"
+          >
+            +55 (71) 99315-8381
+          </CustomText>
+        </View>
         <View className="items-center">
           <OTPInput
             code={otpToken}
@@ -63,10 +74,17 @@ export default function OTPConfirmation() {
           )}
         </View>
         <View className="mt-4 flex-row items-center justify-center">
-          <CustomText variant={ECustomTextVariants.SUBTITLE2}>Não recebeu?&nbsp;</CustomText>
-          <CustomText variant={ECustomTextVariants.SUBTITLE2_ACTION}>Reenviar</CustomText>
+          <CustomText variant={ECustomTextVariants.HELPER2} customClassName="text-neutrals-500">
+            Não recebeu?&nbsp;
+          </CustomText>
+          <CustomText
+            variant={ECustomTextVariants.HELPER2}
+            customClassName="underline text-brand-700"
+          >
+            Reenviar
+          </CustomText>
         </View>
-        <CustomButton isDisabled={!isTokenReady} onPress={handleConfirmOTP}>
+        <CustomButton isDisabled={!isTokenReady} onPress={handleConfirmOTP} customClassName="mt-6">
           Continuar
         </CustomButton>
       </View>
