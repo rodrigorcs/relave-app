@@ -1,16 +1,14 @@
 import {
-  Autocomplete,
   CustomButton,
   CustomText,
   ECustomButtonVariants,
   ECustomTextVariants,
 } from '../components/common'
-import { BottomSheet, IBottomSheetRefProps } from '../components/common/BottomSheet'
+import { AddVehicleBottomSheet } from '../components/home/AddVehicleBottomSheet'
 import { IVehicleBrand } from '../models/contracts/vehicleBrand'
 import { IVehicleModel } from '../models/contracts/vehicleModel'
 import { theme } from '../theme'
 import { cn } from '../utils/cn'
-import firestore from '@react-native-firebase/firestore'
 import {
   ArrowRight as ArrowRightIcon,
   Plus as PlusIcon,
@@ -20,7 +18,7 @@ import {
   IconoirProvider,
   Spark as SparkIcon,
 } from 'iconoir-react-native'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { Image, TouchableOpacity, SafeAreaView, View } from 'react-native'
 import { GestureHandlerRootView, ScrollView } from 'react-native-gesture-handler'
 
@@ -76,42 +74,17 @@ const services = [
 
 export default function Home() {
   const [selectedVehicleId, setSelectedVehicleId] = useState(vehicles[0].id)
-  const [vehicleBrands, setVehicleBrands] = useState<IVehicleBrand[] | null>(null)
-  const [vehicleModels, setVehicleModels] = useState<IVehicleModel[] | null>(null)
   const [selectedBrand, setSelectedBrand] = useState<IVehicleBrand | null>(null)
   const [selectedModel, setSelectedModel] = useState<IVehicleModel | null>(null)
-  const bottomSheetRef = useRef<IBottomSheetRefProps>(null)
-
-  useEffect(() => {
-    const execute = async () => {
-      const snapshot = await firestore().collection('vehicleBrands').get()
-      const _vehicleBrands = snapshot.docs.map((doc) => doc.data()) as IVehicleBrand[]
-      setVehicleBrands(_vehicleBrands)
-    }
-    execute()
-  }, [])
-
-  useEffect(() => {
-    if (!selectedBrand) return
-
-    const execute = async () => {
-      const snapshot = await firestore()
-        .collection('vehicleModels')
-        .where('brandId', '==', selectedBrand.id)
-        .get()
-      const _vehicleModels = snapshot.docs.map((doc) => doc.data()) as IVehicleModel[]
-      setVehicleModels(_vehicleModels)
-    }
-    execute()
-  }, [selectedBrand])
-
-  const onPress = useCallback(() => {
-    bottomSheetRef?.current?.scrollTo(0)
-  }, [])
+  const [openBottomSheet, setOpenBottomSheet] = useState<string | null>(null)
 
   const handleChangeVehicle = (vehicleId: string) => {
     setSelectedVehicleId(vehicleId)
   }
+
+  const handleOpenAddVehicleBottomSheet = useCallback(() => {
+    setOpenBottomSheet('AddVehicle')
+  }, [])
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
@@ -157,7 +130,7 @@ export default function Home() {
                 className={cn(
                   'h-32 w-32 bg-neutrals-100 rounded-2xl items-center justify-center ml-2 mr-4',
                 )}
-                onPress={onPress}
+                onPress={handleOpenAddVehicleBottomSheet}
               >
                 <PlusIcon color={theme.colors['neutrals-800']} width={24} height={24} />
                 <CustomText variant={ECustomTextVariants.BODY3} customClassName="mt-2 text-center">
@@ -248,30 +221,13 @@ export default function Home() {
             </ScrollView>
           </View>
         </View>
-        <BottomSheet ref={bottomSheetRef} height={400}>
-          <View className="flex-1">
-            <CustomText variant={ECustomTextVariants.HEADING4}>Adicionar carro</CustomText>
-            {/* @ts-expect-error // FIXME: IVehicleBrand does not satisfy IOption */}
-            <Autocomplete<IVehicleBrand>
-              options={vehicleBrands}
-              selectedOption={selectedBrand}
-              setSelectedOption={setSelectedBrand}
-              title="Marca"
-              placeholder="Digite a marca..."
-            />
-            {/* @ts-expect-error // FIXME: IVehicleModel does not satisfy IOption */}
-            <Autocomplete<IVehicleModel>
-              options={vehicleModels}
-              selectedOption={selectedModel}
-              setSelectedOption={setSelectedModel}
-              title="Modelo"
-              placeholder="Digite o modelo..."
-            />
-            <CustomButton onPress={() => {}} customClassName="mt-8">
-              Confirmar escolha
-            </CustomButton>
-          </View>
-        </BottomSheet>
+        <AddVehicleBottomSheet
+          selectedBrand={selectedBrand}
+          selectedModel={selectedModel}
+          setSelectedBrand={setSelectedBrand}
+          setSelectedModel={setSelectedModel}
+          isOpen={openBottomSheet === 'AddVehicle'}
+        />
       </SafeAreaView>
     </GestureHandlerRootView>
   )
