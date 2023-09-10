@@ -66,11 +66,12 @@ export const AddVehicleBottomSheet: FC<IProps> = ({
   const handleCreateVehicle = async () => {
     if (!selectedBrand || !selectedModel) return
     const createdVehicle = await vehiclesActions.createVehicle({
+      ownerId: userId,
       brandId: selectedBrand.id,
       brandName: selectedBrand.name,
+      brandSlug: selectedBrand.slug,
       modelId: selectedModel.id,
       modelName: selectedModel.name,
-      ownerId: userId,
     })
     addVehicle(createdVehicle)
     close()

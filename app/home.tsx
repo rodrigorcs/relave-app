@@ -5,6 +5,9 @@ import {
   ECustomTextVariants,
 } from '../components/common'
 import { AddVehicleBottomSheet } from '../components/home/AddVehicleBottomSheet'
+import { UserVehicleCard } from '../components/home/UserVehicleCard'
+import { vehiclesActions } from '../core/actions/vehicles'
+import { IVehicle } from '../models/contracts/vehicle'
 import { IVehicleBrand } from '../models/contracts/vehicleBrand'
 import { IVehicleModel } from '../models/contracts/vehicleModel'
 import { getCurrentUser } from '../state/slices/auth'
@@ -20,8 +23,8 @@ import {
   IconoirProvider,
   Spark as SparkIcon,
 } from 'iconoir-react-native'
-import React, { useCallback, useState } from 'react'
-import { Image, TouchableOpacity, SafeAreaView, View } from 'react-native'
+import React, { useCallback, useEffect, useState } from 'react'
+import { TouchableOpacity, SafeAreaView, View } from 'react-native'
 import { GestureHandlerRootView, ScrollView } from 'react-native-gesture-handler'
 import { useSelector } from 'react-redux'
 
@@ -30,27 +33,6 @@ const tierIcons = Object.freeze({
   2: <SparkIcon />,
   3: <DropletIcon />,
 })
-
-const vehicles = [
-  {
-    id: 'bmw-530i',
-    brand: 'BMW',
-    model: '530i',
-    logo: require('../assets/images/vehicleBrands/bmw.png'),
-  },
-  {
-    id: 'mercedes-cls450',
-    brand: 'Mercedes',
-    model: 'CLS 450',
-    logo: require('../assets/images/vehicleBrands/mercedes_benz.png'),
-  },
-  {
-    id: 'tesla-models',
-    brand: 'Tesla',
-    model: 'Model S',
-    logo: require('../assets/images/vehicleBrands/tesla.png'),
-  },
-]
 
 const services = [
   {
@@ -76,12 +58,23 @@ const services = [
 ]
 
 export default function Home() {
-  const [selectedVehicleId, setSelectedVehicleId] = useState(vehicles[0].id)
+  const [selectedVehicleId, setSelectedVehicleId] = useState<IVehicle['id'] | null>(null)
   const [selectedBrand, setSelectedBrand] = useState<IVehicleBrand | null>(null)
   const [selectedModel, setSelectedModel] = useState<IVehicleModel | null>(null)
   const [openBottomSheet, setOpenBottomSheet] = useState<string | null>(null)
+
+  const [vehicles, setVehicles] = useState<IVehicle[]>([])
+
   const currentUser = useSelector(({ auth }: IAppState) => getCurrentUser(auth))
   if (!currentUser) return //FIXME: Add auth boundaries so currentUser is always truthy
+
+  useEffect(() => {
+    const execute = async () => {
+      const vehicles = await vehiclesActions.getVehiclesByUserId(currentUser?.id)
+      setVehicles(vehicles)
+    }
+    execute()
+  }, [])
 
   const handleChangeVehicle = (vehicleId: string) => {
     setSelectedVehicleId(vehicleId)
@@ -107,32 +100,13 @@ export default function Home() {
               {vehicles.map((vehicle, index) => {
                 const isSelected = vehicle.id === selectedVehicleId
                 return (
-                  <View key={vehicle.id} className={cn(index > 0 && 'ml-2', index === 0 && 'ml-4')}>
-                    <TouchableOpacity
-                      className={cn(
-                        'h-32 w-32 mb-2 bg-neutrals-100 rounded-2xl items-center justify-center',
-                        isSelected && 'border border-brand-500',
-                      )}
-                      activeOpacity={0.6}
-                      onPress={() => handleChangeVehicle(vehicle.id)}
-                    >
-                      <Image source={vehicle.logo} resizeMode="center" className="h-8 w-8 mb-4" />
-                      <CustomText variant={ECustomTextVariants.EYEBROW2}>
-                        {vehicle.brand}
-                      </CustomText>
-                      <CustomText variant={ECustomTextVariants.BODY3}>{vehicle.model}</CustomText>
-                    </TouchableOpacity>
-                    {isSelected && (
-                      <View className="w-5 h-5 bg-brand-500 rounded-full items-center justify-center absolute bottom-0 left-[54]">
-                        <CheckIcon
-                          width={16}
-                          height={16}
-                          strokeWidth={2}
-                          color={theme.colors['neutrals-white']}
-                        />
-                      </View>
-                    )}
-                  </View>
+                  <UserVehicleCard
+                    key={vehicle.id}
+                    vehicle={vehicle}
+                    handleChangeVehicle={handleChangeVehicle}
+                    isSelected={isSelected}
+                    index={index}
+                  />
                 )
               })}
               <TouchableOpacity
