@@ -1,3 +1,4 @@
+import { usersActions } from '../../core/actions/users'
 import { storeUser, clearCredentials } from '../../state/slices/auth'
 import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth'
 import React, { FC, ReactNode, useEffect } from 'react'
@@ -11,12 +12,12 @@ interface IProps {
 export const AuthProvider: FC<IProps> = ({ children }) => {
   const dispatch = useDispatch()
 
-  function onAuthStateChanged(user: FirebaseAuthTypes.User | null) {
+  async function onAuthStateChanged(user: FirebaseAuthTypes.User | null) {
     if (!user) return dispatch(clearCredentials() as unknown as AnyAction)
 
-    const userData = {
+    const uncheckedUser = {
       displayName: user.displayName,
-      id: user.uid,
+      firebaseId: user.uid,
       credentials: {
         isAnonymous: user.isAnonymous,
         metadata: user.metadata,
@@ -27,7 +28,9 @@ export const AuthProvider: FC<IProps> = ({ children }) => {
       },
     }
 
-    dispatch(storeUser(userData))
+    const checkedUser = await usersActions.getOrCreateUser(uncheckedUser)
+
+    dispatch(storeUser(checkedUser))
   }
 
   useEffect(() => {

@@ -14,8 +14,9 @@ type IFirebaseUser = Pick<FirebaseAuthTypes.User,
   'uid'>
 
 export interface IUser {
+  id: string
+  firebaseId: IFirebaseUser['uid'],
   displayName: IFirebaseUser['displayName'],
-  id: IFirebaseUser['uid'],
   credentials: {
     isAnonymous: IFirebaseUser['isAnonymous'],
     metadata: IFirebaseUser['metadata'],
