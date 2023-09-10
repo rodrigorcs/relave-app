@@ -23,6 +23,7 @@ interface IProps {
   addVehicle: (vehicle: IVehicle) => void
   userId: IUser['id']
   isOpen: boolean
+  close: () => void
 }
 
 export const AddVehicleBottomSheet: FC<IProps> = ({
@@ -33,17 +34,11 @@ export const AddVehicleBottomSheet: FC<IProps> = ({
   addVehicle,
   userId,
   isOpen,
+  close,
 }) => {
+  const HEIGHT = 400
   const [vehicleBrands, setVehicleBrands] = useState<IVehicleBrand[] | null>(null)
   const [vehicleModels, setVehicleModels] = useState<IVehicleModel[] | null>(null)
-
-  const handleClose = () => {
-    bottomSheetRef?.current?.scrollTo(0)
-  }
-
-  useEffect(() => {
-    if (isOpen) handleClose()
-  }, [isOpen])
 
   useEffect(() => {
     const execute = async () => {
@@ -78,13 +73,13 @@ export const AddVehicleBottomSheet: FC<IProps> = ({
       ownerId: userId,
     })
     addVehicle(createdVehicle)
-    handleClose()
+    close()
   }
 
   const bottomSheetRef = useRef<IBottomSheetRefProps>(null)
 
   return (
-    <BottomSheet ref={bottomSheetRef} height={400}>
+    <BottomSheet ref={bottomSheetRef} height={HEIGHT} isOpen={isOpen} close={close}>
       <View className="flex-1">
         <CustomText variant={ECustomTextVariants.HEADING4}>Adicionar carro</CustomText>
         {/* @ts-expect-error // FIXME: IVehicleBrand does not satisfy IOption */}

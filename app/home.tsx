@@ -91,6 +91,10 @@ export default function Home() {
     setOpenBottomSheet('AddVehicle')
   }, [])
 
+  const handleCloseBottomSheet = useCallback(() => {
+    setOpenBottomSheet(null)
+  }, [])
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaView className="flex flex-1 bg-brand-500">
@@ -234,6 +238,7 @@ export default function Home() {
           userId={currentUser.id}
           addVehicle={() => {}}
           isOpen={openBottomSheet === 'AddVehicle'}
+          close={handleCloseBottomSheet}
         />
       </SafeAreaView>
     </GestureHandlerRootView>

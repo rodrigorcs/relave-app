@@ -1,14 +1,12 @@
 import { theme } from '../../theme'
 import { Cancel as CloseIcon } from 'iconoir-react-native'
-import React, { useCallback, useImperativeHandle, useState } from 'react'
+import React, { useCallback, useEffect, useImperativeHandle } from 'react'
 import { Pressable, TouchableOpacity } from 'react-native'
 import { Gesture, GestureDetector } from 'react-native-gesture-handler'
 import Animated, {
   Extrapolate,
   interpolate,
-  runOnJS,
   useAnimatedStyle,
-  useDerivedValue,
   useSharedValue,
   withSpring,
 } from 'react-native-reanimated'
@@ -16,6 +14,8 @@ import Animated, {
 interface IBottomSheetProps {
   children?: React.ReactNode
   height: number
+  isOpen: boolean
+  close: () => void
 }
 
 export interface IBottomSheetRefProps {
@@ -26,11 +26,14 @@ export interface IBottomSheetRefProps {
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 
 export const BottomSheet = React.forwardRef<IBottomSheetRefProps, IBottomSheetProps>(
-  ({ children, height }, ref) => {
+  ({ children, height, isOpen, close }, ref) => {
     const MAX_TRANSLATE_Y = height + 60
     const translateY = useSharedValue(MAX_TRANSLATE_Y)
     const active = useSharedValue(true)
-    const [isOpen, setIsOpen] = useState(active.value)
+
+    useEffect(() => {
+      isOpen ? scrollTo(0) : scrollTo(MAX_TRANSLATE_Y)
+    }, [isOpen])
 
     const scrollTo = useCallback((destination: number) => {
       'worklet'
@@ -57,7 +60,7 @@ export const BottomSheet = React.forwardRef<IBottomSheetRefProps, IBottomSheetPr
         if (translateY.value > MAX_TRANSLATE_Y / 3) {
           scrollTo(MAX_TRANSLATE_Y)
         } else if (translateY.value < MAX_TRANSLATE_Y / 1.5) {
-          scrollTo(0)
+          close()
         }
       })
 
@@ -76,17 +79,13 @@ export const BottomSheet = React.forwardRef<IBottomSheetRefProps, IBottomSheetPr
       return { opacity }
     })
 
-    useDerivedValue(() => {
-      runOnJS(setIsOpen)(active.value)
-    }, [])
-
     return (
       <>
         <AnimatedPressable
           className="absolute top-0 left-0 right-0 bottom-0 bg-neutrals-black opacity-0"
           style={rOverlayStyle}
           pointerEvents={isOpen ? 'auto' : 'none'}
-          onPress={() => scrollTo(MAX_TRANSLATE_Y)}
+          onPress={() => close()}
         />
         <GestureDetector gesture={gesture}>
           <Animated.View
@@ -95,7 +94,7 @@ export const BottomSheet = React.forwardRef<IBottomSheetRefProps, IBottomSheetPr
           >
             <TouchableOpacity
               className="absolute top-6 right-6 w-6 h-6 rounded-full items-center justify-center bg-neutrals-100"
-              onPress={() => scrollTo(MAX_TRANSLATE_Y)}
+              onPress={() => close()}
             >
               <CloseIcon
                 width={16}
