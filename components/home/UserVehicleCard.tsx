@@ -1,10 +1,11 @@
+import { useCloudImage } from '../../hooks/useCloudImage'
+import { Endpoints } from '../../models/constants/Endpoints'
 import { IVehicle } from '../../models/contracts/vehicle'
 import { theme } from '../../theme'
 import { cn } from '../../utils/cn'
-import { storage } from '../../utils/firebase'
 import { CustomText, ECustomTextVariants } from '../common'
 import { Car as BrandFallbackIcon, Check as CheckIcon } from 'iconoir-react-native'
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC } from 'react'
 import { View, TouchableOpacity, Image } from 'react-native'
 
 interface IProps {
@@ -20,17 +21,7 @@ export const UserVehicleCard: FC<IProps> = ({
   isSelected,
   handleChangeVehicle,
 }) => {
-  const [brandLogoUrl, setBrandLogoUrl] = useState<string | null>(null)
-
-  useEffect(() => {
-    const execute = async () => {
-      const imageUrl = await storage()
-        .ref(`vehicleBrandsLogos/${vehicle.brandSlug}.png`)
-        .getDownloadURL()
-      setBrandLogoUrl(imageUrl)
-    }
-    execute()
-  }, [])
+  const [brandLogoUrl] = useCloudImage(Endpoints.VEHICLE_BRANDS_LOGOS(vehicle.brandSlug))
 
   return (
     <View key={vehicle.id} className={cn(index > 0 && 'ml-2', index === 0 && 'ml-4')}>

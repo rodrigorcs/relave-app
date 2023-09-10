@@ -7,6 +7,7 @@ import {
 import { AddVehicleBottomSheet } from '../components/home/AddVehicleBottomSheet'
 import { UserVehicleCard } from '../components/home/UserVehicleCard'
 import { vehiclesActions } from '../core/actions/vehicles'
+import { useAsyncData } from '../hooks/useAsyncData'
 import { IVehicle } from '../models/contracts/vehicle'
 import { getCurrentUser } from '../state/slices/auth'
 import { IAppState } from '../state/store'
@@ -21,7 +22,7 @@ import {
   IconoirProvider,
   Spark as SparkIcon,
 } from 'iconoir-react-native'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { TouchableOpacity, SafeAreaView, View } from 'react-native'
 import { GestureHandlerRootView, ScrollView } from 'react-native-gesture-handler'
 import { useSelector } from 'react-redux'
@@ -59,18 +60,12 @@ export default function Home() {
   const [selectedVehicleId, setSelectedVehicleId] = useState<IVehicle['id'] | null>(null)
   const [openBottomSheet, setOpenBottomSheet] = useState<string | null>(null)
 
-  const [vehicles, setVehicles] = useState<IVehicle[]>([])
-
   const currentUser = useSelector(({ auth }: IAppState) => getCurrentUser(auth))
   if (!currentUser) return //FIXME: Add auth boundaries so currentUser is always truthy
 
-  useEffect(() => {
-    const execute = async () => {
-      const vehicles = await vehiclesActions.getVehiclesByUserId(currentUser?.id)
-      setVehicles(vehicles)
-    }
-    execute()
-  }, [])
+  const [vehicles] = useAsyncData(
+    currentUser ? () => vehiclesActions.getVehiclesByUserId(currentUser.id) : null,
+  )
 
   const handleChangeVehicle = (vehicleId: string) => {
     setSelectedVehicleId(vehicleId)
@@ -93,7 +88,7 @@ export default function Home() {
               Selecione seu carro
             </CustomText>
             <ScrollView horizontal showsHorizontalScrollIndicator={false} className="flex-row mt-4">
-              {vehicles.map((vehicle, index) => {
+              {(vehicles ?? []).map((vehicle, index) => {
                 const isSelected = vehicle.id === selectedVehicleId
                 return (
                   <UserVehicleCard
@@ -132,7 +127,7 @@ export default function Home() {
                     key={service.name}
                     className={cn(
                       'w-[272] bg-neutrals-white rounded-2xl ml-4',
-                      index === vehicles.length - 1 && 'mr-4',
+                      vehicles && index === vehicles.length - 1 && 'mr-4',
                     )}
                   >
                     <View className="flex-row justify-between items-center border-b border-neutrals-200 px-6 py-5">
