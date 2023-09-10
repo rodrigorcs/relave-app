@@ -6,10 +6,11 @@ import {
   ECustomTextVariants,
 } from '../components/common'
 import { BottomSheet, IBottomSheetRefProps } from '../components/common/BottomSheet'
-import { vehicleBrands } from '../models/constants/vehicleBrands'
 import { IVehicleBrand } from '../models/contracts/vehicleBrand'
+import { IVehicleModel } from '../models/contracts/vehicleModel'
 import { theme } from '../theme'
 import { cn } from '../utils/cn'
+import firestore from '@react-native-firebase/firestore'
 import {
   ArrowRight as ArrowRightIcon,
   Plus as PlusIcon,
@@ -19,7 +20,7 @@ import {
   IconoirProvider,
   Spark as SparkIcon,
 } from 'iconoir-react-native'
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Image, TouchableOpacity, SafeAreaView, View } from 'react-native'
 import { GestureHandlerRootView, ScrollView } from 'react-native-gesture-handler'
 
@@ -75,8 +76,34 @@ const services = [
 
 export default function Home() {
   const [selectedVehicleId, setSelectedVehicleId] = useState(vehicles[0].id)
+  const [vehicleBrands, setVehicleBrands] = useState<IVehicleBrand[] | null>(null)
+  const [vehicleModels, setVehicleModels] = useState<IVehicleModel[] | null>(null)
   const [selectedBrand, setSelectedBrand] = useState<IVehicleBrand | null>(null)
+  const [selectedModel, setSelectedModel] = useState<IVehicleModel | null>(null)
   const bottomSheetRef = useRef<IBottomSheetRefProps>(null)
+
+  useEffect(() => {
+    const execute = async () => {
+      const snapshot = await firestore().collection('vehicleBrands').get()
+      const _vehicleBrands = snapshot.docs.map((doc) => doc.data()) as IVehicleBrand[]
+      setVehicleBrands(_vehicleBrands)
+    }
+    execute()
+  }, [])
+
+  useEffect(() => {
+    if (!selectedBrand) return
+
+    const execute = async () => {
+      const snapshot = await firestore()
+        .collection('vehicleModels')
+        .where('brandId', '==', selectedBrand.id)
+        .get()
+      const _vehicleModels = snapshot.docs.map((doc) => doc.data()) as IVehicleModel[]
+      setVehicleModels(_vehicleModels)
+    }
+    execute()
+  }, [selectedBrand])
 
   const onPress = useCallback(() => {
     bottomSheetRef?.current?.scrollTo(0)
@@ -231,6 +258,14 @@ export default function Home() {
               setSelectedOption={setSelectedBrand}
               title="Marca"
               placeholder="Digite a marca..."
+            />
+            {/* @ts-expect-error // FIXME: IVehicleModel does not satisfy IOption */}
+            <Autocomplete<IVehicleModel>
+              options={vehicleModels}
+              selectedOption={selectedModel}
+              setSelectedOption={setSelectedModel}
+              title="Modelo"
+              placeholder="Digite o modelo..."
             />
             <CustomButton onPress={() => {}} customClassName="mt-8">
               Confirmar escolha
