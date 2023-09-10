@@ -1,3 +1,4 @@
+import { vehicleBrandsActions } from '../../core/actions/vehicleBrands'
 import { vehiclesActions } from '../../core/actions/vehicles'
 import { IUser } from '../../models/contracts/user'
 import { IVehicle } from '../../models/contracts/vehicle'
@@ -42,8 +43,7 @@ export const AddVehicleBottomSheet: FC<IProps> = ({
 
   useEffect(() => {
     const execute = async () => {
-      const snapshot = await firestore().collection('vehicleBrands').get()
-      const _vehicleBrands = snapshot.docs.map((doc) => doc.data()) as IVehicleBrand[]
+      const _vehicleBrands = await vehicleBrandsActions.getAll()
       setVehicleBrands(_vehicleBrands)
     }
     execute()

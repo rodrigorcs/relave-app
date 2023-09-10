@@ -3,3 +3,9 @@ export interface IVehicleBrand {
   slug: string
   name: string
 }
+
+export enum EVehicleBrandKeys {
+  ID = 'id',
+  SLUG = 'slug',
+  NAME = 'name'
+}
