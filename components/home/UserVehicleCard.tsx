@@ -1,9 +1,10 @@
 import { IVehicle } from '../../models/contracts/vehicle'
 import { theme } from '../../theme'
 import { cn } from '../../utils/cn'
+import { storage } from '../../utils/firebase'
 import { CustomText, ECustomTextVariants } from '../common'
-import { Check as CheckIcon } from 'iconoir-react-native'
-import React, { FC } from 'react'
+import { Car as BrandFallbackIcon, Check as CheckIcon } from 'iconoir-react-native'
+import React, { FC, useEffect, useState } from 'react'
 import { View, TouchableOpacity, Image } from 'react-native'
 
 interface IProps {
@@ -19,6 +20,18 @@ export const UserVehicleCard: FC<IProps> = ({
   isSelected,
   handleChangeVehicle,
 }) => {
+  const [brandLogoUrl, setBrandLogoUrl] = useState<string | null>(null)
+
+  useEffect(() => {
+    const execute = async () => {
+      const imageUrl = await storage()
+        .ref(`vehicleBrandsLogos/${vehicle.brandSlug}.png`)
+        .getDownloadURL()
+      setBrandLogoUrl(imageUrl)
+    }
+    execute()
+  }, [])
+
   return (
     <View key={vehicle.id} className={cn(index > 0 && 'ml-2', index === 0 && 'ml-4')}>
       <TouchableOpacity
@@ -29,7 +42,18 @@ export const UserVehicleCard: FC<IProps> = ({
         activeOpacity={0.6}
         onPress={() => handleChangeVehicle(vehicle.id)}
       >
-        {/* <Image source={imageSrc} resizeMode="center" className="h-8 w-8 mb-4" /> */}
+        {brandLogoUrl ? (
+          <Image source={{ uri: brandLogoUrl }} resizeMode="center" className="h-8 w-8 mb-4" />
+        ) : (
+          <View className="h-8 w-8 mb-4 items-center justify-center">
+            <BrandFallbackIcon
+              width={24}
+              height={24}
+              strokeWidth={1.5}
+              color={theme.colors['neutrals-900']}
+            />
+          </View>
+        )}
         <CustomText variant={ECustomTextVariants.EYEBROW2}>{vehicle.brandName}</CustomText>
         <CustomText variant={ECustomTextVariants.BODY3}>{vehicle.modelName}</CustomText>
       </TouchableOpacity>
