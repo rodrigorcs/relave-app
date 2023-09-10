@@ -7,6 +7,8 @@ import {
 import { AddVehicleBottomSheet } from '../components/home/AddVehicleBottomSheet'
 import { IVehicleBrand } from '../models/contracts/vehicleBrand'
 import { IVehicleModel } from '../models/contracts/vehicleModel'
+import { getCurrentUser } from '../state/slices/auth'
+import { IAppState } from '../state/store'
 import { theme } from '../theme'
 import { cn } from '../utils/cn'
 import {
@@ -21,6 +23,7 @@ import {
 import React, { useCallback, useState } from 'react'
 import { Image, TouchableOpacity, SafeAreaView, View } from 'react-native'
 import { GestureHandlerRootView, ScrollView } from 'react-native-gesture-handler'
+import { useSelector } from 'react-redux'
 
 const tierIcons = Object.freeze({
   1: <FlashIcon />,
@@ -77,6 +80,8 @@ export default function Home() {
   const [selectedBrand, setSelectedBrand] = useState<IVehicleBrand | null>(null)
   const [selectedModel, setSelectedModel] = useState<IVehicleModel | null>(null)
   const [openBottomSheet, setOpenBottomSheet] = useState<string | null>(null)
+  const currentUser = useSelector(({ auth }: IAppState) => getCurrentUser(auth))
+  if (!currentUser) return //FIXME: Add auth boundaries so currentUser is always truthy
 
   const handleChangeVehicle = (vehicleId: string) => {
     setSelectedVehicleId(vehicleId)
@@ -226,6 +231,8 @@ export default function Home() {
           selectedModel={selectedModel}
           setSelectedBrand={setSelectedBrand}
           setSelectedModel={setSelectedModel}
+          userId={currentUser.id}
+          addVehicle={() => {}}
           isOpen={openBottomSheet === 'AddVehicle'}
         />
       </SafeAreaView>

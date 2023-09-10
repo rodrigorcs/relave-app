@@ -1,3 +1,6 @@
+import { vehiclesActions } from '../../core/actions/vehicles'
+import { IUser } from '../../models/contracts/user'
+import { IVehicle } from '../../models/contracts/vehicle'
 import { IVehicleBrand } from '../../models/contracts/vehicleBrand'
 import { IVehicleModel } from '../../models/contracts/vehicleModel'
 import {
@@ -17,6 +20,8 @@ interface IProps {
   selectedModel: IVehicleModel | null
   setSelectedBrand: Dispatch<SetStateAction<IVehicleBrand | null>>
   setSelectedModel: Dispatch<SetStateAction<IVehicleModel | null>>
+  addVehicle: (vehicle: IVehicle) => void
+  userId: IUser['id']
   isOpen: boolean
 }
 
@@ -25,13 +30,19 @@ export const AddVehicleBottomSheet: FC<IProps> = ({
   selectedModel,
   setSelectedBrand,
   setSelectedModel,
+  addVehicle,
+  userId,
   isOpen,
 }) => {
   const [vehicleBrands, setVehicleBrands] = useState<IVehicleBrand[] | null>(null)
   const [vehicleModels, setVehicleModels] = useState<IVehicleModel[] | null>(null)
 
+  const handleClose = () => {
+    bottomSheetRef?.current?.scrollTo(0)
+  }
+
   useEffect(() => {
-    if (isOpen) bottomSheetRef?.current?.scrollTo(0)
+    if (isOpen) handleClose()
   }, [isOpen])
 
   useEffect(() => {
@@ -57,6 +68,19 @@ export const AddVehicleBottomSheet: FC<IProps> = ({
     execute()
   }, [selectedBrand])
 
+  const handleCreateVehicle = async () => {
+    if (!selectedBrand || !selectedModel) return
+    const createdVehicle = await vehiclesActions.createVehicle({
+      brandId: selectedBrand.id,
+      brandName: selectedBrand.name,
+      modelId: selectedModel.id,
+      modelName: selectedModel.name,
+      ownerId: userId,
+    })
+    addVehicle(createdVehicle)
+    handleClose()
+  }
+
   const bottomSheetRef = useRef<IBottomSheetRefProps>(null)
 
   return (
@@ -79,7 +103,7 @@ export const AddVehicleBottomSheet: FC<IProps> = ({
           title="Modelo"
           placeholder="Digite o modelo..."
         />
-        <CustomButton onPress={() => {}} customClassName="mt-8">
+        <CustomButton onPress={handleCreateVehicle} customClassName="mt-8">
           Confirmar escolha
         </CustomButton>
       </View>
