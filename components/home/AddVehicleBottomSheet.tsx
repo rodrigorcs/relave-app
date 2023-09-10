@@ -1,5 +1,7 @@
 import { vehicleBrandsActions } from '../../core/actions/vehicleBrands'
+import { vehicleModelsActions } from '../../core/actions/vehicleModels'
 import { vehiclesActions } from '../../core/actions/vehicles'
+import { useAsyncData } from '../../hooks/useAsyncData'
 import { IUser } from '../../models/contracts/user'
 import { IVehicle } from '../../models/contracts/vehicle'
 import { IVehicleBrand } from '../../models/contracts/vehicleBrand'
@@ -12,56 +14,26 @@ import {
   IBottomSheetRefProps,
   Autocomplete,
 } from '../common'
-import firestore from '@react-native-firebase/firestore'
-import React, { Dispatch, FC, SetStateAction, useEffect, useRef, useState } from 'react'
+import React, { FC, useRef, useState } from 'react'
 import { View } from 'react-native'
 
 interface IProps {
-  selectedBrand: IVehicleBrand | null
-  selectedModel: IVehicleModel | null
-  setSelectedBrand: Dispatch<SetStateAction<IVehicleBrand | null>>
-  setSelectedModel: Dispatch<SetStateAction<IVehicleModel | null>>
   addVehicle: (vehicle: IVehicle) => void
   userId: IUser['id']
   isOpen: boolean
   close: () => void
 }
 
-export const AddVehicleBottomSheet: FC<IProps> = ({
-  selectedBrand,
-  selectedModel,
-  setSelectedBrand,
-  setSelectedModel,
-  addVehicle,
-  userId,
-  isOpen,
-  close,
-}) => {
+export const AddVehicleBottomSheet: FC<IProps> = ({ addVehicle, userId, isOpen, close }) => {
   const HEIGHT = 400
-  const [vehicleBrands, setVehicleBrands] = useState<IVehicleBrand[] | null>(null)
-  const [vehicleModels, setVehicleModels] = useState<IVehicleModel[] | null>(null)
+  const [selectedBrand, setSelectedBrand] = useState<IVehicleBrand | null>(null)
+  const [selectedModel, setSelectedModel] = useState<IVehicleModel | null>(null)
 
-  useEffect(() => {
-    const execute = async () => {
-      const _vehicleBrands = await vehicleBrandsActions.getAll()
-      setVehicleBrands(_vehicleBrands)
-    }
-    execute()
-  }, [])
-
-  useEffect(() => {
-    if (!selectedBrand) return
-
-    const execute = async () => {
-      const snapshot = await firestore()
-        .collection('vehicleModels')
-        .where('brandId', '==', selectedBrand.id)
-        .get()
-      const _vehicleModels = snapshot.docs.map((doc) => doc.data()) as IVehicleModel[]
-      setVehicleModels(_vehicleModels)
-    }
-    execute()
-  }, [selectedBrand])
+  const [vehicleBrands] = useAsyncData(() => vehicleBrandsActions.getAll())
+  const [vehicleModels] = useAsyncData(
+    selectedBrand ? () => vehicleModelsActions.getByBrandId(selectedBrand?.id) : null,
+    [selectedBrand],
+  )
 
   const handleCreateVehicle = async () => {
     if (!selectedBrand || !selectedModel) return

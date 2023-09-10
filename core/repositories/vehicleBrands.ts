@@ -5,7 +5,7 @@ import { firestore } from "../../utils/firebase"
 const vehicleBrandsCollection = firestore().collection(EFirestoreCollections.VEHICLE_BRANDS)
 
 export const vehicleBrandsRepository = {
-  getVehiclesBrands: async () => {
+  getVehicleBrands: async () => {
     const snapshot = await vehicleBrandsCollection.get()
     const vehicleBrands = snapshot.docs.map((doc) => doc.data()) as IVehicleBrand[]
 

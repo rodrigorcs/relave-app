@@ -8,8 +8,6 @@ import { AddVehicleBottomSheet } from '../components/home/AddVehicleBottomSheet'
 import { UserVehicleCard } from '../components/home/UserVehicleCard'
 import { vehiclesActions } from '../core/actions/vehicles'
 import { IVehicle } from '../models/contracts/vehicle'
-import { IVehicleBrand } from '../models/contracts/vehicleBrand'
-import { IVehicleModel } from '../models/contracts/vehicleModel'
 import { getCurrentUser } from '../state/slices/auth'
 import { IAppState } from '../state/store'
 import { theme } from '../theme'
@@ -39,7 +37,7 @@ const services = [
     price: 7000,
     name: 'Lavagem Simples',
     tier: 1,
-    features: ['Lavagem exterior', 'Limpeza dos vidros', 'Aspiração interna', 'Secagem manual'],
+    features: ['Lavagem exterior', 'Limpeza dos vidros', 'Aspiração interna'],
   },
   {
     price: 12000,
@@ -59,8 +57,6 @@ const services = [
 
 export default function Home() {
   const [selectedVehicleId, setSelectedVehicleId] = useState<IVehicle['id'] | null>(null)
-  const [selectedBrand, setSelectedBrand] = useState<IVehicleBrand | null>(null)
-  const [selectedModel, setSelectedModel] = useState<IVehicleModel | null>(null)
   const [openBottomSheet, setOpenBottomSheet] = useState<string | null>(null)
 
   const [vehicles, setVehicles] = useState<IVehicle[]>([])
@@ -125,6 +121,9 @@ export default function Home() {
           <View className="flex-1 py-8 bg-brand-500">
             <CustomText variant={ECustomTextVariants.HEADING3} customClassName="ml-4" white>
               Serviços
+            </CustomText>
+            <CustomText variant={ECustomTextVariants.BODY3} customClassName="ml-4 mt-1" white>
+              Escolha o tipo de cuidado que o seu carro precisa
             </CustomText>
             <ScrollView horizontal showsHorizontalScrollIndicator={false} className="flex-row mt-4">
               {services.map((service, index) => {
@@ -205,10 +204,6 @@ export default function Home() {
           </View>
         </View>
         <AddVehicleBottomSheet
-          selectedBrand={selectedBrand}
-          selectedModel={selectedModel}
-          setSelectedBrand={setSelectedBrand}
-          setSelectedModel={setSelectedModel}
           userId={currentUser.id}
           addVehicle={() => {}}
           isOpen={openBottomSheet === 'AddVehicle'}
