@@ -13,7 +13,15 @@ type IFirebaseUser = Pick<FirebaseAuthTypes.User,
   'providerId' |
   'uid'>
 
-export interface IUser extends Omit<IFirebaseUser, 'uid' | 'emailVerified'> {
-  id: IFirebaseUser['uid']
-  isEmailVerified: IFirebaseUser['emailVerified']
+export interface IUser {
+  displayName: IFirebaseUser['displayName'],
+  id: IFirebaseUser['uid'],
+  credentials: {
+    isAnonymous: IFirebaseUser['isAnonymous'],
+    metadata: IFirebaseUser['metadata'],
+    multiFactor: IFirebaseUser['multiFactor'],
+    phoneNumber: IFirebaseUser['phoneNumber'],
+    providerData: IFirebaseUser['providerData'],
+    providerId: IFirebaseUser['providerId'],
+  },
 }

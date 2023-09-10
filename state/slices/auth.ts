@@ -1,15 +1,15 @@
 import { FirebaseAuthTypes } from '@react-native-firebase/auth';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import auth from '@react-native-firebase/auth'
 import { IUser } from '../../models/contracts/user';
+import { confirmOTPTokenAction, sendOTPTokenAction, signOutAction } from '../../actions/auth'
 
 interface IAuthState {
-  credentials: IUser | null
+  user: IUser | null
   isUserSignedIn: boolean
 }
 
 const initialState: IAuthState = {
-  credentials: null,
+  user: null,
   isUserSignedIn: false
 }
 
@@ -17,39 +17,33 @@ export const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    storeCredentials: (state, action: PayloadAction<IUser>) => {
-      state.credentials = action.payload
+    storeUser: (state, action: PayloadAction<IUser>) => {
+      state.user = action.payload
       state.isUserSignedIn = !!action.payload.id
     },
     clearCredentials: (state) => {
-      state.credentials = null
+      state.user = null
       state.isUserSignedIn = false
     },
   },
 })
 
-export const { storeCredentials, clearCredentials } = authSlice.actions
+export const { storeUser, clearCredentials } = authSlice.actions
 
 let smsConfirmationObj: FirebaseAuthTypes.ConfirmationResult | null = null; // TODO: Alternative - Can't put into slice as it's not serializable
 
 export const sendOTPToken = (phoneNumber: string) => async () => {
-  const phoneToSignIn = `+55 ${phoneNumber}`
-  const confirmation = await auth().signInWithPhoneNumber(phoneToSignIn)
+  const confirmation = await sendOTPTokenAction(phoneNumber)
   smsConfirmationObj = confirmation
 }
 
 export const confirmOTPToken = (code: string) => async () => {
-  try {
-    await smsConfirmationObj?.confirm(code)
-  } catch (error) {
-    // TODO: Add error handling
-    console.error(error)
-  }
+  if (smsConfirmationObj) await confirmOTPTokenAction(smsConfirmationObj, code)
 }
 
-export const signOut = () => auth().signOut()
+export const signOut = () => signOutAction()
 
-export const getCurrentUser = (state: IAuthState) => state.credentials
+export const getCurrentUser = (state: IAuthState) => state.user
 export const getIsUserSignedIn = (state: IAuthState) => state.isUserSignedIn
 
 export const authReducer = authSlice.reducer
