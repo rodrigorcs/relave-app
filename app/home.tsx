@@ -1,7 +1,10 @@
 import { CustomText, ECustomTextVariants } from '../components/common'
-import { AddVehicleBottomSheet } from '../components/home/AddVehicleBottomSheet'
-import { ServiceBundleCard } from '../components/home/ServiceBundleCard'
-import { UserVehicleCard } from '../components/home/UserVehicleCard'
+import {
+  AddVehicleCard,
+  AddVehicleBottomSheet,
+  ServiceBundleCard,
+  UserVehicleCard,
+} from '../components/home'
 import { serviceBundlesActions } from '../core/actions/serviceBundles'
 import { vehiclesActions } from '../core/actions/vehicles'
 import { useAsyncData } from '../hooks/useAsyncData'
@@ -9,16 +12,13 @@ import { EServiceBundleTiers } from '../models/contracts/serviceBundle'
 import { IVehicle } from '../models/contracts/vehicle'
 import { getCurrentUser } from '../state/slices/auth'
 import { IAppState } from '../state/store'
-import { theme } from '../theme'
-import { cn } from '../utils/cn'
 import {
-  Plus as PlusIcon,
   Flash as FlashIcon,
-  DropletHalf as DropletIcon,
   Spark as SparkIcon,
+  DropletHalf as DropletIcon,
 } from 'iconoir-react-native'
 import React, { useCallback, useState } from 'react'
-import { TouchableOpacity, SafeAreaView, View } from 'react-native'
+import { SafeAreaView, View } from 'react-native'
 import { GestureHandlerRootView, ScrollView } from 'react-native-gesture-handler'
 import { useSelector } from 'react-redux'
 
@@ -27,6 +27,11 @@ const TIER_ICONS = Object.freeze({
   [EServiceBundleTiers.ADVANCED]: <SparkIcon />,
   [EServiceBundleTiers.PREMIUM]: <DropletIcon />,
 })
+
+enum EBottomSheets {
+  ADD_VEHICLE = 'AddVehicle',
+  ADD_SERVICES = 'AddServices',
+}
 
 export default function Home() {
   const [selectedVehicleId, setSelectedVehicleId] = useState<IVehicle['id'] | null>(null)
@@ -38,17 +43,14 @@ export default function Home() {
   const [vehicles] = useAsyncData(
     currentUser ? () => vehiclesActions.getVehiclesByUserId(currentUser.id) : null,
   )
-
   const [serviceBundles] = useAsyncData(() => serviceBundlesActions.getAllWithDetails())
-
-  console.log({ serviceBundles })
 
   const handleChangeVehicle = (vehicleId: string) => {
     setSelectedVehicleId(vehicleId)
   }
 
   const handleOpenAddVehicleBottomSheet = useCallback(() => {
-    setOpenBottomSheet('AddVehicle')
+    setOpenBottomSheet(EBottomSheets.ADD_VEHICLE)
   }, [])
 
   const handleCloseBottomSheet = useCallback(() => {
@@ -76,17 +78,7 @@ export default function Home() {
                   />
                 )
               })}
-              <TouchableOpacity
-                className={cn(
-                  'h-32 w-32 bg-neutrals-100 rounded-2xl items-center justify-center ml-2 mr-4',
-                )}
-                onPress={handleOpenAddVehicleBottomSheet}
-              >
-                <PlusIcon color={theme.colors['neutrals-800']} width={24} height={24} />
-                <CustomText variant={ECustomTextVariants.BODY3} customClassName="mt-2 text-center">
-                  {`Adicionar\ncarro`}
-                </CustomText>
-              </TouchableOpacity>
+              <AddVehicleCard onPress={handleOpenAddVehicleBottomSheet} />
             </ScrollView>
           </View>
           <View className="flex-1 py-8 bg-brand-500">
@@ -114,7 +106,7 @@ export default function Home() {
         <AddVehicleBottomSheet
           userId={currentUser.id}
           addVehicle={() => {}}
-          isOpen={openBottomSheet === 'AddVehicle'}
+          isOpen={openBottomSheet === EBottomSheets.ADD_VEHICLE}
           close={handleCloseBottomSheet}
         />
       </SafeAreaView>
