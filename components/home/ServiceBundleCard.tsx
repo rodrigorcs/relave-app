@@ -13,11 +13,17 @@ import { ClassNameValue } from 'tailwind-merge'
 
 interface IProps {
   serviceBundle: IServiceBundleWithDetails
+  onPress: (serviceBundle: IServiceBundleWithDetails) => void
   Icon: ReactNode
   customClassName: ClassNameValue
 }
 
-export const ServiceBundleCard: FC<IProps> = ({ serviceBundle, Icon, customClassName }) => {
+export const ServiceBundleCard: FC<IProps> = ({
+  serviceBundle,
+  onPress,
+  Icon,
+  customClassName,
+}) => {
   return (
     <View className={cn('w-[272] bg-neutrals-white rounded-2xl ml-4', customClassName)}>
       <View className="flex-row justify-between items-center border-b border-neutrals-200 px-6 py-5">
@@ -62,7 +68,7 @@ export const ServiceBundleCard: FC<IProps> = ({ serviceBundle, Icon, customClass
         </View>
         <CustomButton
           variant={ECustomButtonVariants.SECONDARY}
-          onPress={() => {}}
+          onPress={() => onPress(serviceBundle)}
           IconRight={
             <ArrowRightIcon
               width={20}

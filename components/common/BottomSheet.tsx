@@ -1,4 +1,5 @@
 import { theme } from '../../theme'
+import { cn } from '../../utils/cn'
 import { Cancel as CloseIcon } from 'iconoir-react-native'
 import React, { useCallback, useEffect, useImperativeHandle } from 'react'
 import { Pressable, TouchableOpacity } from 'react-native'
@@ -6,6 +7,7 @@ import { Gesture, GestureDetector } from 'react-native-gesture-handler'
 import Animated, {
   Extrapolate,
   interpolate,
+  runOnJS,
   useAnimatedStyle,
   useSharedValue,
   withSpring,
@@ -60,7 +62,7 @@ export const BottomSheet = React.forwardRef<IBottomSheetRefProps, IBottomSheetPr
         if (translateY.value > MAX_TRANSLATE_Y / 3) {
           scrollTo(MAX_TRANSLATE_Y)
         } else if (translateY.value < MAX_TRANSLATE_Y / 1.5) {
-          close()
+          runOnJS(close)()
         }
       })
 
@@ -89,8 +91,8 @@ export const BottomSheet = React.forwardRef<IBottomSheetRefProps, IBottomSheetPr
         />
         <GestureDetector gesture={gesture}>
           <Animated.View
-            className="w-full bg-neutrals-white absolute rounded-t-3xl p-6 pt-14 bottom-0"
-            style={rBottomSheetStyle}
+            className={cn('w-full bg-neutrals-white absolute rounded-t-3xl p-6 pt-14 bottom-0')}
+            style={[rBottomSheetStyle, { height }]}
           >
             <TouchableOpacity
               className="absolute top-6 right-6 w-6 h-6 rounded-full items-center justify-center bg-neutrals-100"

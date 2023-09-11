@@ -5,10 +5,11 @@ import {
   ServiceBundleCard,
   UserVehicleCard,
 } from '../components/home'
+import { AddServicesBottomSheet } from '../components/home/AddServicesBottomSheet'
 import { serviceBundlesActions } from '../core/actions/serviceBundles'
 import { vehiclesActions } from '../core/actions/vehicles'
 import { useAsyncData } from '../hooks/useAsyncData'
-import { EServiceBundleTiers } from '../models/contracts/serviceBundle'
+import { EServiceBundleTiers, IServiceBundleWithDetails } from '../models/contracts/serviceBundle'
 import { IVehicle } from '../models/contracts/vehicle'
 import { getCurrentUser } from '../state/slices/auth'
 import { IAppState } from '../state/store'
@@ -28,14 +29,11 @@ const TIER_ICONS = Object.freeze({
   [EServiceBundleTiers.PREMIUM]: <DropletIcon />,
 })
 
-enum EBottomSheets {
-  ADD_VEHICLE = 'AddVehicle',
-  ADD_SERVICES = 'AddServices',
-}
-
 export default function Home() {
   const [selectedVehicleId, setSelectedVehicleId] = useState<IVehicle['id'] | null>(null)
-  const [openBottomSheet, setOpenBottomSheet] = useState<string | null>(null)
+  const [selectedServiceBundle, setSelectedServiceBundle] =
+    useState<IServiceBundleWithDetails | null>(null)
+  const [openAddVehicleBottomSheet, setOpenAddVehicleBottomSheet] = useState<boolean>(false)
 
   const currentUser = useSelector(({ auth }: IAppState) => getCurrentUser(auth))
   if (!currentUser) return //FIXME: Add auth boundaries so currentUser is always truthy
@@ -50,12 +48,20 @@ export default function Home() {
   }
 
   const handleOpenAddVehicleBottomSheet = useCallback(() => {
-    setOpenBottomSheet(EBottomSheets.ADD_VEHICLE)
+    setOpenAddVehicleBottomSheet(true)
   }, [])
 
-  const handleCloseBottomSheet = useCallback(() => {
-    setOpenBottomSheet(null)
+  const handleCloseAddVehicleBottomSheet = useCallback(() => {
+    setOpenAddVehicleBottomSheet(false)
   }, [])
+
+  const handleCloseAddServicesBottomSheet = useCallback(() => {
+    setSelectedServiceBundle(null)
+  }, [])
+
+  const handleChooseServiceBundle = (serviceBundle: IServiceBundleWithDetails) => {
+    setSelectedServiceBundle(serviceBundle)
+  }
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
@@ -95,6 +101,7 @@ export default function Home() {
                   <ServiceBundleCard
                     key={serviceBundle.id}
                     serviceBundle={serviceBundle}
+                    onPress={handleChooseServiceBundle}
                     Icon={TIER_ICONS[serviceBundle.tier]}
                     customClassName={isLastItem && 'mr-4'}
                   />
@@ -106,8 +113,17 @@ export default function Home() {
         <AddVehicleBottomSheet
           userId={currentUser.id}
           addVehicle={() => {}}
-          isOpen={openBottomSheet === EBottomSheets.ADD_VEHICLE}
-          close={handleCloseBottomSheet}
+          isOpen={openAddVehicleBottomSheet}
+          close={handleCloseAddVehicleBottomSheet}
+        />
+        <AddServicesBottomSheet
+          userId={currentUser.id}
+          // @ts-expect-error / FIXME: Handle click when no vehicle is selected
+          selectedVehicleId={selectedVehicleId}
+          // @ts-expect-error / FIXME: Make TS understand that it will only be open if selectedServiceBundle !== null
+          selectedServiceBundle={selectedServiceBundle}
+          isOpen={selectedServiceBundle !== null}
+          close={handleCloseAddServicesBottomSheet}
         />
       </SafeAreaView>
     </GestureHandlerRootView>

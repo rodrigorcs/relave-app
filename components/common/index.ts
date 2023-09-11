@@ -1,5 +1,6 @@
 export * from './Autocomplete'
 export * from './BottomSheet'
+export * from './Checkbox'
 export * from './CustomButton'
 export * from './CustomInput'
 export * from './CustomText'
