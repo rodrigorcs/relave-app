@@ -1,6 +1,5 @@
 import { servicesActions } from '../../core/actions/services'
-import { useAsyncData } from '../../hooks/useAsyncData'
-import { useSelection } from '../../hooks/useSelection'
+import { useAsyncData, useSelection } from '../../hooks'
 import { IServiceBundleWithDetails } from '../../models/contracts/serviceBundle'
 import { IUser } from '../../models/contracts/user'
 import { IVehicle } from '../../models/contracts/vehicle'

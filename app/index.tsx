@@ -1,6 +1,6 @@
 import NotificationsIllustration from '../assets/vectors/illustration-push-notifications.svg'
 import { CustomButton, CustomInput, CustomText, ECustomTextVariants } from '../components/common'
-import { useMaskedInput } from '../hooks/useMaskedInput'
+import { useMaskedInput } from '../hooks'
 import { EInputMasks } from '../models/constants/EInputMasks'
 import { sendOTPToken, signOut } from '../state/slices/auth'
 import { router } from 'expo-router'

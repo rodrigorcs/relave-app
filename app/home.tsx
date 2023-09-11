@@ -8,7 +8,7 @@ import {
 import { AddServicesBottomSheet } from '../components/home/AddServicesBottomSheet'
 import { serviceBundlesActions } from '../core/actions/serviceBundles'
 import { vehiclesActions } from '../core/actions/vehicles'
-import { useAsyncData } from '../hooks/useAsyncData'
+import { useAsyncData } from '../hooks'
 import { EServiceBundleTiers, IServiceBundleWithDetails } from '../models/contracts/serviceBundle'
 import { IVehicle } from '../models/contracts/vehicle'
 import { getCurrentUser } from '../state/slices/auth'

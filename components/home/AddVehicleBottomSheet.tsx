@@ -1,7 +1,7 @@
 import { vehicleBrandsActions } from '../../core/actions/vehicleBrands'
 import { vehicleModelsActions } from '../../core/actions/vehicleModels'
 import { vehiclesActions } from '../../core/actions/vehicles'
-import { useAsyncData } from '../../hooks/useAsyncData'
+import { useAsyncData } from '../../hooks'
 import { IUser } from '../../models/contracts/user'
 import { IVehicle } from '../../models/contracts/vehicle'
 import { IVehicleBrand } from '../../models/contracts/vehicleBrand'

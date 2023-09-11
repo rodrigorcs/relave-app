@@ -1,4 +1,4 @@
-import { useCloudImage } from '../../hooks/useCloudImage'
+import { useCloudImage } from '../../hooks'
 import { Endpoints } from '../../models/constants/Endpoints'
 import { IVehicle } from '../../models/contracts/vehicle'
 import { theme } from '../../theme'
