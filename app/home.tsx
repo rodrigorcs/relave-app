@@ -1,25 +1,20 @@
-import {
-  CustomButton,
-  CustomText,
-  ECustomButtonVariants,
-  ECustomTextVariants,
-} from '../components/common'
+import { CustomText, ECustomTextVariants } from '../components/common'
 import { AddVehicleBottomSheet } from '../components/home/AddVehicleBottomSheet'
+import { ServiceBundleCard } from '../components/home/ServiceBundleCard'
 import { UserVehicleCard } from '../components/home/UserVehicleCard'
+import { serviceBundlesActions } from '../core/actions/serviceBundles'
 import { vehiclesActions } from '../core/actions/vehicles'
 import { useAsyncData } from '../hooks/useAsyncData'
+import { EServiceBundleTiers } from '../models/contracts/serviceBundle'
 import { IVehicle } from '../models/contracts/vehicle'
 import { getCurrentUser } from '../state/slices/auth'
 import { IAppState } from '../state/store'
 import { theme } from '../theme'
 import { cn } from '../utils/cn'
 import {
-  ArrowRight as ArrowRightIcon,
   Plus as PlusIcon,
-  Check as CheckIcon,
   Flash as FlashIcon,
   DropletHalf as DropletIcon,
-  IconoirProvider,
   Spark as SparkIcon,
 } from 'iconoir-react-native'
 import React, { useCallback, useState } from 'react'
@@ -27,34 +22,11 @@ import { TouchableOpacity, SafeAreaView, View } from 'react-native'
 import { GestureHandlerRootView, ScrollView } from 'react-native-gesture-handler'
 import { useSelector } from 'react-redux'
 
-const tierIcons = Object.freeze({
-  1: <FlashIcon />,
-  2: <SparkIcon />,
-  3: <DropletIcon />,
+const TIER_ICONS = Object.freeze({
+  [EServiceBundleTiers.SIMPLE]: <FlashIcon />,
+  [EServiceBundleTiers.ADVANCED]: <SparkIcon />,
+  [EServiceBundleTiers.PREMIUM]: <DropletIcon />,
 })
-
-const services = [
-  {
-    price: 7000,
-    name: 'Lavagem Simples',
-    tier: 1,
-    features: ['Lavagem exterior', 'Limpeza dos vidros', 'Aspiração interna'],
-  },
-  {
-    price: 12000,
-    name: 'Lavagem Avançada',
-    tier: 2,
-    includes: 'Lavagem Simples',
-    features: ['Enceramento', 'Higienização interna', 'Revitalização de plásticos'],
-  },
-  {
-    price: 18000,
-    name: 'Lavagem Premium',
-    tier: 3,
-    includes: 'Lavagem Avançada',
-    features: ['Polimento da pintura', 'Higienização interna completa', 'Tratamento de couro'],
-  },
-]
 
 export default function Home() {
   const [selectedVehicleId, setSelectedVehicleId] = useState<IVehicle['id'] | null>(null)
@@ -66,6 +38,10 @@ export default function Home() {
   const [vehicles] = useAsyncData(
     currentUser ? () => vehiclesActions.getVehiclesByUserId(currentUser.id) : null,
   )
+
+  const [serviceBundles] = useAsyncData(() => serviceBundlesActions.getAllWithDetails())
+
+  console.log({ serviceBundles })
 
   const handleChangeVehicle = (vehicleId: string) => {
     setSelectedVehicleId(vehicleId)
@@ -121,78 +97,15 @@ export default function Home() {
               Escolha o tipo de cuidado que o seu carro precisa
             </CustomText>
             <ScrollView horizontal showsHorizontalScrollIndicator={false} className="flex-row mt-4">
-              {services.map((service, index) => {
+              {(serviceBundles || []).map((serviceBundle, index) => {
+                const isLastItem = serviceBundles && index === serviceBundles?.length - 1
                 return (
-                  <View
-                    key={service.name}
-                    className={cn(
-                      'w-[272] bg-neutrals-white rounded-2xl ml-4',
-                      vehicles && index === vehicles.length - 1 && 'mr-4',
-                    )}
-                  >
-                    <View className="flex-row justify-between items-center border-b border-neutrals-200 px-6 py-5">
-                      <View className="w-10 h-10 items-center justify-center rounded-full bg-brand-300">
-                        <IconoirProvider
-                          iconProps={{
-                            width: 20,
-                            height: 20,
-                            color: theme.colors['brand-500'],
-                            fill: theme.colors['brand-500'],
-                          }}
-                        >
-                          {tierIcons[service.tier as 1 | 2 | 3]}
-                        </IconoirProvider>
-                      </View>
-                      <CustomText variant={ECustomTextVariants.HEADING2}>
-                        {`R$${service.price / 100}`}
-                      </CustomText>
-                    </View>
-                    <View className="p-6 flex-1">
-                      <CustomText variant={ECustomTextVariants.HEADING4} customClassName="mb-4">
-                        {service.name}
-                      </CustomText>
-                      <View className="flex-1">
-                        {service.features.map((feature, index) => {
-                          return (
-                            <View
-                              key={feature}
-                              className={cn('flex-row items-center', index > 0 && 'mt-3')}
-                            >
-                              <View className="w-5 h-5 bg-brand-500 rounded-full items-center justify-center">
-                                <CheckIcon
-                                  width={16}
-                                  height={16}
-                                  strokeWidth={2}
-                                  color={theme.colors['neutrals-white']}
-                                />
-                              </View>
-                              <CustomText
-                                key={feature}
-                                variant={ECustomTextVariants.BODY3}
-                                customClassName="ml-2"
-                              >
-                                {feature}
-                              </CustomText>
-                            </View>
-                          )
-                        })}
-                      </View>
-                      <CustomButton
-                        variant={ECustomButtonVariants.SECONDARY}
-                        onPress={() => {}}
-                        IconRight={
-                          <ArrowRightIcon
-                            width={20}
-                            height={20}
-                            strokeWidth={2}
-                            color={theme.colors['brand-500']}
-                          />
-                        }
-                      >
-                        Escolher
-                      </CustomButton>
-                    </View>
-                  </View>
+                  <ServiceBundleCard
+                    key={serviceBundle.id}
+                    serviceBundle={serviceBundle}
+                    Icon={TIER_ICONS[serviceBundle.tier]}
+                    customClassName={isLastItem && 'mr-4'}
+                  />
                 )
               })}
             </ScrollView>
