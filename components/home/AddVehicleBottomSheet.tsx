@@ -70,6 +70,7 @@ export const AddVehicleBottomSheet: FC<IProps> = ({ addVehicle, userId, isOpen, 
           setSelectedOption={setSelectedModel}
           title="Modelo"
           placeholder="Digite o modelo..."
+          isDisabled={!selectedBrand}
         />
         <CustomButton onPress={handleCreateVehicle} customClassName="absolute bottom-0 w-full">
           Confirmar escolha

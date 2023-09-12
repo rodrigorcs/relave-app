@@ -14,16 +14,20 @@ import { View, FlatList, TouchableOpacity, TextInput } from 'react-native'
 interface IDropdownExpandButtonProps {
   isDropdownOpen: boolean
   setIsDropdownOpen: Dispatch<SetStateAction<boolean>>
+  isDisabled?: boolean
 }
 
 const DropdownExpandButton: FC<IDropdownExpandButtonProps> = ({
   isDropdownOpen,
   setIsDropdownOpen,
+  isDisabled = false,
 }) => {
-  const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen)
+  const toggleDropdown = () => {
+    if (!isDisabled) setIsDropdownOpen(!isDropdownOpen)
+  }
 
   return (
-    <TouchableOpacity onPress={toggleDropdown}>
+    <TouchableOpacity onPress={toggleDropdown} activeOpacity={isDisabled ? 1 : 0.2}>
       {isDropdownOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
     </TouchableOpacity>
   )
@@ -40,6 +44,7 @@ interface IProps<T extends IOption> {
   setSelectedOption?: Dispatch<SetStateAction<T | null>>
   title?: string
   placeholder?: string
+  isDisabled?: boolean
 }
 
 export const Autocomplete = <T extends IOption>({
@@ -48,6 +53,7 @@ export const Autocomplete = <T extends IOption>({
   setSelectedOption,
   title,
   placeholder = '',
+  isDisabled = false,
 }: IProps<T>) => {
   const [input, setInput] = useState('')
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
@@ -88,8 +94,10 @@ export const Autocomplete = <T extends IOption>({
           <DropdownExpandButton
             isDropdownOpen={isDropdownOpen}
             setIsDropdownOpen={setIsDropdownOpen}
+            isDisabled={isDisabled}
           />
         }
+        isDisabled={isDisabled}
       />
       <View ref={dropdownRef} className={cn('z-10 mt-1', !isDropdownOpen && 'hidden')}>
         {isDropdownOpen && (

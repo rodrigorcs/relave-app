@@ -17,6 +17,7 @@ interface IProps {
   inputRef?: RefObject<TextInput>
   iconLeft?: ReactNode
   iconRight?: ReactNode
+  isDisabled?: boolean
 }
 
 export const CustomInput: FC<IProps> = ({
@@ -31,6 +32,7 @@ export const CustomInput: FC<IProps> = ({
   inputRef,
   iconLeft,
   iconRight,
+  isDisabled = false,
 }) => {
   return (
     <View>
@@ -50,7 +52,7 @@ export const CustomInput: FC<IProps> = ({
           iconProps={{
             width: 24,
             height: 24,
-            color: theme.colors['neutrals-600'],
+            color: isDisabled ? theme.colors['neutrals-200'] : theme.colors['neutrals-600'],
           }}
         >
           {iconLeft && iconLeft}
@@ -62,8 +64,12 @@ export const CustomInput: FC<IProps> = ({
               placeholder={placeholder}
               keyboardType={keyboardType}
               className="flex-1"
-              placeholderTextColor={theme.colors['neutrals-400']}
+              placeholderTextColor={
+                isDisabled ? theme.colors['neutrals-200'] : theme.colors['neutrals-400']
+              }
               onFocus={onFocus}
+              editable={!isDisabled}
+              selectTextOnFocus={!isDisabled}
               style={{ fontSize: 16 }} // TODO: Remove default lineHeight from tailwind so that `text-base` class can be used
             />
           </View>
