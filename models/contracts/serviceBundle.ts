@@ -11,11 +11,13 @@ export interface IServiceBundle {
   name: string
   tier: EServiceBundleTiers
   price: number
-  services: (IService['id'])[]
+  exclusiveServices: (IService['id'])[]
+  allServices: (IService['id'])[]
 }
 
-export interface IServiceBundleWithDetails extends Omit<IServiceBundle, 'services'> {
-  services: IService[]
+export interface IServiceBundleWithDetails extends Omit<IServiceBundle, 'exclusiveServices' | 'allServices'> {
+  exclusiveServices: IService[]
+  allServices: IService[]
 }
 
 export enum EServiceBundleKeys {
@@ -23,5 +25,6 @@ export enum EServiceBundleKeys {
   NAME = 'name',
   TIER = 'tier',
   PRICE = 'price',
-  SERVICES = 'services'
+  EXCLUSIVE_SERVICES = 'exclusiveServices',
+  ALL_SERVICES = 'allServices'
 }

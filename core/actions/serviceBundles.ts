@@ -9,10 +9,12 @@ export const serviceBundlesActions = {
     const services = await servicesService.getAllServices()
 
     const serviceBundleWithDetails = serviceBundles.map(serviceBundle => {
-      const servicesInBundle = services.filter(service => serviceBundle.services.includes(service.id))
+      const exclusiveServicesInBundle = services.filter(service => serviceBundle.exclusiveServices.includes(service.id))
+      const allServicesInBundle = services.filter(service => serviceBundle.allServices.includes(service.id))
       return {
         ...serviceBundle,
-        services: servicesInBundle
+        exclusiveServices: exclusiveServicesInBundle,
+        allServices: allServicesInBundle
       }
     })
 

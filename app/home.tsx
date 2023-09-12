@@ -87,7 +87,7 @@ export default function Home() {
               <AddVehicleCard onPress={handleOpenAddVehicleBottomSheet} />
             </ScrollView>
           </View>
-          <View className="flex-1 py-8 bg-brand-500">
+          <View className="flex-1 pt-6 pb-2 bg-brand-500">
             <CustomText variant={ECustomTextVariants.HEADING3} customClassName="ml-4" white>
               Serviços
             </CustomText>
@@ -97,10 +97,13 @@ export default function Home() {
             <ScrollView horizontal showsHorizontalScrollIndicator={false} className="flex-row mt-4">
               {(serviceBundles || []).map((serviceBundle, index) => {
                 const isLastItem = serviceBundles && index === serviceBundles?.length - 1
+                const previousBundle =
+                  index > 0 && serviceBundles ? serviceBundles[index - 1] : null
                 return (
                   <ServiceBundleCard
                     key={serviceBundle.id}
                     serviceBundle={serviceBundle}
+                    previousBundleName={previousBundle?.name}
                     onPress={handleChooseServiceBundle}
                     Icon={TIER_ICONS[serviceBundle.tier]}
                     customClassName={isLastItem && 'mr-4'}

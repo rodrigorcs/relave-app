@@ -39,7 +39,7 @@ export const AddServicesBottomSheet: FC<IProps> = ({
   const listMargin = footerPosition.height ? footerPosition.height + 28 : null
 
   const [services] = useAsyncData(() => servicesActions.getAll())
-  const serviceIdsInBundle = (selectedServiceBundle?.services ?? []).map((service) => service.id)
+  const serviceIdsInBundle = (selectedServiceBundle?.allServices ?? []).map((service) => service.id)
   const avaliableServices = (services ?? []).filter(
     (service) => !service.onlyInBundle && !serviceIdsInBundle.includes(service.id),
   )

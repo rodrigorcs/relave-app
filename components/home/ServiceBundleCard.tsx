@@ -1,3 +1,4 @@
+import { IService } from '../../models/contracts/service'
 import { IServiceBundleWithDetails } from '../../models/contracts/serviceBundle'
 import { theme } from '../../theme'
 import { cn } from '../../utils/cn'
@@ -14,6 +15,7 @@ import { ClassNameValue } from 'tailwind-merge'
 
 interface IProps {
   serviceBundle: IServiceBundleWithDetails
+  previousBundleName: string | undefined
   onPress: (serviceBundle: IServiceBundleWithDetails) => void
   Icon: ReactNode
   customClassName: ClassNameValue
@@ -21,10 +23,21 @@ interface IProps {
 
 export const ServiceBundleCard: FC<IProps> = ({
   serviceBundle,
+  previousBundleName,
   onPress,
   Icon,
   customClassName,
 }) => {
+  const previousBundleAsService: Partial<IService> = {
+    id: `${serviceBundle.id}-previousBundle`,
+    name: `Inclui ${previousBundleName}`,
+  }
+
+  const services =
+    (previousBundleName
+      ? [previousBundleAsService, ...serviceBundle.exclusiveServices]
+      : serviceBundle.exclusiveServices) ?? []
+
   return (
     <View className={cn('w-[272] bg-neutrals-white rounded-2xl ml-4', customClassName)}>
       <View className="flex-row justify-between items-center border-b border-neutrals-200 px-6 py-5">
@@ -49,7 +62,7 @@ export const ServiceBundleCard: FC<IProps> = ({
           {serviceBundle.name}
         </CustomText>
         <View className="flex-1">
-          {serviceBundle.services.map((service, index) => {
+          {services.map((service, index) => {
             return (
               <View key={service.id} className={cn('flex-row items-center', index > 0 && 'mt-3')}>
                 <View className="w-5 h-5 bg-brand-500 rounded-full items-center justify-center">
