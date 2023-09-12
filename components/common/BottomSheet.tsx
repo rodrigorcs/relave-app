@@ -91,7 +91,9 @@ export const BottomSheet = React.forwardRef<IBottomSheetRefProps, IBottomSheetPr
         />
         <GestureDetector gesture={gesture}>
           <Animated.View
-            className={cn('w-full bg-neutrals-white absolute rounded-t-3xl p-6 pt-14 bottom-0')}
+            className={cn(
+              'w-full bg-neutrals-white absolute rounded-t-3xl px-6 pt-14 pb-8 bottom-0',
+            )}
             style={[rBottomSheetStyle, { height }]}
           >
             <TouchableOpacity

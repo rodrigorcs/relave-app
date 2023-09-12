@@ -31,7 +31,7 @@ export const AddServicesBottomSheet: FC<IProps> = ({
   isOpen,
   close,
 }) => {
-  const HEIGHT = 500
+  const HEIGHT = 700
   const bottomSheetRef = useRef<IBottomSheetRefProps>(null)
 
   const [services] = useAsyncData(() => servicesActions.getAll())
@@ -50,7 +50,7 @@ export const AddServicesBottomSheet: FC<IProps> = ({
           {avaliableServices.map((service, index) => {
             const isSelected = selectedServiceIds.includes(service.id)
             return (
-              <View className={cn('flex-row', index > 0 && 'mt-4')}>
+              <View key={service.id} className={cn('flex-row', index > 0 && 'mt-4')}>
                 <Checkbox
                   id={service.id}
                   isSelected={isSelected}
@@ -72,7 +72,7 @@ export const AddServicesBottomSheet: FC<IProps> = ({
             )
           })}
         </View>
-        <CustomButton onPress={() => {}} customClassName="mt-8">
+        <CustomButton onPress={() => {}} customClassName="mt-8 absolute bottom-0 w-full">
           Confirmar escolha
         </CustomButton>
       </View>

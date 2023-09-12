@@ -7,7 +7,7 @@ import {
   NavArrowDown as ChevronDownIcon,
   NavArrowUp as ChevronUpIcon,
 } from 'iconoir-react-native'
-import React, { Dispatch, FC, SetStateAction, useRef, useState } from 'react'
+import React, { Dispatch, FC, SetStateAction, useEffect, useRef, useState } from 'react'
 import { View, FlatList, TouchableOpacity, TextInput } from 'react-native'
 
 interface IDropdownExpandButtonProps {
@@ -52,6 +52,8 @@ export const Autocomplete = <T extends IOption>({
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const inputRef = useRef<TextInput>(null)
   const hasSelectedOption = useRef(false)
+  const [dropdownPosY, setDropdownPosY] = useState<number | null>(null)
+  const dropdownRef = useRef<View>(null)
 
   // FIXME: CustomInput overrides state input value, hasSelectedOption is an workaround
   const handleChangeSelectedOption = (option: T) => {
@@ -66,6 +68,18 @@ export const Autocomplete = <T extends IOption>({
     if (hasSelectedOption.current) return (hasSelectedOption.current = false)
     setInput(input)
   }
+
+  const getInputPositionY = () => {
+    if (dropdownRef.current) {
+      dropdownRef.current.measure((_fx, _fy, _w, h, _px, py) => {
+        setDropdownPosY(py + h)
+      })
+    }
+  }
+
+  useEffect(() => {
+    getInputPositionY() // TODO: Create custom hook usePosition
+  }, [dropdownRef])
 
   return (
     <>
@@ -89,50 +103,57 @@ export const Autocomplete = <T extends IOption>({
           />
         }
       />
-      {isDropdownOpen && (
-        <View className="rounded-lg shadow bg-neutrals-white mt-1">
-          <FlatList
-            data={
-              input.length >= 2
-                ? options.filter((option) =>
-                    option.name.toLowerCase().includes(input.toLowerCase()),
-                  )
-                : options
-            }
-            className="h-40"
-            renderItem={({ item: option }) => {
-              const isSelected = selectedOption && option.id === selectedOption.id
-              return (
-                <TouchableOpacity
-                  key={option.id}
-                  onPress={() => handleChangeSelectedOption(option)}
-                  className={cn(
-                    'flex-row justify-between items-center px-4 py-3 border-b border-neutrals-100',
-                    isSelected && 'bg-neutrals-100',
-                  )}
-                >
-                  <CustomText
-                    variant={
-                      isSelected ? ECustomTextVariants.EXPRESSIVE2 : ECustomTextVariants.BODY2
-                    }
+      <View ref={dropdownRef} className={cn('z-10 mt-1', !isDropdownOpen && 'hidden')}>
+        {isDropdownOpen && (
+          <View
+            className={cn(
+              `shadow bg-neutrals-white absolute w-full h-40 rounded-lg`,
+              dropdownPosY && `top-[${dropdownPosY}]`,
+            )}
+          >
+            <FlatList
+              data={
+                input.length >= 2
+                  ? options.filter((option) =>
+                      option.name.toLowerCase().includes(input.toLowerCase()),
+                    )
+                  : options
+              }
+              style={{ borderRadius: 8 }} // rounded-lg does not work when there is a bg color
+              renderItem={({ item: option }) => {
+                const isSelected = selectedOption && option.id === selectedOption.id
+                return (
+                  <TouchableOpacity
+                    key={option.id}
+                    onPress={() => handleChangeSelectedOption(option)}
+                    className={cn(
+                      'flex-row justify-between items-center px-4 py-3 border-b border-neutrals-100 bg-neutrals-white',
+                      isSelected && 'bg-neutrals-100',
+                    )}
                   >
-                    {option.name}
-                  </CustomText>
-                  {isSelected && (
-                    <CheckIcon
-                      width={24}
-                      height={24}
-                      strokeWidth={2}
-                      color={theme.colors['brand-500']}
-                      className="ml-2"
-                    />
-                  )}
-                </TouchableOpacity>
-              )
-            }}
-          />
-        </View>
-      )}
+                    <CustomText
+                      variant={
+                        isSelected ? ECustomTextVariants.EXPRESSIVE2 : ECustomTextVariants.BODY2
+                      }
+                    >
+                      {option.name}
+                    </CustomText>
+                    {isSelected && (
+                      <CheckIcon
+                        width={24}
+                        height={24}
+                        strokeWidth={2}
+                        color={theme.colors['brand-500']}
+                        className="ml-2"
+                      />
+                    )}
+                  </TouchableOpacity>
+                )
+              }}
+            />
+          </View>
+        )}
+      </View>
     </>
   )
 }

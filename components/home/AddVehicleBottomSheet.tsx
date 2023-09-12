@@ -25,7 +25,7 @@ interface IProps {
 }
 
 export const AddVehicleBottomSheet: FC<IProps> = ({ addVehicle, userId, isOpen, close }) => {
-  const HEIGHT = 400
+  const HEIGHT = 500
   const [selectedBrand, setSelectedBrand] = useState<IVehicleBrand | null>(null)
   const [selectedModel, setSelectedModel] = useState<IVehicleModel | null>(null)
 
@@ -71,7 +71,7 @@ export const AddVehicleBottomSheet: FC<IProps> = ({ addVehicle, userId, isOpen, 
           title="Modelo"
           placeholder="Digite o modelo..."
         />
-        <CustomButton onPress={handleCreateVehicle} customClassName="mt-8">
+        <CustomButton onPress={handleCreateVehicle} customClassName="absolute bottom-0 w-full">
           Confirmar escolha
         </CustomButton>
       </View>
