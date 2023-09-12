@@ -1,4 +1,5 @@
 export * from './useAsyncData'
 export * from './useCloudImage'
 export * from './useMaskedInput'
+export * from './usePosition'
 export * from './useSelection'

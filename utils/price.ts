@@ -1,3 +1,3 @@
-export const getDisplayPrice = (priceInCents: number) => {
-  return `R$${priceInCents / 100}`
+export const getDisplayPrice = (priceInCents: number, addSpace = false) => {
+  return `R$${addSpace ? ' ' : ''}${priceInCents / 100}`
 }

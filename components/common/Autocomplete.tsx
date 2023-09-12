@@ -1,3 +1,4 @@
+import { usePosition } from '../../hooks'
 import { theme } from '../../theme'
 import { cn } from '../../utils/cn'
 import { CustomInput } from './CustomInput'
@@ -7,7 +8,7 @@ import {
   NavArrowDown as ChevronDownIcon,
   NavArrowUp as ChevronUpIcon,
 } from 'iconoir-react-native'
-import React, { Dispatch, FC, SetStateAction, useEffect, useRef, useState } from 'react'
+import React, { Dispatch, FC, SetStateAction, useRef, useState } from 'react'
 import { View, FlatList, TouchableOpacity, TextInput } from 'react-native'
 
 interface IDropdownExpandButtonProps {
@@ -52,8 +53,7 @@ export const Autocomplete = <T extends IOption>({
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const inputRef = useRef<TextInput>(null)
   const hasSelectedOption = useRef(false)
-  const [dropdownPosY, setDropdownPosY] = useState<number | null>(null)
-  const dropdownRef = useRef<View>(null)
+  const { ref: dropdownRef, position: dropdownPosition } = usePosition()
 
   // FIXME: CustomInput overrides state input value, hasSelectedOption is an workaround
   const handleChangeSelectedOption = (option: T) => {
@@ -68,18 +68,6 @@ export const Autocomplete = <T extends IOption>({
     if (hasSelectedOption.current) return (hasSelectedOption.current = false)
     setInput(input)
   }
-
-  const getInputPositionY = () => {
-    if (dropdownRef.current) {
-      dropdownRef.current.measure((_fx, _fy, _w, h, _px, py) => {
-        setDropdownPosY(py + h)
-      })
-    }
-  }
-
-  useEffect(() => {
-    getInputPositionY() // TODO: Create custom hook usePosition
-  }, [dropdownRef])
 
   return (
     <>
@@ -108,7 +96,7 @@ export const Autocomplete = <T extends IOption>({
           <View
             className={cn(
               `shadow bg-neutrals-white absolute w-full h-40 rounded-lg`,
-              dropdownPosY && `top-[${dropdownPosY}]`,
+              dropdownPosition.endPosY && `top-[${dropdownPosition.endPosY}]`,
             )}
           >
             <FlatList

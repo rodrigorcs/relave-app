@@ -1,16 +1,20 @@
+import { theme } from '../../theme'
 import { cn } from '../../utils/cn'
+import { IconoirProvider } from 'iconoir-react-native'
 import React, { FC, ReactNode } from 'react'
 import { TouchableOpacity, Text } from 'react-native'
 import { ClassNameValue } from 'tailwind-merge'
 
 export enum ECustomButtonVariants {
-  PRIMARY = 'bg-brand-500',
-  SECONDARY = 'border border-brand-500',
+  PRIMARY = 'h-14 bg-brand-500',
+  SECONDARY = 'h-14 border border-brand-500',
+  TERTIARY = 'h-8',
 }
 
 enum ECustomButtonTextVariants {
   PRIMARY = 'text-neutrals-white',
   SECONDARY = 'text-brand-500',
+  TERTIARY = 'text-brand-500 ',
 }
 
 interface IProps {
@@ -40,7 +44,7 @@ export const CustomButton: FC<IProps> = ({
   return (
     <TouchableOpacity
       className={cn(
-        'h-14 flex-row items-center justify-center rounded-full',
+        'flex-row items-center justify-center rounded-full',
         variant,
         isDisabled && 'bg-brand-300',
         customClassName,
@@ -48,18 +52,30 @@ export const CustomButton: FC<IProps> = ({
       onPress={onPress}
       activeOpacity={isDisabled ? 1 : 0.2}
     >
-      {IconLeft && IconLeft}
-      <Text
-        className={cn(
-          'text-base font-semibold text-neutrals-white',
-          IconLeft && 'ml-4',
-          IconRight && 'mr-4',
-          ECustomButtonTextVariants[variantKey as keyof typeof ECustomButtonVariants],
-        )}
+      <IconoirProvider
+        iconProps={{
+          width: 24,
+          height: 24,
+          strokeWidth: 2,
+          color:
+            variant === ECustomButtonVariants.TERTIARY
+              ? theme.colors['brand-500']
+              : theme.colors['neutrals-white'],
+        }}
       >
-        {children}
-      </Text>
-      {IconRight && IconRight}
+        {IconLeft && IconLeft}
+        <Text
+          className={cn(
+            'text-base font-semibold text-neutrals-white',
+            IconLeft && 'ml-4',
+            IconRight && 'mr-4',
+            ECustomButtonTextVariants[variantKey as keyof typeof ECustomButtonVariants],
+          )}
+        >
+          {children}
+        </Text>
+        {IconRight && IconRight}
+      </IconoirProvider>
     </TouchableOpacity>
   )
 }

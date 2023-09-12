@@ -1,6 +1,7 @@
 import { IServiceBundleWithDetails } from '../../models/contracts/serviceBundle'
 import { theme } from '../../theme'
 import { cn } from '../../utils/cn'
+import { getDisplayPrice } from '../../utils/price'
 import { CustomText, ECustomTextVariants, CustomButton, ECustomButtonVariants } from '../common'
 import {
   IconoirProvider,
@@ -39,9 +40,9 @@ export const ServiceBundleCard: FC<IProps> = ({
             {Icon}
           </IconoirProvider>
         </View>
-        <CustomText variant={ECustomTextVariants.HEADING2}>{`R$${
-          serviceBundle.price / 100
-        }`}</CustomText>
+        <CustomText variant={ECustomTextVariants.HEADING2}>
+          {getDisplayPrice(serviceBundle.price)}
+        </CustomText>
       </View>
       <View className="p-6 flex-1">
         <CustomText variant={ECustomTextVariants.HEADING4} customClassName="mb-4">
