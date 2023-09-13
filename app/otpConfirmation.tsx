@@ -5,7 +5,7 @@ import { confirmOTPToken, getIsUserSignedIn } from '../state/slices/auth'
 import { IAppState } from '../state/store'
 import { router } from 'expo-router'
 import React, { useEffect, useState } from 'react'
-import { SafeAreaView, Text, View } from 'react-native'
+import { SafeAreaView, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import { AnyAction } from 'redux'
 
@@ -68,9 +68,12 @@ export default function OTPConfirmation() {
             showError={showError}
           />
           {showError && (
-            <Text className="mt-2 text-xs font-normal text-feedback-negative-300">
+            <CustomText
+              variant={ECustomTextVariants.HELPER2}
+              customClassName="mt-2 text-feedback-negative-300"
+            >
               {`O código deve conter 6 dígitos`}
-            </Text>
+            </CustomText>
           )}
         </View>
         <View className="mt-4 flex-row items-center justify-center">

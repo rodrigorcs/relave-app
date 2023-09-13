@@ -1,6 +1,7 @@
 import { cn } from '../../utils/cn'
+import { CustomText, ECustomTextVariants } from '../common'
 import React, { useRef, useState, FC } from 'react'
-import { Pressable, Text, TextInput, View } from 'react-native'
+import { Pressable, TextInput, View } from 'react-native'
 import { ClassNameValue } from 'tailwind-merge'
 
 const determineAction = (currentCode: string, newCode: string): 'add' | 'delete' | null =>
@@ -20,7 +21,9 @@ const SingleDigit: FC<ISingleDigitProps> = ({ digit, isFocused, customClassName 
       customClassName,
     )}
   >
-    <Text className="text-2xl text-center">{digit}</Text>
+    <CustomText variant={ECustomTextVariants.HEADING3} customClassName="text-center">
+      {digit}
+    </CustomText>
   </View>
 )
 

@@ -1,20 +1,15 @@
 import { theme } from '../../theme'
 import { cn } from '../../utils/cn'
+import { CustomText, ECustomTextVariants } from './CustomText'
 import { IconoirProvider } from 'iconoir-react-native'
 import React, { FC, ReactNode } from 'react'
-import { TouchableOpacity, Text } from 'react-native'
+import { TouchableOpacity } from 'react-native'
 import { ClassNameValue } from 'tailwind-merge'
 
 export enum ECustomButtonVariants {
   PRIMARY = 'h-14 bg-brand-500',
   SECONDARY = 'h-14 border border-brand-500',
   TERTIARY = 'h-8',
-}
-
-enum ECustomButtonTextVariants {
-  PRIMARY = 'text-neutrals-white',
-  SECONDARY = 'text-brand-500',
-  TERTIARY = 'text-brand-500 ',
 }
 
 interface IProps {
@@ -36,11 +31,6 @@ export const CustomButton: FC<IProps> = ({
   IconLeft,
   IconRight,
 }) => {
-  const variantKey = Object.entries(ECustomButtonVariants).find(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    ([_key, value]) => value === variant,
-  )?.[0]
-
   return (
     <TouchableOpacity
       className={cn(
@@ -64,16 +54,16 @@ export const CustomButton: FC<IProps> = ({
         }}
       >
         {IconLeft && IconLeft}
-        <Text
-          className={cn(
-            'text-base font-semibold text-neutrals-white',
+        <CustomText
+          variant={ECustomTextVariants.HEADING5}
+          customClassName={cn(
             IconLeft && 'ml-4',
             IconRight && 'mr-4',
-            ECustomButtonTextVariants[variantKey as keyof typeof ECustomButtonVariants],
+            variant === ECustomButtonVariants.PRIMARY ? 'text-neutrals-white' : 'text-brand-500',
           )}
         >
           {children}
-        </Text>
+        </CustomText>
         {IconRight && IconRight}
       </IconoirProvider>
     </TouchableOpacity>

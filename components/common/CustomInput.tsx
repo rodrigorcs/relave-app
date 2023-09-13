@@ -1,8 +1,9 @@
 import { theme } from '../../theme'
 import { cn } from '../../utils/cn'
+import { CustomText, ECustomTextVariants } from './CustomText'
 import { IconoirProvider } from 'iconoir-react-native'
 import React, { FC, ReactNode, RefObject } from 'react'
-import { View, TextInput, Text, KeyboardTypeOptions } from 'react-native'
+import { View, TextInput, KeyboardTypeOptions } from 'react-native'
 import { ClassNameValue } from 'tailwind-merge'
 
 interface IProps {
@@ -44,9 +45,9 @@ export const CustomInput: FC<IProps> = ({
         )}
       >
         {prefix && (
-          <Text className="mr-2 self-center text-base text-neutrals-400" style={{ lineHeight: 20 }}>
+          <CustomText variant={ECustomTextVariants.BODY2} customClassName="mr-2 text-neutrals-400">
             {prefix}
-          </Text>
+          </CustomText>
         )}
         <IconoirProvider
           iconProps={{
@@ -63,7 +64,7 @@ export const CustomInput: FC<IProps> = ({
               onChangeText={handleValueChange}
               placeholder={placeholder}
               keyboardType={keyboardType}
-              className="flex-1"
+              className="flex-1 font-[DMSansRegular]"
               placeholderTextColor={
                 isDisabled ? theme.colors['neutrals-200'] : theme.colors['neutrals-400']
               }
@@ -77,7 +78,12 @@ export const CustomInput: FC<IProps> = ({
         </IconoirProvider>
       </View>
       {error && (
-        <Text className="mt-1 text-xs font-normal text-feedback-negative-300">{error}</Text>
+        <CustomText
+          variant={ECustomTextVariants.HELPER2}
+          customClassName="mt-1 text-feedback-negative-300"
+        >
+          {error}
+        </CustomText>
       )}
     </View>
   )
