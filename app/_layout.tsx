@@ -8,15 +8,25 @@ import { Provider as ReduxProvider } from 'react-redux'
 
 export default function Layout() {
   useFonts({
-    Montserrat_900Black: require('../assets/fonts/Montserrat/Montserrat-Black.ttf'),
-    Montserrat_800ExtraBold: require('../assets/fonts/Montserrat/Montserrat-ExtraBold.ttf'),
-    Montserrat_700Bold: require('../assets/fonts/Montserrat/Montserrat-Bold.ttf'),
-    Montserrat_600SemiBold: require('../assets/fonts/Montserrat/Montserrat-SemiBold.ttf'),
-    Montserrat_500Medium: require('../assets/fonts/Montserrat/Montserrat-Medium.ttf'),
-    Montserrat_400Regular: require('../assets/fonts/Montserrat/Montserrat-Regular.ttf'),
-    Montserrat_300Light: require('../assets/fonts/Montserrat/Montserrat-Light.ttf'),
-    Montserrat_200ExtraLight: require('../assets/fonts/Montserrat/Montserrat-ExtraLight.ttf'),
-    Montserrat_100Thin: require('../assets/fonts/Montserrat/Montserrat-Thin.ttf'),
+    InterBlack: require('../assets/fonts/Inter-Black.ttf'),
+    InterExtraBold: require('../assets/fonts/Inter-ExtraBold.ttf'),
+    InterBold: require('../assets/fonts/Inter-Bold.ttf'),
+    InterSemiBold: require('../assets/fonts/Inter-SemiBold.ttf'),
+    InterMedium: require('../assets/fonts/Inter-Medium.ttf'),
+    InterRegular: require('../assets/fonts/Inter-Regular.ttf'),
+    InterLight: require('../assets/fonts/Inter-Light.ttf'),
+    InterExtraLight: require('../assets/fonts/Inter-ExtraLight.ttf'),
+    InterThin: require('../assets/fonts/Inter-Thin.ttf'),
+
+    DMSansBlack: require('../assets/fonts/DMSans-Black.ttf'),
+    DMSansExtraBold: require('../assets/fonts/DMSans-ExtraBold.ttf'),
+    DMSansBold: require('../assets/fonts/DMSans-Bold.ttf'),
+    DMSansSemiBold: require('../assets/fonts/DMSans-SemiBold.ttf'),
+    DMSansMedium: require('../assets/fonts/DMSans-Medium.ttf'),
+    DMSansRegular: require('../assets/fonts/DMSans-Regular.ttf'),
+    DMSansLight: require('../assets/fonts/DMSans-Light.ttf'),
+    DMSansExtraLight: require('../assets/fonts/DMSans-ExtraLight.ttf'),
+    DMSansThin: require('../assets/fonts/DMSans-Thin.ttf'),
   })
 
   return (
