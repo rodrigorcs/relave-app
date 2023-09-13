@@ -12,6 +12,12 @@ import { useAsyncData } from '../hooks'
 import { EServiceBundleTiers, IServiceBundleWithDetails } from '../models/contracts/serviceBundle'
 import { IVehicle } from '../models/contracts/vehicle'
 import { getCurrentUser } from '../state/slices/auth'
+import {
+  getSelectedServiceBundle,
+  getSelectedVehicle,
+  setSelectedServiceBundle,
+  setSelectedVehicle,
+} from '../state/slices/cart'
 import { IAppState } from '../state/store'
 import {
   Flash as FlashIcon,
@@ -21,7 +27,7 @@ import {
 import React, { useCallback, useState } from 'react'
 import { SafeAreaView, View } from 'react-native'
 import { GestureHandlerRootView, ScrollView } from 'react-native-gesture-handler'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 
 const TIER_ICONS = Object.freeze({
   [EServiceBundleTiers.SIMPLE]: <FlashIcon />,
@@ -30,12 +36,14 @@ const TIER_ICONS = Object.freeze({
 })
 
 export default function Home() {
-  const [selectedVehicleId, setSelectedVehicleId] = useState<IVehicle['id'] | null>(null)
-  const [selectedServiceBundle, setSelectedServiceBundle] =
-    useState<IServiceBundleWithDetails | null>(null)
+  const dispatch = useDispatch()
+
   const [openAddVehicleBottomSheet, setOpenAddVehicleBottomSheet] = useState<boolean>(false)
 
   const currentUser = useSelector(({ auth }: IAppState) => getCurrentUser(auth))
+  const selectedVehicle = useSelector(({ cart }: IAppState) => getSelectedVehicle(cart))
+  const selectedServiceBundle = useSelector(({ cart }: IAppState) => getSelectedServiceBundle(cart))
+
   if (!currentUser) return //FIXME: Add auth boundaries so currentUser is always truthy
 
   const [vehicles] = useAsyncData(
@@ -43,8 +51,8 @@ export default function Home() {
   )
   const [serviceBundles] = useAsyncData(() => serviceBundlesActions.getAllWithDetails())
 
-  const handleChangeVehicle = (vehicleId: string) => {
-    setSelectedVehicleId(vehicleId)
+  const handleChangeVehicle = (vehicle: IVehicle) => {
+    dispatch(setSelectedVehicle(vehicle))
   }
 
   const handleOpenAddVehicleBottomSheet = useCallback(() => {
@@ -56,11 +64,11 @@ export default function Home() {
   }, [])
 
   const handleCloseAddServicesBottomSheet = useCallback(() => {
-    setSelectedServiceBundle(null)
+    dispatch(setSelectedServiceBundle(null))
   }, [])
 
   const handleChooseServiceBundle = (serviceBundle: IServiceBundleWithDetails) => {
-    setSelectedServiceBundle(serviceBundle)
+    dispatch(setSelectedServiceBundle(serviceBundle))
   }
 
   return (
@@ -73,7 +81,7 @@ export default function Home() {
             </CustomText>
             <ScrollView horizontal showsHorizontalScrollIndicator={false} className="flex-row mt-4">
               {(vehicles ?? []).map((vehicle, index) => {
-                const isSelected = vehicle.id === selectedVehicleId
+                const isSelected = vehicle.id === selectedVehicle?.id
                 return (
                   <UserVehicleCard
                     key={vehicle.id}
@@ -120,10 +128,6 @@ export default function Home() {
           close={handleCloseAddVehicleBottomSheet}
         />
         <AddServicesBottomSheet
-          userId={currentUser.id}
-          // @ts-expect-error / FIXME: Handle click when no vehicle is selected
-          selectedVehicleId={selectedVehicleId}
-          // @ts-expect-error / FIXME: Make TS understand that it will only be open if selectedServiceBundle !== null
           selectedServiceBundle={selectedServiceBundle}
           isOpen={selectedServiceBundle !== null}
           close={handleCloseAddServicesBottomSheet}

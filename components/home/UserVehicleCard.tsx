@@ -12,7 +12,7 @@ interface IProps {
   vehicle: IVehicle
   index: number
   isSelected: boolean
-  handleChangeVehicle: (vehicleId: string) => void
+  handleChangeVehicle: (vehicle: IVehicle) => void
 }
 
 export const UserVehicleCard: FC<IProps> = ({
@@ -31,7 +31,7 @@ export const UserVehicleCard: FC<IProps> = ({
           isSelected && 'border border-brand-500',
         )}
         activeOpacity={0.6}
-        onPress={() => handleChangeVehicle(vehicle.id)}
+        onPress={() => handleChangeVehicle(vehicle)}
       >
         {brandLogoUrl ? (
           <Image source={{ uri: brandLogoUrl }} resizeMode="center" className="h-8 w-8 mb-4" />

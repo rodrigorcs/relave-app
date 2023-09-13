@@ -1,8 +1,8 @@
 import { servicesActions } from '../../core/actions/services'
 import { useAsyncData, usePosition, useSelection } from '../../hooks'
+import { IService } from '../../models/contracts/service'
 import { IServiceBundleWithDetails } from '../../models/contracts/serviceBundle'
-import { IUser } from '../../models/contracts/user'
-import { IVehicle } from '../../models/contracts/vehicle'
+import { setSelectedAdditionalServices } from '../../state/slices/cart'
 import { cn } from '../../utils/cn'
 import { getDisplayPrice } from '../../utils/price'
 import {
@@ -17,23 +17,17 @@ import {
 import { ArrowRight as ArrowRightIcon } from 'iconoir-react-native'
 import React, { FC, useRef } from 'react'
 import { FlatList, View } from 'react-native'
+import { useDispatch } from 'react-redux'
 
 interface IProps {
-  userId: IUser['id']
-  selectedVehicleId: IVehicle['id']
-  selectedServiceBundle: IServiceBundleWithDetails
+  selectedServiceBundle: IServiceBundleWithDetails | null
   isOpen: boolean
   close: () => void
 }
 
-export const AddServicesBottomSheet: FC<IProps> = ({
-  // userId,
-  // selectedVehicleId,
-  selectedServiceBundle,
-  isOpen,
-  close,
-}) => {
+export const AddServicesBottomSheet: FC<IProps> = ({ selectedServiceBundle, isOpen, close }) => {
   const HEIGHT = 600
+  const dispatch = useDispatch()
   const bottomSheetRef = useRef<IBottomSheetRefProps>(null)
   const { ref: footerRef, position: footerPosition } = usePosition()
   const listMargin = footerPosition.height ? footerPosition.height + 28 : null
@@ -45,6 +39,13 @@ export const AddServicesBottomSheet: FC<IProps> = ({
   )
 
   const [selectedServiceIds, selectServiceId, unselectServiceId] = useSelection()
+
+  const handleProceedWithSelection = (selectedServiceIds: IService['id'][]) => {
+    const selectedServices = avaliableServices.filter((service) =>
+      selectedServiceIds.includes(service.id),
+    )
+    dispatch(setSelectedAdditionalServices(selectedServices))
+  }
 
   return (
     <BottomSheet ref={bottomSheetRef} height={HEIGHT} isOpen={isOpen} close={close}>
@@ -87,11 +88,14 @@ export const AddServicesBottomSheet: FC<IProps> = ({
           />
         </View>
         <View ref={footerRef} className="absolute bottom-0 w-full">
-          <CustomButton onPress={() => {}} IconRight={<ArrowRightIcon />}>
+          <CustomButton
+            onPress={() => handleProceedWithSelection(selectedServiceIds)}
+            IconRight={<ArrowRightIcon />}
+          >
             Confirmar escolha
           </CustomButton>
           <CustomButton
-            onPress={() => {}}
+            onPress={() => handleProceedWithSelection([])}
             variant={ECustomButtonVariants.TERTIARY}
             customClassName="mt-2"
           >
