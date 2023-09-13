@@ -50,7 +50,10 @@ export const AddServicesBottomSheet: FC<IProps> = ({
     <BottomSheet ref={bottomSheetRef} height={HEIGHT} isOpen={isOpen} close={close}>
       <View className="flex-1">
         <CustomText variant={ECustomTextVariants.HEADING4}>Adicionais</CustomText>
-        <View className={cn('my-6')}>
+        <CustomText variant={ECustomTextVariants.BODY3} customClassName="mt-1 text-neutrals-600">
+          Adicione serviços extras para um toque final
+        </CustomText>
+        <View className={cn('mt-6 mb-10')}>
           <FlatList
             data={avaliableServices}
             style={{ marginBottom: listMargin }}
