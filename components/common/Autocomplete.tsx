@@ -96,6 +96,7 @@ export const Autocomplete = <T extends IOption>({
   }
 
   const dropdownOptions = getDropdownOptions()
+  const hasOptions = dropdownOptions?.length > 0
 
   return (
     <>
@@ -125,50 +126,57 @@ export const Autocomplete = <T extends IOption>({
         {isDropdownOpen && (
           <View
             className={cn(
-              `shadow bg-neutrals-white absolute w-full h-40 rounded-lg`,
+              `shadow bg-neutrals-white absolute w-full rounded-lg`,
               dropdownPosition.endPosY && `top-[${dropdownPosition.endPosY}]`,
-              large && 'h-80',
+              hasOptions && 'h-40',
+              hasOptions && large && 'h-80',
             )}
           >
-            <FlatList
-              data={dropdownOptions}
-              style={{ borderRadius: 8 }} // rounded-lg does not work when there is a bg color
-              renderItem={({ item: option }) => {
-                const isSelected = selectedOption && option.id === selectedOption.id
-                return (
-                  <TouchableOpacity
-                    key={option.id}
-                    onPress={() => handleChangeSelectedOption(option)}
-                    className={cn(
-                      'flex-row justify-between items-center px-4 py-3 border-b border-neutrals-100 bg-neutrals-white',
-                      isSelected && 'bg-neutrals-100',
-                      listItemClassName,
-                    )}
-                  >
-                    {children ? (
-                      children(option)
-                    ) : (
-                      <CustomText
-                        variant={
-                          isSelected ? ECustomTextVariants.EXPRESSIVE2 : ECustomTextVariants.BODY2
-                        }
-                      >
-                        {option.name}
-                      </CustomText>
-                    )}
-                    {isSelected && (
-                      <CheckIcon
-                        width={24}
-                        height={24}
-                        strokeWidth={2}
-                        color={theme.colors['brand-500']}
-                        className="ml-2"
-                      />
-                    )}
-                  </TouchableOpacity>
-                )
-              }}
-            />
+            {dropdownOptions.length === 0 ? (
+              <View className="flex-row justify-between items-center px-4 py-3 bg-neutrals-white">
+                <CustomText variant={ECustomTextVariants.HELPER1}>No options.</CustomText>
+              </View>
+            ) : (
+              <FlatList
+                data={dropdownOptions}
+                style={{ borderRadius: 8 }} // rounded-lg does not work when there is a bg color
+                renderItem={({ item: option }) => {
+                  const isSelected = selectedOption && option.id === selectedOption.id
+                  return (
+                    <TouchableOpacity
+                      key={option.id}
+                      onPress={() => handleChangeSelectedOption(option)}
+                      className={cn(
+                        'flex-row justify-between items-center px-4 py-3 border-b border-neutrals-100 bg-neutrals-white',
+                        isSelected && 'bg-neutrals-100',
+                        listItemClassName,
+                      )}
+                    >
+                      {children ? (
+                        children(option)
+                      ) : (
+                        <CustomText
+                          variant={
+                            isSelected ? ECustomTextVariants.EXPRESSIVE2 : ECustomTextVariants.BODY2
+                          }
+                        >
+                          {option.name}
+                        </CustomText>
+                      )}
+                      {isSelected && (
+                        <CheckIcon
+                          width={24}
+                          height={24}
+                          strokeWidth={2}
+                          color={theme.colors['brand-500']}
+                          className="ml-2"
+                        />
+                      )}
+                    </TouchableOpacity>
+                  )
+                }}
+              />
+            )}
           </View>
         )}
       </View>

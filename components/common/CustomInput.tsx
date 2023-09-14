@@ -39,7 +39,7 @@ export const CustomInput: FC<IProps> = ({
     <View>
       <View
         className={cn(
-          'h-12 flex-row justify-center items-center rounded-xl border border-neutrals-200 px-3',
+          'h-14 flex-row justify-center items-center rounded-xl border border-neutrals-200 px-3',
           error && 'border-feedback-negative-300',
           customClassName,
         )}
