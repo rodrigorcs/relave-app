@@ -1,5 +1,5 @@
 import { Endpoints } from "../../models/constants/Endpoints"
-import { TGoogleMapsAutocompleteResponse } from "../../models/contracts/external/googleMaps"
+import { TGoogleMapsPlaceResult } from "../../models/contracts/external/googleMaps"
 import { httpClient } from "../../utils/httpClient"
 import { Config } from '../../models/constants/Config'
 import { AxiosResponse } from "axios"
@@ -7,16 +7,16 @@ import { AxiosResponse } from "axios"
 
 export const locationActions = {
   getNearbyPlaces: async (searchInput: string) => {
-    const res: AxiosResponse<TGoogleMapsAutocompleteResponse> = await httpClient.get(Endpoints.GOOGLE_MAPS_AUTOCOMPLETE, {
+    const res = await httpClient.get(Endpoints.GOOGLE_MAPS_TEXTSEARCH, {
       params: {
-        input: encodeURIComponent(searchInput),
+        query: searchInput,
         location: '-12.9811756,-38.4648224',
         radius: '30000',
-        country: 'br',
         language: 'pt-BR',
+        region: 'br',
         key: Config.GOOGLE_CLOUD_IOS_API_KEY
       }
-    })
-    return res.data
+    }) as AxiosResponse<{ results: TGoogleMapsPlaceResult[] }>
+    return res.data.results
   },
 }

@@ -9,15 +9,15 @@ export default function Appointment() {
   const [input, setInput] = useState('')
   const debouncedInput = useDebounce(input, 1500)
 
-  const [placesResponse] = useAsyncData(
+  const [places] = useAsyncData(
     () => locationActions.getNearbyPlaces(debouncedInput),
     [debouncedInput],
   )
 
   const options =
-    placesResponse?.predictions?.map((prediction) => ({
-      id: prediction.place_id,
-      name: `${prediction.description} | ${prediction.types}`,
+    (places ?? []).map((place) => ({
+      id: place.place_id as string,
+      name: `${place.name}`,
     })) ?? []
 
   return (

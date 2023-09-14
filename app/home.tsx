@@ -1,4 +1,4 @@
-import { CustomButton, CustomText, ECustomTextVariants } from '../components/common'
+import { CustomText, ECustomTextVariants } from '../components/common'
 import {
   AddVehicleCard,
   AddVehicleBottomSheet,
@@ -6,7 +6,6 @@ import {
   UserVehicleCard,
 } from '../components/home'
 import { AddServicesBottomSheet } from '../components/home/AddServicesBottomSheet'
-import { locationActions } from '../core/actions/location'
 import { serviceBundlesActions } from '../core/actions/serviceBundles'
 import { vehiclesActions } from '../core/actions/vehicles'
 import { useAsyncData } from '../hooks'
@@ -77,13 +76,6 @@ export default function Home() {
       <SafeAreaView className="flex flex-1 bg-brand-500">
         <View className="flex-1">
           <View className="py-8 bg-common-background">
-            <CustomButton
-              onPress={() => {
-                locationActions.getNearbyPlaces('campn')
-              }}
-            >
-              Call API
-            </CustomButton>
             <CustomText variant={ECustomTextVariants.HEADING3} customClassName="ml-4">
               Selecione seu carro
             </CustomText>

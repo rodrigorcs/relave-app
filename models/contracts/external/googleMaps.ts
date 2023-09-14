@@ -1,4 +1,4 @@
 /// <reference types="@types/google.maps" />
 
-export type TGoogleMapsAutocompleteResponse = google.maps.places.AutocompleteResponse;
-export type TGoogleMapsAutocompleteRequest = google.maps.places.AutocompletionRequest;
+export type TGoogleMapsTextSearchRequest = google.maps.places.TextSearchRequest;
+export type TGoogleMapsPlaceResult = google.maps.places.PlaceResult;
