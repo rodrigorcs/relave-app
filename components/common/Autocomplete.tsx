@@ -8,8 +8,9 @@ import {
   NavArrowDown as ChevronDownIcon,
   NavArrowUp as ChevronUpIcon,
 } from 'iconoir-react-native'
-import React, { Dispatch, FC, SetStateAction, useEffect, useRef, useState } from 'react'
+import React, { Dispatch, FC, ReactNode, SetStateAction, useEffect, useRef, useState } from 'react'
 import { View, FlatList, TouchableOpacity, TextInput } from 'react-native'
+import { ClassNameValue } from 'tailwind-merge'
 
 interface IDropdownExpandButtonProps {
   isDropdownOpen: boolean
@@ -47,6 +48,9 @@ interface IProps<T extends IOption> {
   title?: string
   placeholder?: string
   isDisabled?: boolean
+  children?: (option: IOption) => ReactNode
+  listItemClassName: ClassNameValue
+  large?: boolean
 }
 
 export const Autocomplete = <T extends IOption>({
@@ -58,6 +62,9 @@ export const Autocomplete = <T extends IOption>({
   title,
   placeholder = '',
   isDisabled = false,
+  children,
+  listItemClassName,
+  large,
 }: IProps<T>) => {
   const [input, setInput] = useState('')
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
@@ -120,6 +127,7 @@ export const Autocomplete = <T extends IOption>({
             className={cn(
               `shadow bg-neutrals-white absolute w-full h-40 rounded-lg`,
               dropdownPosition.endPosY && `top-[${dropdownPosition.endPosY}]`,
+              large && 'h-80',
             )}
           >
             <FlatList
@@ -134,15 +142,20 @@ export const Autocomplete = <T extends IOption>({
                     className={cn(
                       'flex-row justify-between items-center px-4 py-3 border-b border-neutrals-100 bg-neutrals-white',
                       isSelected && 'bg-neutrals-100',
+                      listItemClassName,
                     )}
                   >
-                    <CustomText
-                      variant={
-                        isSelected ? ECustomTextVariants.EXPRESSIVE2 : ECustomTextVariants.BODY2
-                      }
-                    >
-                      {option.name}
-                    </CustomText>
+                    {children ? (
+                      children(option)
+                    ) : (
+                      <CustomText
+                        variant={
+                          isSelected ? ECustomTextVariants.EXPRESSIVE2 : ECustomTextVariants.BODY2
+                        }
+                      >
+                        {option.name}
+                      </CustomText>
+                    )}
                     {isSelected && (
                       <CheckIcon
                         width={24}
