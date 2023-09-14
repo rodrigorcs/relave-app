@@ -8,7 +8,7 @@ import {
   NavArrowDown as ChevronDownIcon,
   NavArrowUp as ChevronUpIcon,
 } from 'iconoir-react-native'
-import React, { Dispatch, FC, SetStateAction, useRef, useState } from 'react'
+import React, { Dispatch, FC, SetStateAction, useEffect, useRef, useState } from 'react'
 import { View, FlatList, TouchableOpacity, TextInput } from 'react-native'
 
 interface IDropdownExpandButtonProps {
@@ -42,6 +42,8 @@ interface IProps<T extends IOption> {
   options: T[]
   selectedOption: T | null
   setSelectedOption?: Dispatch<SetStateAction<T | null>>
+  onInputChange?: (input: string) => void
+  filterOnType?: boolean
   title?: string
   placeholder?: string
   isDisabled?: boolean
@@ -51,6 +53,8 @@ export const Autocomplete = <T extends IOption>({
   options,
   selectedOption,
   setSelectedOption,
+  onInputChange,
+  filterOnType = true,
   title,
   placeholder = '',
   isDisabled = false,
@@ -60,6 +64,10 @@ export const Autocomplete = <T extends IOption>({
   const inputRef = useRef<TextInput>(null)
   const hasSelectedOption = useRef(false)
   const { ref: dropdownRef, position: dropdownPosition } = usePosition()
+
+  useEffect(() => {
+    if (onInputChange && input) onInputChange(input)
+  }, [onInputChange, input])
 
   // FIXME: CustomInput overrides state input value, hasSelectedOption is an workaround
   const handleChangeSelectedOption = (option: T) => {
@@ -74,6 +82,13 @@ export const Autocomplete = <T extends IOption>({
     if (hasSelectedOption.current) return (hasSelectedOption.current = false)
     setInput(input)
   }
+
+  const getDropdownOptions = (): T[] => {
+    if (!filterOnType || input.length > 2) return options
+    return options?.filter((option) => option.name.toLowerCase().includes(input.toLowerCase()))
+  }
+
+  const dropdownOptions = getDropdownOptions()
 
   return (
     <>
@@ -108,13 +123,7 @@ export const Autocomplete = <T extends IOption>({
             )}
           >
             <FlatList
-              data={
-                input.length >= 2
-                  ? options.filter((option) =>
-                      option.name.toLowerCase().includes(input.toLowerCase()),
-                    )
-                  : options
-              }
+              data={dropdownOptions}
               style={{ borderRadius: 8 }} // rounded-lg does not work when there is a bg color
               renderItem={({ item: option }) => {
                 const isSelected = selectedOption && option.id === selectedOption.id

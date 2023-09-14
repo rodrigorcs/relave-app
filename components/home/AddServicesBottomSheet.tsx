@@ -14,6 +14,7 @@ import {
   Checkbox,
   ECustomButtonVariants,
 } from '../common'
+import { router } from 'expo-router'
 import { ArrowRight as ArrowRightIcon } from 'iconoir-react-native'
 import React, { FC, useRef } from 'react'
 import { FlatList, View } from 'react-native'
@@ -45,6 +46,7 @@ export const AddServicesBottomSheet: FC<IProps> = ({ selectedServiceBundle, isOp
       selectedServiceIds.includes(service.id),
     )
     dispatch(setSelectedAdditionalServices(selectedServices))
+    router.push('/appointment')
   }
 
   return (
