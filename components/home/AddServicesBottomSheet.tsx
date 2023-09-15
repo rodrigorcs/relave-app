@@ -49,6 +49,7 @@ export const AddServicesBottomSheet: FC<IProps> = ({ selectedServiceBundle, isOp
     router.push('/appointment')
   }
 
+  // TODO: Check all FlatLists and ScrollViews
   return (
     <BottomSheet ref={bottomSheetRef} height={HEIGHT} isOpen={isOpen} close={close}>
       <View className="flex-1">

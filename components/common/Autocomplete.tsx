@@ -10,7 +10,6 @@ import {
 } from 'iconoir-react-native'
 import React, { Dispatch, FC, ReactNode, SetStateAction, useEffect, useRef, useState } from 'react'
 import { View, FlatList, TouchableOpacity, TextInput } from 'react-native'
-import { ClassNameValue } from 'tailwind-merge'
 
 interface IDropdownExpandButtonProps {
   isDropdownOpen: boolean
@@ -49,7 +48,6 @@ interface IProps<T extends IOption> {
   placeholder?: string
   isDisabled?: boolean
   children?: (option: IOption) => ReactNode
-  listItemClassName: ClassNameValue
   large?: boolean
 }
 
@@ -63,7 +61,6 @@ export const Autocomplete = <T extends IOption>({
   placeholder = '',
   isDisabled = false,
   children,
-  listItemClassName,
   large,
 }: IProps<T>) => {
   const [input, setInput] = useState('')
@@ -122,61 +119,64 @@ export const Autocomplete = <T extends IOption>({
         }
         isDisabled={isDisabled}
       />
-      <View ref={dropdownRef} className={cn('z-10 mt-1', !isDropdownOpen && 'hidden')}>
+      <View ref={dropdownRef} className={cn('z-10', !isDropdownOpen && 'hidden')}>
         {isDropdownOpen && (
           <View
             className={cn(
-              `shadow bg-neutrals-white absolute w-full rounded-lg`,
+              `absolute w-full rounded-lg`,
               dropdownPosition.endPosY && `top-[${dropdownPosition.endPosY}]`,
-              hasOptions && 'h-40',
-              hasOptions && large && 'h-80',
+              hasOptions && 'max-h-40',
+              hasOptions && large && 'max-h-80',
             )}
           >
-            {dropdownOptions.length === 0 ? (
-              <View className="flex-row justify-between items-center px-4 py-3 bg-neutrals-white">
-                <CustomText variant={ECustomTextVariants.HELPER1}>No options.</CustomText>
-              </View>
-            ) : (
-              <FlatList
-                data={dropdownOptions}
-                style={{ borderRadius: 8 }} // rounded-lg does not work when there is a bg color
-                renderItem={({ item: option }) => {
-                  const isSelected = selectedOption && option.id === selectedOption.id
-                  return (
-                    <TouchableOpacity
-                      key={option.id}
-                      onPress={() => handleChangeSelectedOption(option)}
-                      className={cn(
-                        'flex-row justify-between items-center px-4 py-3 border-b border-neutrals-100 bg-neutrals-white',
-                        isSelected && 'bg-neutrals-100',
-                        listItemClassName,
-                      )}
-                    >
-                      {children ? (
-                        children(option)
-                      ) : (
-                        <CustomText
-                          variant={
-                            isSelected ? ECustomTextVariants.EXPRESSIVE2 : ECustomTextVariants.BODY2
-                          }
-                        >
-                          {option.name}
-                        </CustomText>
-                      )}
-                      {isSelected && (
-                        <CheckIcon
-                          width={24}
-                          height={24}
-                          strokeWidth={2}
-                          color={theme.colors['brand-500']}
-                          className="ml-2"
-                        />
-                      )}
-                    </TouchableOpacity>
-                  )
-                }}
-              />
-            )}
+            <View className={cn(`shadow bg-neutrals-white mt-1 rounded-lg`)}>
+              {dropdownOptions.length === 0 ? (
+                <View className="flex-row justify-between items-center px-4 py-3 bg-neutrals-white">
+                  <CustomText variant={ECustomTextVariants.HELPER1}>No options.</CustomText>
+                </View>
+              ) : (
+                <FlatList
+                  data={dropdownOptions}
+                  style={{ borderRadius: 8 }} // rounded-lg does not work when there is a bg color
+                  renderItem={({ item: option }) => {
+                    const isSelected = selectedOption && option.id === selectedOption.id
+                    return (
+                      <TouchableOpacity
+                        key={option.id}
+                        onPress={() => handleChangeSelectedOption(option)}
+                        className={cn(
+                          'flex-row justify-between items-center px-4 py-3 border-b border-neutrals-100 bg-neutrals-white',
+                          isSelected && 'bg-neutrals-100',
+                        )}
+                      >
+                        {children ? (
+                          children(option)
+                        ) : (
+                          <CustomText
+                            variant={
+                              isSelected
+                                ? ECustomTextVariants.EXPRESSIVE2
+                                : ECustomTextVariants.BODY2
+                            }
+                          >
+                            {option.name}
+                          </CustomText>
+                        )}
+                        {isSelected && (
+                          <CheckIcon
+                            width={24}
+                            height={24}
+                            strokeWidth={2}
+                            color={theme.colors['brand-500']}
+                            className="ml-2"
+                          />
+                        )}
+                      </TouchableOpacity>
+                    )
+                  }}
+                />
+              )}
+            </View>
           </View>
         )}
       </View>

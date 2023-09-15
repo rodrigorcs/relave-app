@@ -25,6 +25,7 @@
     "@reduxjs/toolkit": "^1.9.5",
     "axios": "^1.5.0",
     "clsx": "^2.0.0",
+    "dayjs": "^1.11.9",
     "eslint": "^8.47.0",
     "expo": "^49.0.7",
     "expo-font": "^11.4.0",
