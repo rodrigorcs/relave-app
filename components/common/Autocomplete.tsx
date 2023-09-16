@@ -41,7 +41,7 @@ interface IOption extends Record<string, unknown> {
 interface IProps<T extends IOption> {
   options: T[]
   selectedOption: T | null
-  setSelectedOption?: Dispatch<SetStateAction<T | null>>
+  onChange?: (selectedOption: T | null) => void
   onInputChange?: (input: string) => void
   filterOnType?: boolean
   title?: string
@@ -54,7 +54,7 @@ interface IProps<T extends IOption> {
 export const Autocomplete = <T extends IOption>({
   options,
   selectedOption,
-  setSelectedOption,
+  onChange,
   onInputChange,
   filterOnType = true,
   title,
@@ -77,7 +77,7 @@ export const Autocomplete = <T extends IOption>({
   const handleChangeSelectedOption = (option: T) => {
     setInput(option.name)
     hasSelectedOption.current = true
-    if (setSelectedOption) setSelectedOption(option)
+    if (onChange) onChange(option)
     setIsDropdownOpen(false)
     inputRef.current?.blur()
   }

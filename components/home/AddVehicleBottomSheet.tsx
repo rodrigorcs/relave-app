@@ -59,7 +59,7 @@ export const AddVehicleBottomSheet: FC<IProps> = ({ addVehicle, userId, isOpen, 
         <Autocomplete<IVehicleBrand>
           options={vehicleBrands}
           selectedOption={selectedBrand}
-          setSelectedOption={setSelectedBrand}
+          onChange={setSelectedBrand}
           title="Marca"
           placeholder="Digite a marca..."
         />
@@ -67,7 +67,7 @@ export const AddVehicleBottomSheet: FC<IProps> = ({ addVehicle, userId, isOpen, 
         <Autocomplete<IVehicleModel>
           options={vehicleModels}
           selectedOption={selectedModel}
-          setSelectedOption={setSelectedModel}
+          onChange={setSelectedModel}
           title="Modelo"
           placeholder="Digite o modelo..."
           isDisabled={!selectedBrand}
