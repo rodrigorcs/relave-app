@@ -4,5 +4,6 @@ export enum EFirestoreCollections {
   VEHICLE_MODELS = 'vehicleModels',
   VEHICLES = 'vehicles',
   SERVICES = 'services',
-  SERVICE_BUNDLES = 'serviceBundles'
+  SERVICE_BUNDLES = 'serviceBundles',
+  DAY_SCHEDULES = 'daySchedules'
 }

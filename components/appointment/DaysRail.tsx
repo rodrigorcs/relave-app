@@ -1,6 +1,6 @@
-import { Days } from '../../models/constants/Days'
 import { cn } from '../../utils/cn'
 import { addLeadingZeros } from '../../utils/date'
+import { dayjsToDate } from '../../utils/dayjs'
 import { CustomText, ECustomTextVariants } from '../common'
 import dayjs, { Dayjs } from 'dayjs'
 import React, { FC } from 'react'
@@ -18,34 +18,18 @@ interface IProps {
   onChange: (selectedDate: IDate) => void
 }
 
-export const DaysRail: FC<IProps> = ({ selectedDate: selectedDateFromProps, onChange }) => {
+const getUpcomingDays = (today: Dayjs, daysCount: number): IDate[] => {
+  return Array.from({ length: daysCount }, (_element, index) => {
+    const date = today.add(index, 'day')
+
+    return dayjsToDate(date, index)
+  })
+}
+
+export const DaysRail: FC<IProps> = ({ selectedDate, onChange }) => {
   const today = dayjs()
-  const dayjsToDate = (date: Dayjs, index?: number) => {
-    const day = date.date()
-    const month = date.month()
-    const dayOfWeek =
-      (index !== undefined ? Days.RELATIVE_DAYS_OF_WEEK[index] : Days.DAYS_OF_WEEK[date.day()]) ??
-      Days.DAYS_OF_WEEK[date.day()]
-
-    return {
-      id: `${month}-${day}`,
-      day,
-      month,
-      dayOfWeek,
-    }
-  }
-
-  const selectedDate = selectedDateFromProps ?? dayjsToDate(today)
-
-  const getUpcomingDays = (today: Dayjs, daysCount: number): IDate[] => {
-    return Array.from({ length: daysCount }, (_element, index) => {
-      const date = today.add(index, 'day')
-
-      return dayjsToDate(date, index)
-    })
-  }
-
   const upcomingDays = getUpcomingDays(today, 7)
+
   return (
     <ScrollView horizontal showsHorizontalScrollIndicator={false} className="flex-row mt-4">
       {upcomingDays.map((date, index) => {
