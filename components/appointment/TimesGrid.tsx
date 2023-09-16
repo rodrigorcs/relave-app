@@ -2,6 +2,7 @@ import { daySchedulesAction } from '../../core/actions/daySchedules'
 import { useAsyncData } from '../../hooks'
 import { cn } from '../../utils/cn'
 import { CustomText, ECustomTextVariants } from '../common'
+import { Skeleton } from '../common/Skeleton'
 import { IDate } from './DaysRail'
 import dayjs from 'dayjs'
 import React, { FC } from 'react'
@@ -46,9 +47,10 @@ const generatePlaceholders = (length: number, numColumns: number): null[] => {
 }
 
 export const TimesGrid: FC<IProps> = ({ selectedDate, selectedTime, onChange }) => {
-  const [availableTimes, isLoading] = useAsyncData(
+  const [availableTimes, isLoadingAvailability] = useAsyncData(
     () => daySchedulesAction.getByDate(selectedDate.id),
     [selectedDate],
+    true,
   )
 
   const times = getTimesArray(8, 17.5, 0.5)
@@ -59,9 +61,8 @@ export const TimesGrid: FC<IProps> = ({ selectedDate, selectedTime, onChange }) 
       data={timesWithPlaceholders}
       scrollEnabled={false}
       renderItem={({ item, index }) => {
-        const isSelected =
-          item?.hour === selectedTime?.hour && item?.minute === selectedTime?.minute
-        const isDisabled = isLoading || !item || !availableTimes?.includes(item?.id)
+        const isDisabled = isLoadingAvailability || !item || !availableTimes?.includes(item?.id)
+        const isSelected = !isDisabled && item?.id === selectedTime?.id
 
         const positions = ['start', 'center', 'end'] as const
         const position = positions[index % 3]
@@ -86,13 +87,17 @@ export const TimesGrid: FC<IProps> = ({ selectedDate, selectedTime, onChange }) 
                 disabled={isDisabled}
                 activeOpacity={isDisabled ? 1 : 0.6}
               >
-                <CustomText
-                  variant={ECustomTextVariants.BODY2}
-                  customClassName={cn(isDisabled ? 'text-neutrals-300' : 'text-neutrals-600')}
-                  white={isSelected}
-                >
-                  {item.formattedTime}
-                </CustomText>
+                {isLoadingAvailability ? (
+                  <Skeleton customClassName="w-12 h-5" />
+                ) : (
+                  <CustomText
+                    variant={ECustomTextVariants.BODY2}
+                    customClassName={cn(isDisabled ? 'text-neutrals-300' : 'text-neutrals-600')}
+                    white={isSelected}
+                  >
+                    {item.formattedTime}
+                  </CustomText>
+                )}
               </TouchableOpacity>
             )}
           </View>
