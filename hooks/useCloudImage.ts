@@ -13,6 +13,7 @@ export const useCloudImage = (imageEndpoint: string): [string | null, boolean, u
           .ref(imageEndpoint)
           .getDownloadURL()
         setImageUrl(_imageUrl)
+        if (_imageUrl === null) setError('Image does not exist')
       } catch (e) {
         setError(e);
       } finally {

@@ -1,13 +1,15 @@
 import { cn } from '../../utils/cn'
-import React, { FC, useRef, useEffect } from 'react'
-import { Animated } from 'react-native'
+import React, { FC, useRef, useEffect, ReactNode } from 'react'
+import { Animated, View } from 'react-native'
 import { ClassNameValue } from 'tailwind-merge'
 
 interface IProps {
   customClassName: ClassNameValue
+  isLoaded?: boolean
+  children?: ReactNode
 }
 
-export const Skeleton: FC<IProps> = ({ customClassName }) => {
+export const Skeleton: FC<IProps> = ({ customClassName, isLoaded, children }) => {
   const opacity = useRef(new Animated.Value(0.3))
 
   useEffect(() => {
@@ -28,9 +30,14 @@ export const Skeleton: FC<IProps> = ({ customClassName }) => {
   }, [opacity])
 
   return (
-    <Animated.View
-      style={{ opacity: opacity.current }}
-      className={cn('bg-neutrals-200 rounded', customClassName)}
-    />
+    <View>
+      {!isLoaded && (
+        <Animated.View
+          style={{ opacity: opacity.current }}
+          className={cn('bg-neutrals-200 rounded', customClassName)}
+        />
+      )}
+      {children}
+    </View>
   )
 }

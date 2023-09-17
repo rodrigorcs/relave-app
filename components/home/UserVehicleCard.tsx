@@ -4,9 +4,55 @@ import { IVehicle } from '../../models/contracts/vehicle'
 import { theme } from '../../theme'
 import { cn } from '../../utils/cn'
 import { CustomText, ECustomTextVariants } from '../common'
+import { Skeleton } from '../common/Skeleton'
 import { Car as BrandFallbackIcon, Check as CheckIcon } from 'iconoir-react-native'
-import React, { FC } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { View, TouchableOpacity, Image } from 'react-native'
+
+interface IBrandLogoProps {
+  imageUrl: string | null
+  hasImageUrlError?: boolean
+}
+
+enum EImageState {
+  SUCCESS = 'success',
+  LOADING = 'loading',
+  ERROR = 'error',
+}
+
+const BrandLogo: FC<IBrandLogoProps> = ({ imageUrl, hasImageUrlError }) => {
+  const [imageState, setImageState] = useState<EImageState>(EImageState.LOADING)
+
+  useEffect(() => {
+    if (hasImageUrlError) setImageState(EImageState.ERROR)
+  }, [hasImageUrlError])
+
+  return (
+    <Skeleton customClassName="h-8 aspect-square" isLoaded={imageState !== EImageState.LOADING}>
+      <Image
+        source={{ uri: imageUrl ?? undefined }}
+        resizeMode="center"
+        className={cn('h-8 w-8')}
+        style={{
+          position: imageState === EImageState.SUCCESS ? undefined : 'absolute',
+          top: imageState === EImageState.SUCCESS ? undefined : -1000,
+        }}
+        onLoadEnd={() => setImageState(EImageState.SUCCESS)}
+        onError={() => setImageState(EImageState.ERROR)}
+      />
+      {imageState === EImageState.ERROR && (
+        <View className="h-8 w-8 items-center justify-center">
+          <BrandFallbackIcon
+            width={20}
+            height={20}
+            strokeWidth={1.5}
+            color={theme.colors['neutrals-800']}
+          />
+        </View>
+      )}
+    </Skeleton>
+  )
+}
 
 interface IProps {
   vehicle: IVehicle
@@ -21,7 +67,10 @@ export const UserVehicleCard: FC<IProps> = ({
   isSelected,
   handleChangeVehicle,
 }) => {
-  const [brandLogoUrl] = useCloudImage(Endpoints.VEHICLE_BRANDS_LOGOS(vehicle.brandSlug))
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [brandLogoUrl, _isFetchingUrl, hasImageError] = useCloudImage(
+    Endpoints.VEHICLE_BRANDS_LOGOS(vehicle.brandSlug),
+  )
 
   return (
     <View key={vehicle.id} className={cn(index > 0 && 'ml-2', index === 0 && 'ml-4')}>
@@ -33,19 +82,10 @@ export const UserVehicleCard: FC<IProps> = ({
         activeOpacity={0.6}
         onPress={() => handleChangeVehicle(vehicle)}
       >
-        {brandLogoUrl ? (
-          <Image source={{ uri: brandLogoUrl }} resizeMode="center" className="h-8 w-8 mb-4" />
-        ) : (
-          <View className="h-8 w-8 mb-4 items-center justify-center">
-            <BrandFallbackIcon
-              width={24}
-              height={24}
-              strokeWidth={1.5}
-              color={theme.colors['neutrals-900']}
-            />
-          </View>
-        )}
-        <CustomText variant={ECustomTextVariants.EYEBROW2}>{vehicle.brandName}</CustomText>
+        <BrandLogo imageUrl={brandLogoUrl} hasImageUrlError={!!hasImageError} />
+        <CustomText variant={ECustomTextVariants.EYEBROW2} customClassName="mt-4">
+          {vehicle.brandName}
+        </CustomText>
         <CustomText variant={ECustomTextVariants.BODY3}>{vehicle.modelName}</CustomText>
       </TouchableOpacity>
       {isSelected && (
