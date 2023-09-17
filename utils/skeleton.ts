@@ -1,0 +1,1 @@
+export const skeletonArray = (itemsQty: number) => new Array(itemsQty).fill(null)

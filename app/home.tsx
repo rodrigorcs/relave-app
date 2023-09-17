@@ -6,6 +6,7 @@ import {
   UserVehicleCard,
 } from '../components/home'
 import { AddServicesBottomSheet } from '../components/home/AddServicesBottomSheet'
+import { UserVehicleCardSkeleton } from '../components/home/skeletons'
 import { serviceBundlesActions } from '../core/actions/serviceBundles'
 import { vehiclesActions } from '../core/actions/vehicles'
 import { useAsyncData } from '../hooks'
@@ -19,6 +20,7 @@ import {
   setSelectedVehicle,
 } from '../state/slices/cart'
 import { IAppState } from '../state/store'
+import { skeletonArray } from '../utils/skeleton'
 import {
   Flash as FlashIcon,
   Spark as SparkIcon,
@@ -46,7 +48,7 @@ export default function Home() {
 
   if (!currentUser) return //FIXME: Add auth boundaries so currentUser is always truthy
 
-  const [vehicles] = useAsyncData(
+  const [vehicles, isLoadingVehicles] = useAsyncData(
     currentUser ? () => vehiclesActions.getVehiclesByUserId(currentUser.id) : null,
   )
   const [serviceBundles] = useAsyncData(() => serviceBundlesActions.getAllWithDetails())
@@ -80,18 +82,24 @@ export default function Home() {
               Selecione seu carro
             </CustomText>
             <ScrollView horizontal showsHorizontalScrollIndicator={false} className="flex-row mt-4">
-              {(vehicles ?? []).map((vehicle, index) => {
-                const isSelected = vehicle.id === selectedVehicle?.id
-                return (
-                  <UserVehicleCard
-                    key={vehicle.id}
-                    vehicle={vehicle}
-                    handleChangeVehicle={handleChangeVehicle}
-                    isSelected={isSelected}
-                    index={index}
-                  />
-                )
-              })}
+              {isLoadingVehicles ? (
+                skeletonArray(3).map((_null, index) => <UserVehicleCardSkeleton index={index} />)
+              ) : (
+                <>
+                  {(vehicles ?? []).map((vehicle, index) => {
+                    const isSelected = vehicle.id === selectedVehicle?.id
+                    return (
+                      <UserVehicleCard
+                        key={vehicle.id}
+                        vehicle={vehicle}
+                        handleChangeVehicle={handleChangeVehicle}
+                        isSelected={isSelected}
+                        index={index}
+                      />
+                    )
+                  })}
+                </>
+              )}
               <AddVehicleCard onPress={handleOpenAddVehicleBottomSheet} />
             </ScrollView>
           </View>
