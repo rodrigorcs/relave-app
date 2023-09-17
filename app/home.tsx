@@ -6,10 +6,10 @@ import {
   UserVehicleCard,
 } from '../components/home'
 import { AddServicesBottomSheet } from '../components/home/AddServicesBottomSheet'
-import { UserVehicleCardSkeleton } from '../components/home/skeletons'
+import { UserVehicleCardSkeleton, ServiceBundleCardSkeleton } from '../components/home/skeletons'
 import { serviceBundlesActions } from '../core/actions/serviceBundles'
 import { vehiclesActions } from '../core/actions/vehicles'
-import { useAsyncData } from '../hooks'
+import { useAsyncData, useSkeletonArray } from '../hooks'
 import { EServiceBundleTiers, IServiceBundleWithDetails } from '../models/contracts/serviceBundle'
 import { IVehicle } from '../models/contracts/vehicle'
 import { getCurrentUser } from '../state/slices/auth'
@@ -20,7 +20,6 @@ import {
   setSelectedVehicle,
 } from '../state/slices/cart'
 import { IAppState } from '../state/store'
-import { skeletonArray } from '../utils/skeleton'
 import {
   Flash as FlashIcon,
   Spark as SparkIcon,
@@ -51,7 +50,11 @@ export default function Home() {
   const [vehicles, isLoadingVehicles] = useAsyncData(
     currentUser ? () => vehiclesActions.getVehiclesByUserId(currentUser.id) : null,
   )
-  const [serviceBundles] = useAsyncData(() => serviceBundlesActions.getAllWithDetails())
+  const [serviceBundles, isLoadingServiceBundles] = useAsyncData(() =>
+    serviceBundlesActions.getAllWithDetails(),
+  )
+  const vehicleSkeletons = useSkeletonArray(3)
+  const serviceBundleSkeletons = useSkeletonArray(3)
 
   const handleChangeVehicle = (vehicle: IVehicle) => {
     dispatch(setSelectedVehicle(vehicle))
@@ -83,7 +86,9 @@ export default function Home() {
             </CustomText>
             <ScrollView horizontal showsHorizontalScrollIndicator={false} className="flex-row mt-4">
               {isLoadingVehicles ? (
-                skeletonArray(3).map((_null, index) => <UserVehicleCardSkeleton index={index} />)
+                vehicleSkeletons.map((_skeleton, index) => (
+                  <UserVehicleCardSkeleton key={index} index={index} />
+                ))
               ) : (
                 <>
                   {(vehicles ?? []).map((vehicle, index) => {
@@ -111,21 +116,31 @@ export default function Home() {
               Escolha o tipo de cuidado que o seu carro precisa
             </CustomText>
             <ScrollView horizontal showsHorizontalScrollIndicator={false} className="flex-row mt-4">
-              {(serviceBundles || []).map((serviceBundle, index) => {
-                const isLastItem = serviceBundles && index === serviceBundles?.length - 1
-                const previousBundle =
-                  index > 0 && serviceBundles ? serviceBundles[index - 1] : null
-                return (
-                  <ServiceBundleCard
-                    key={serviceBundle.id}
-                    serviceBundle={serviceBundle}
-                    previousBundleName={previousBundle?.name}
-                    onPress={handleChooseServiceBundle}
-                    Icon={TIER_ICONS[serviceBundle.tier]}
-                    customClassName={isLastItem && 'mr-4'}
-                  />
-                )
-              })}
+              {isLoadingServiceBundles ? (
+                <>
+                  {serviceBundleSkeletons.map((_skeleton, index) => (
+                    <ServiceBundleCardSkeleton key={index} />
+                  ))}
+                </>
+              ) : (
+                <>
+                  {(serviceBundles || []).map((serviceBundle, index) => {
+                    const isLastItem = serviceBundles && index === serviceBundles?.length - 1
+                    const previousBundle =
+                      index > 0 && serviceBundles ? serviceBundles[index - 1] : null
+                    return (
+                      <ServiceBundleCard
+                        key={serviceBundle.id}
+                        serviceBundle={serviceBundle}
+                        previousBundleName={previousBundle?.name}
+                        onPress={handleChooseServiceBundle}
+                        Icon={TIER_ICONS[serviceBundle.tier]}
+                        customClassName={isLastItem && 'mr-4'}
+                      />
+                    )
+                  })}
+                </>
+              )}
             </ScrollView>
           </View>
         </View>

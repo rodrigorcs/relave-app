@@ -5,11 +5,12 @@ import { ClassNameValue } from 'tailwind-merge'
 
 interface IProps {
   customClassName: ClassNameValue
+  style?: Record<string, unknown>
   isLoaded?: boolean
   children?: ReactNode
 }
 
-export const Skeleton: FC<IProps> = ({ customClassName, isLoaded, children }) => {
+export const Skeleton: FC<IProps> = ({ customClassName, style, isLoaded, children }) => {
   const opacity = useRef(new Animated.Value(0.3))
 
   useEffect(() => {
@@ -33,7 +34,7 @@ export const Skeleton: FC<IProps> = ({ customClassName, isLoaded, children }) =>
     <View>
       {!isLoaded && (
         <Animated.View
-          style={{ opacity: opacity.current }}
+          style={{ opacity: opacity.current, ...style }}
           className={cn('bg-neutrals-200 rounded', customClassName)}
         />
       )}
