@@ -3,6 +3,7 @@ import { ITime, TimesGrid } from '../components/appointment/TimesGrid'
 import { CustomButton, CustomText, ECustomTextVariants } from '../components/common'
 import { TGoogleMapsPlaceResult } from '../models/contracts/external/googleMaps'
 import { dayjs, dayjsToDate } from '../utils/dayjs'
+import { router } from 'expo-router'
 import { ArrowRight as ArrowRightIcon } from 'iconoir-react-native'
 import React, { useState } from 'react'
 import { SafeAreaView, ScrollView, View } from 'react-native'
@@ -39,7 +40,7 @@ export default function Appointment() {
         </View>
       </ScrollView>
       <View className="px-4 pt-6 pb-1 border-t border-neutrals-200">
-        <CustomButton onPress={() => {}} IconRight={<ArrowRightIcon />}>
+        <CustomButton onPress={() => router.push('/checkout')} IconRight={<ArrowRightIcon />}>
           Continuar
         </CustomButton>
       </View>
