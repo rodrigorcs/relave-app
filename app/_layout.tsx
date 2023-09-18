@@ -1,4 +1,5 @@
 import { AuthProvider } from '../components/providers/AuthProvider'
+import { PaymentsProvider } from '../components/providers/PaymentsProvider'
 import '../global.css'
 import { store } from '../state/store'
 import { useFonts } from 'expo-font'
@@ -37,6 +38,9 @@ export default function Layout() {
           <Stack.Screen name="otpConfirmation" options={{ title: 'Confirmação' }} />
           <Stack.Screen name="home" options={{ title: 'Lavei', headerBackVisible: false }} />
           <Stack.Screen name="appointment" options={{ title: 'Lavei' }} />
+          <PaymentsProvider>
+            <Stack.Screen name="checkout" options={{ title: 'Resumo' }} />
+          </PaymentsProvider>
         </Stack>
       </AuthProvider>
     </ReduxProvider>
