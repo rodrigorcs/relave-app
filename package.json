@@ -23,6 +23,7 @@
     "@react-native-firebase/storage": "^18.3.2",
     "@react-navigation/native": "^6.0.2",
     "@reduxjs/toolkit": "^1.9.5",
+    "@stripe/stripe-react-native": "^0.32.0",
     "axios": "^1.5.0",
     "clsx": "^2.0.0",
     "dayjs": "^1.11.9",
