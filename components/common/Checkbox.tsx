@@ -7,14 +7,19 @@ import { TouchableOpacity } from 'react-native'
 interface IProps {
   id: string
   isSelected: boolean
-  select: (id: string) => void
-  unselect: (id: string) => void
+  select?: (id: string) => void
+  unselect?: (id: string) => void
 }
 
 export const Checkbox: FC<IProps> = ({ id, isSelected, select, unselect }) => {
+  const toggleSelection = () => {
+    if (select && !isSelected) select(id)
+    if (unselect && isSelected) unselect(id)
+  }
+
   return (
     <TouchableOpacity
-      onPress={() => (isSelected ? unselect(id) : select(id))}
+      onPress={toggleSelection}
       className={cn(
         'w-6 h-6 rounded items-center justify-center',
         isSelected ? 'bg-brand-500' : 'border border-neutrals-500',

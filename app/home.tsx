@@ -45,7 +45,7 @@ export default function Home() {
   const selectedVehicle = useSelector(({ cart }: IAppState) => getSelectedVehicle(cart))
   const selectedServiceBundle = useSelector(({ cart }: IAppState) => getSelectedServiceBundle(cart))
 
-  if (!currentUser) return //FIXME: Add auth boundaries so currentUser is always truthy
+  if (!currentUser) return console.error('User not logged in') //FIXME: Add auth boundaries so currentUser is always truthy
 
   const [vehicles, isLoadingVehicles] = useAsyncData(
     currentUser ? () => vehiclesActions.getVehiclesByUserId(currentUser.id) : null,

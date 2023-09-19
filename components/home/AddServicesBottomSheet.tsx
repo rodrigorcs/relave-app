@@ -18,6 +18,7 @@ import { router } from 'expo-router'
 import { ArrowRight as ArrowRightIcon } from 'iconoir-react-native'
 import React, { FC, useRef } from 'react'
 import { FlatList, View } from 'react-native'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 import { useDispatch } from 'react-redux'
 
 interface IProps {
@@ -40,6 +41,10 @@ export const AddServicesBottomSheet: FC<IProps> = ({ selectedServiceBundle, isOp
   )
 
   const [selectedServiceIds, selectServiceId, unselectServiceId] = useSelection()
+  const toggleService = (serviceId: string) => {
+    const isSelected = selectedServiceIds.includes(serviceId)
+    return isSelected ? unselectServiceId(serviceId) : selectServiceId(serviceId)
+  }
 
   const handleProceedWithSelection = (selectedServiceIds: IService['id'][]) => {
     const selectedServices = avaliableServices.filter((service) =>
@@ -64,13 +69,13 @@ export const AddServicesBottomSheet: FC<IProps> = ({ selectedServiceBundle, isOp
             renderItem={({ item: service, index }) => {
               const isSelected = selectedServiceIds.includes(service.id)
               return (
-                <View key={service.id} className={cn('flex-row', index > 0 && 'mt-4')}>
-                  <Checkbox
-                    id={service.id}
-                    isSelected={isSelected}
-                    select={selectServiceId}
-                    unselect={unselectServiceId}
-                  />
+                <TouchableOpacity
+                  key={service.id}
+                  activeOpacity={0.8}
+                  onPress={() => toggleService(service.id)}
+                  className={cn('flex-row', index > 0 && 'mt-4')}
+                >
+                  <Checkbox id={service.id} isSelected={isSelected} />
                   <View className="ml-4">
                     <CustomText
                       variant={ECustomTextVariants.BODY2}
@@ -85,7 +90,7 @@ export const AddServicesBottomSheet: FC<IProps> = ({ selectedServiceBundle, isOp
                       {`+${getDisplayPrice(service.price, true)}`}
                     </CustomText>
                   </View>
-                </View>
+                </TouchableOpacity>
               )
             }}
           />
