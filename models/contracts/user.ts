@@ -16,6 +16,7 @@ type IFirebaseUser = Pick<FirebaseAuthTypes.User,
 export interface IUser {
   id: string
   firebaseId: IFirebaseUser['uid'],
+  stripeId?: string,
   displayName: IFirebaseUser['displayName'],
   credentials: {
     isAnonymous: IFirebaseUser['isAnonymous'],

@@ -1,20 +1,20 @@
 import { CustomButton, CustomText, ECustomTextVariants } from '../components/common'
+import { useStripePaymentSheet } from '../hooks'
 import { IService } from '../models/contracts/service'
 import { IServiceBundle, IServiceBundleWithDetails } from '../models/contracts/serviceBundle'
+import { getCurrentUser } from '../state/slices/auth'
 import { getSelectedAdditionalServices, getSelectedServiceBundle } from '../state/slices/cart'
 import { IAppState } from '../state/store'
 import { theme } from '../theme'
 import { cn } from '../utils/cn'
-import { httpClient } from '../utils/httpClient'
 import { getDisplayPrice } from '../utils/price'
-import { useStripe } from '@stripe/stripe-react-native'
 import {
   ArrowRight as ArrowRightIcon,
   Calendar as CalendarIcon,
   PinAlt as LocationIcon,
 } from 'iconoir-react-native'
-import React, { useEffect, useState } from 'react'
-import { Alert, SafeAreaView, View } from 'react-native'
+import React from 'react'
+import { SafeAreaView, View } from 'react-native'
 import { useSelector } from 'react-redux'
 
 enum ECheckoutItemTypes {
@@ -98,85 +98,21 @@ const cartToCheckoutItems = ({
 }
 
 export default function Checkout() {
+  const currentUser = useSelector(({ auth }: IAppState) => getCurrentUser(auth))
   const serviceBundle = useSelector(({ cart }: IAppState) => getSelectedServiceBundle(cart))
   const additionalServices = useSelector(({ cart }: IAppState) =>
     getSelectedAdditionalServices(cart),
   )
 
   const checkoutItems = serviceBundle && cartToCheckoutItems({ serviceBundle, additionalServices })
+  const totalAmount = (checkoutItems ?? []).find(
+    (checkoutItem) => checkoutItem.type === ECheckoutItemTypes.TOTAL,
+  )?.price
 
-  const { initPaymentSheet, presentPaymentSheet } = useStripe()
-  const [, /*loading*/ setLoading] = useState(false)
-
-  const fetchPaymentSheetParams = async () => {
-    const response = await httpClient.get(
-      `http://127.0.0.1:5001/lavei-firebase/us-central1/paymentSheet`,
-    )
-
-    console.log({ response: response.data })
-    const { setupIntent, ephemeralKey, customer } = response.data
-
-    return {
-      setupIntent,
-      ephemeralKey,
-      customer,
-    }
-  }
-
-  const initializePaymentSheet = async () => {
-    console.log('initializePaymentSheet')
-    const { setupIntent, ephemeralKey, customer } = await fetchPaymentSheetParams()
-
-    const { error } = await initPaymentSheet({
-      merchantDisplayName: 'Example, Inc.',
-      customerId: customer,
-      customerEphemeralKeySecret: ephemeralKey,
-      setupIntentClientSecret: setupIntent,
-      style: 'alwaysLight',
-      appearance: {
-        colors: {
-          background: theme.colors['common-background'],
-          primary: theme.colors['brand-500'],
-          error: theme.colors['feedback-negative-300'],
-          primaryText: theme.colors['neutrals-800'],
-          secondaryText: theme.colors['neutrals-500'],
-          placeholderText: theme.colors['neutrals-400'],
-          componentText: theme.colors['neutrals-800'],
-          componentBorder: theme.colors['neutrals-200'],
-          componentDivider: theme.colors['neutrals-200'],
-          componentBackground: theme.colors['common-background'],
-          icon: theme.colors['neutrals-500'],
-        },
-        shapes: { shadow: { opacity: 0 }, borderRadius: 12, borderWidth: 1 },
-        primaryButton: { shapes: { borderRadius: 24 } },
-      },
-      primaryButtonLabel: 'Confirmar pagamento',
-      defaultBillingDetails: { address: { country: 'BR' } },
-      // intentConfiguration: {
-      //   mode: { amount: 500, currencyCode: 'BRL' },
-      //   confirmHandler(paymentMethod, shouldSavePaymentMethod, intentCreationCallback) {},
-      // },
-    })
-    console.log('initPaymentSheet')
-    if (error) console.error(error)
-    if (!error) {
-      setLoading(true)
-    }
-  }
-
-  const openPaymentSheet = async () => {
-    const { error } = await presentPaymentSheet()
-
-    if (error) {
-      Alert.alert(`Error code: ${error.code}`, error.message)
-    } else {
-      Alert.alert('Success', 'Your payment method is successfully set up for future payments!')
-    }
-  }
-
-  useEffect(() => {
-    initializePaymentSheet()
-  }, [])
+  const [openPaymentSheet, isLoading, error] = useStripePaymentSheet(
+    totalAmount,
+    currentUser?.stripeId,
+  )
 
   return (
     <SafeAreaView className="flex flex-1 bg-common-background">
@@ -234,7 +170,11 @@ export default function Checkout() {
         </View>
       </View>
       <View className="px-4 pt-6 pb-1 border-t border-neutrals-200">
-        <CustomButton onPress={openPaymentSheet} IconRight={<ArrowRightIcon />}>
+        <CustomButton
+          onPress={() => openPaymentSheet()}
+          isDisabled={isLoading || !!error}
+          IconRight={<ArrowRightIcon />}
+        >
           Confirmar pagamento
         </CustomButton>
       </View>

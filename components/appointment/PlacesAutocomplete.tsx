@@ -1,6 +1,6 @@
 import { locationActions } from '../../core/actions/location'
 import { useAsyncData, useDebounce } from '../../hooks'
-import { TGoogleMapsPlaceResult } from '../../models/contracts/external/googleMaps'
+import { TGoogleMapsPlaceResult } from '../../models/contracts/externalApi/googleMaps'
 import { Autocomplete, CustomText, ECustomTextVariants } from '../common'
 import React, { FC, useState } from 'react'
 import { View } from 'react-native'

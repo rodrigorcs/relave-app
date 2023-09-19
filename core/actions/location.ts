@@ -1,5 +1,5 @@
 import { Endpoints } from "../../models/constants/Endpoints"
-import { TGoogleMapsPlaceResult } from "../../models/contracts/external/googleMaps"
+import { TGoogleMapsPlaceResult } from "../../models/contracts/externalApi/googleMaps"
 import { httpClient } from "../../utils/httpClient"
 import { Config } from '../../models/constants/Config'
 import { AxiosResponse } from "axios"

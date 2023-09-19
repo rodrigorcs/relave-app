@@ -1,7 +1,7 @@
 import { DaysRail, IDate, PlacesAutocomplete } from '../components/appointment'
 import { ITime, TimesGrid } from '../components/appointment/TimesGrid'
 import { CustomButton, CustomText, ECustomTextVariants } from '../components/common'
-import { TGoogleMapsPlaceResult } from '../models/contracts/external/googleMaps'
+import { TGoogleMapsPlaceResult } from '../models/contracts/externalApi/googleMaps'
 import { dayjs, dayjsToDate } from '../utils/dayjs'
 import { router } from 'expo-router'
 import { ArrowRight as ArrowRightIcon } from 'iconoir-react-native'
