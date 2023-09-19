@@ -33,15 +33,15 @@ export default function Layout() {
   return (
     <ReduxProvider store={store}>
       <AuthProvider>
-        <Stack>
-          <Stack.Screen name="index" options={{ title: 'Cadastro' }} />
-          <Stack.Screen name="otpConfirmation" options={{ title: 'Confirmação' }} />
-          <Stack.Screen name="home" options={{ title: 'Lavei', headerBackVisible: false }} />
-          <Stack.Screen name="appointment" options={{ title: 'Lavei' }} />
-          <PaymentsProvider>
+        <PaymentsProvider>
+          <Stack>
+            <Stack.Screen name="index" options={{ title: 'Cadastro' }} />
+            <Stack.Screen name="otpConfirmation" options={{ title: 'Confirmação' }} />
+            <Stack.Screen name="home" options={{ title: 'Lavei', headerBackVisible: false }} />
+            <Stack.Screen name="appointment" options={{ title: 'Lavei' }} />
             <Stack.Screen name="checkout" options={{ title: 'Resumo' }} />
-          </PaymentsProvider>
-        </Stack>
+          </Stack>
+        </PaymentsProvider>
       </AuthProvider>
     </ReduxProvider>
   )

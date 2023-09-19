@@ -16,7 +16,10 @@
     "ios": {
       "bundleIdentifier": "com.rodrigorcs.laveiapp",
       "googleServicesFile": "./GoogleService-Info.plist",
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "CFBundleDevelopmentRegion": "pt_BR"
+      }
     },
     "android": {
       "package": "com.rodrigorcs.laveiapp",
