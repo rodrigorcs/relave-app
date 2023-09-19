@@ -115,7 +115,8 @@ export default function Checkout() {
   )
 
   const appointmentTime = dayjs(appointment.time)
-  const { dayOfWeek } = dayjsToDate(appointmentTime)
+  const differenceFromToday = appointmentTime.diff(dayjs(), 'd') //FIXME: Value lower than 1 if time in next day is earlier than today
+  const { dayOfWeek } = dayjsToDate(appointmentTime, differenceFromToday)
 
   return (
     <SafeAreaView className="flex flex-1 bg-common-background">
