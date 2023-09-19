@@ -9,7 +9,7 @@ import {
   NavArrowUp as ChevronUpIcon,
 } from 'iconoir-react-native'
 import React, { Dispatch, FC, ReactNode, SetStateAction, useEffect, useRef, useState } from 'react'
-import { View, FlatList, TouchableOpacity, TextInput } from 'react-native'
+import { View, TouchableOpacity, TextInput, ScrollView } from 'react-native'
 
 interface IDropdownExpandButtonProps {
   isDropdownOpen: boolean
@@ -135,10 +135,8 @@ export const Autocomplete = <T extends IOption>({
                   <CustomText variant={ECustomTextVariants.HELPER1}>Sem opções.</CustomText>
                 </View>
               ) : (
-                <FlatList
-                  data={dropdownOptions}
-                  style={{ borderRadius: 8 }} // rounded-lg does not work when there is a bg color
-                  renderItem={({ item: option }) => {
+                <ScrollView className="rounded-lg">
+                  {dropdownOptions.map((option) => {
                     const isSelected = selectedOption && option.id === selectedOption.id
                     return (
                       <TouchableOpacity
@@ -173,8 +171,8 @@ export const Autocomplete = <T extends IOption>({
                         )}
                       </TouchableOpacity>
                     )
-                  }}
-                />
+                  })}
+                </ScrollView>
               )}
             </View>
           </View>
