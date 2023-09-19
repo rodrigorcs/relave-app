@@ -16,7 +16,7 @@ export const AppointmentCard: FC<IProps> = ({ Icon, primaryText, secondaryText, 
   return (
     <View
       className={cn(
-        'flex-1 h-32 p-4 justify-between rounded-2xl border border-neutrals-200',
+        'flex-1 h-36 p-4 justify-between rounded-2xl border border-neutrals-200',
         marginLeft && 'ml-4',
       )}
     >
@@ -32,7 +32,7 @@ export const AppointmentCard: FC<IProps> = ({ Icon, primaryText, secondaryText, 
       <View>
         <CustomText variant={ECustomTextVariants.BODY3}>{primaryText ?? ''}</CustomText>
         {secondaryText && (
-          <CustomText variant={ECustomTextVariants.BODY4} customClassName="text-neutrals-500">
+          <CustomText variant={ECustomTextVariants.BODY4} customClassName="text-neutrals-500 mt-1">
             {secondaryText}
           </CustomText>
         )}

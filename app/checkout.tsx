@@ -6,6 +6,7 @@ import { IServiceBundle, IServiceBundleWithDetails } from '../models/contracts/s
 import { getCurrentUser } from '../state/slices/auth'
 import { getAdditionalServices, getAppointment, getServiceBundle } from '../state/slices/order'
 import { IAppState } from '../state/store'
+import { formatPlaceAddress } from '../utils/address'
 import { cn } from '../utils/cn'
 import { dayjs, dayjsToDate } from '../utils/dayjs'
 import { getDisplayPrice } from '../utils/price'
@@ -117,13 +118,23 @@ export default function Checkout() {
   const appointmentTime = dayjs(appointment.time)
   const { dayOfWeek } = dayjsToDate(appointmentTime)
 
+  const placeName = appointment.place?.name ?? null
+  const placeAddress = appointment.place?.formatted_address ?? null
+  const placeTypes = appointment.place?.types ?? []
+
+  const formattedPlaceAddress = formatPlaceAddress(placeName, placeAddress, placeTypes)
+
   return (
     <SafeAreaView className="flex flex-1 bg-common-background">
       <View className="flex-1">
         <View className="px-4 py-8 border-b border-neutrals-200">
           <CustomText variant={ECustomTextVariants.HEADING3}>Informações do pedido</CustomText>
           <View className="flex-row mt-4">
-            <AppointmentCard Icon={<LocationIcon />} primaryText={appointment.place?.name} />
+            <AppointmentCard
+              Icon={<LocationIcon />}
+              primaryText={formattedPlaceAddress.primaryText}
+              secondaryText={formattedPlaceAddress.secondaryText ?? undefined}
+            />
             <AppointmentCard
               Icon={<CalendarIcon />}
               primaryText={dayOfWeek}
