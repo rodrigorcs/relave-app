@@ -2,16 +2,20 @@ import { DaysRail, IDate, PlacesAutocomplete } from '../components/appointment'
 import { ITime, TimesGrid } from '../components/appointment/TimesGrid'
 import { CustomButton, CustomText, ECustomTextVariants } from '../components/common'
 import { TGoogleMapsPlaceResult } from '../models/contracts/externalApi/googleMaps'
-import { setAppointment } from '../state/slices/order'
+import { getCart } from '../state/slices/cart'
+import { setAppointment, setItemsFromCart } from '../state/slices/order'
+import { IAppState } from '../state/store'
 import { dayjs, dayjsToDate } from '../utils/dayjs'
 import { router } from 'expo-router'
 import { ArrowRight as ArrowRightIcon } from 'iconoir-react-native'
 import React, { useState } from 'react'
 import { SafeAreaView, ScrollView, View } from 'react-native'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 export default function Appointment() {
   const dispatch = useDispatch()
+  const cart = useSelector(({ cart }: IAppState) => getCart(cart))
+
   const [selectedPlace, setSelectedPlace] = useState<TGoogleMapsPlaceResult | null>(null)
   const [selectedDate, setSelectedDate] = useState<IDate>(dayjsToDate(dayjs()))
   const [selectedTime, setSelectedTime] = useState<ITime | null>(null)
@@ -22,6 +26,7 @@ export default function Appointment() {
     const { hour, minute } = selectedTime
     const datetime = `${year}-${month}-${day} ${hour}:${minute}`
     dispatch(setAppointment({ place: selectedPlace, time: dayjs(datetime).valueOf() }))
+    dispatch(setItemsFromCart(cart))
 
     router.push('/checkout')
   }

@@ -39,5 +39,7 @@ export const getSelectedServiceBundle = (state: ICartState) => state.serviceBund
 
 export const getSelectedAdditionalServices = (state: ICartState) => state.additionalServices
 
+export const getCart = (state: ICartState) => state
+
 
 export const cartReducer = cartSlice.reducer

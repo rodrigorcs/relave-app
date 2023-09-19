@@ -3,8 +3,7 @@ import { useStripePaymentSheet } from '../hooks'
 import { IService } from '../models/contracts/service'
 import { IServiceBundle, IServiceBundleWithDetails } from '../models/contracts/serviceBundle'
 import { getCurrentUser } from '../state/slices/auth'
-import { getSelectedAdditionalServices, getSelectedServiceBundle } from '../state/slices/cart'
-import { getAppointment } from '../state/slices/order'
+import { getAdditionalServices, getAppointment, getServiceBundle } from '../state/slices/order'
 import { IAppState } from '../state/store'
 import { theme } from '../theme'
 import { cn } from '../utils/cn'
@@ -102,10 +101,8 @@ const cartToCheckoutItems = ({
 export default function Checkout() {
   const currentUser = useSelector(({ auth }: IAppState) => getCurrentUser(auth))
   const appointment = useSelector(({ order }: IAppState) => getAppointment(order))
-  const serviceBundle = useSelector(({ cart }: IAppState) => getSelectedServiceBundle(cart))
-  const additionalServices = useSelector(({ cart }: IAppState) =>
-    getSelectedAdditionalServices(cart),
-  )
+  const serviceBundle = useSelector(({ order }: IAppState) => getServiceBundle(order))
+  const additionalServices = useSelector(({ order }: IAppState) => getAdditionalServices(order))
 
   const checkoutItems = serviceBundle && cartToCheckoutItems({ serviceBundle, additionalServices })
   const totalAmount = (checkoutItems ?? []).find(
