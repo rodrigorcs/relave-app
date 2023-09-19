@@ -44,6 +44,7 @@ export const confirmOTPToken = (code: string) => async () => {
 export const signOut = () => authActions.signOut()
 
 export const getCurrentUser = (state: IAuthState) => state.user
+export const getUserPhoneNumber = (state: IAuthState) => state.user?.credentials.phoneNumber
 export const getIsUserSignedIn = (state: IAuthState) => state.isUserSignedIn
 
 export const authReducer = authSlice.reducer

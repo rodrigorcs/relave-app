@@ -1,8 +1,10 @@
 import MessagesIllustration from '../assets/vectors/illustration-messages.svg'
 import { CustomButton, CustomText, ECustomTextVariants } from '../components/common'
 import { OTPInput } from '../components/otpConfirmation'
-import { confirmOTPToken, getIsUserSignedIn } from '../state/slices/auth'
+import { EInputMasks } from '../models/constants/EInputMasks'
+import { confirmOTPToken, getIsUserSignedIn, getUserPhoneNumber } from '../state/slices/auth'
 import { IAppState } from '../state/store'
+import { applyMask } from '../utils/mask'
 import { router } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView, View } from 'react-native'
@@ -12,6 +14,7 @@ import { AnyAction } from 'redux'
 export default function OTPConfirmation() {
   const dispatch = useDispatch()
   const isUserSignedIn = useSelector(({ auth }: IAppState) => getIsUserSignedIn(auth))
+  const userPhoneNumber = useSelector(({ auth }: IAppState) => getUserPhoneNumber(auth))
 
   const [otpToken, setOTPToken] = useState('')
   const [isTokenReady, setIsTokenReady] = useState(false)
@@ -55,7 +58,8 @@ export default function OTPConfirmation() {
             variant={ECustomTextVariants.SUBHEADING2}
             customClassName="font-normal text-neutrals-500 underline"
           >
-            +55 (71) 99315-8381
+            {userPhoneNumber &&
+              applyMask(userPhoneNumber, EInputMasks.PHONE_NUMBER_WITH_COUNTRY_CODE)}
           </CustomText>
         </View>
         <View className="items-center">
