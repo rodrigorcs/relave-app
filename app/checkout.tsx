@@ -4,9 +4,11 @@ import { IService } from '../models/contracts/service'
 import { IServiceBundle, IServiceBundleWithDetails } from '../models/contracts/serviceBundle'
 import { getCurrentUser } from '../state/slices/auth'
 import { getSelectedAdditionalServices, getSelectedServiceBundle } from '../state/slices/cart'
+import { getAppointment } from '../state/slices/order'
 import { IAppState } from '../state/store'
 import { theme } from '../theme'
 import { cn } from '../utils/cn'
+import { dayjs } from '../utils/dayjs'
 import { getDisplayPrice } from '../utils/price'
 import {
   ArrowRight as ArrowRightIcon,
@@ -99,6 +101,7 @@ const cartToCheckoutItems = ({
 
 export default function Checkout() {
   const currentUser = useSelector(({ auth }: IAppState) => getCurrentUser(auth))
+  const appointment = useSelector(({ order }: IAppState) => getAppointment(order))
   const serviceBundle = useSelector(({ cart }: IAppState) => getSelectedServiceBundle(cart))
   const additionalServices = useSelector(({ cart }: IAppState) =>
     getSelectedAdditionalServices(cart),
@@ -122,13 +125,13 @@ export default function Checkout() {
           <View className="flex-row mt-4">
             <View className="flex-1 h-32 p-4 justify-between rounded-2xl border border-neutrals-200">
               <LocationIcon width={20} height={20} color={theme.colors['neutrals-800']} />
-              <CustomText variant={ECustomTextVariants.BODY3}>
-                Av. João Paulo VI, 2300, Centro
-              </CustomText>
+              <CustomText variant={ECustomTextVariants.BODY3}>{appointment.place?.name}</CustomText>
             </View>
             <View className="flex-1 h-32 p-4 justify-between rounded-2xl border border-neutrals-200 ml-4">
               <CalendarIcon width={20} height={20} color={theme.colors['neutrals-800']} />
-              <CustomText variant={ECustomTextVariants.BODY3}>09 de Setembro às 08:00</CustomText>
+              <CustomText variant={ECustomTextVariants.BODY3}>
+                {dayjs(appointment.time).format('DD [de] MMMM [às] HH:mm')}
+              </CustomText>
             </View>
           </View>
         </View>

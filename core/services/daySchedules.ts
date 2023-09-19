@@ -1,6 +1,6 @@
 import { daySchedulesRepository } from "../repositories/daySchedules"
 import { IDate } from "../../components/appointment"
-import dayjs from 'dayjs';
+import { dayjs } from '../../utils/dayjs';
 
 const bitStringToTimeArray = (bitString: string, intervalMinutes: number): string[] => {
   return bitString.split('')

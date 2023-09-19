@@ -1,10 +1,10 @@
 import { daySchedulesAction } from '../../core/actions/daySchedules'
 import { useAsyncData } from '../../hooks'
 import { cn } from '../../utils/cn'
+import { dayjs } from '../../utils/dayjs'
 import { CustomText, ECustomTextVariants } from '../common'
 import { Skeleton } from '../common/Skeleton'
 import { IDate } from './DaysRail'
-import dayjs from 'dayjs'
 import React, { FC } from 'react'
 import { FlatList, View, TouchableOpacity } from 'react-native'
 

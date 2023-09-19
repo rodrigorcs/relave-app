@@ -1,8 +1,9 @@
 import { cn } from '../../utils/cn'
 import { addLeadingZeros } from '../../utils/date'
 import { dayjsToDate } from '../../utils/dayjs'
+import { dayjs } from '../../utils/dayjs'
 import { CustomText, ECustomTextVariants } from '../common'
-import dayjs, { Dayjs } from 'dayjs'
+import { Dayjs } from 'dayjs'
 import React, { FC } from 'react'
 import { ScrollView, TouchableOpacity } from 'react-native'
 
@@ -10,6 +11,7 @@ export interface IDate {
   id: string
   day: number
   month: number
+  year: number
   dayOfWeek: string
 }
 
