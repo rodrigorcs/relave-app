@@ -132,7 +132,7 @@ export const Autocomplete = <T extends IOption>({
             <View className={cn(`shadow bg-neutrals-white mt-1 rounded-lg`)}>
               {dropdownOptions.length === 0 ? (
                 <View className="flex-row justify-between items-center px-4 py-3 bg-neutrals-white">
-                  <CustomText variant={ECustomTextVariants.HELPER1}>No options.</CustomText>
+                  <CustomText variant={ECustomTextVariants.HELPER1}>Sem opções.</CustomText>
                 </View>
               ) : (
                 <FlatList

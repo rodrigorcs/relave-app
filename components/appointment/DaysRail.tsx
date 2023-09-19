@@ -24,7 +24,7 @@ const getUpcomingDays = (today: Dayjs, daysCount: number): IDate[] => {
   return Array.from({ length: daysCount }, (_element, index) => {
     const date = today.add(index, 'day')
 
-    return dayjsToDate(date, index)
+    return dayjsToDate(date)
   })
 }
 
