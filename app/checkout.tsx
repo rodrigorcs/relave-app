@@ -1,3 +1,4 @@
+import { AppointmentCard } from '../components/checkout'
 import { CustomButton, CustomText, ECustomTextVariants } from '../components/common'
 import { useStripePaymentSheet } from '../hooks'
 import { IService } from '../models/contracts/service'
@@ -5,9 +6,8 @@ import { IServiceBundle, IServiceBundleWithDetails } from '../models/contracts/s
 import { getCurrentUser } from '../state/slices/auth'
 import { getAdditionalServices, getAppointment, getServiceBundle } from '../state/slices/order'
 import { IAppState } from '../state/store'
-import { theme } from '../theme'
 import { cn } from '../utils/cn'
-import { dayjs } from '../utils/dayjs'
+import { dayjs, dayjsToDate } from '../utils/dayjs'
 import { getDisplayPrice } from '../utils/price'
 import {
   ArrowRight as ArrowRightIcon,
@@ -114,22 +114,22 @@ export default function Checkout() {
     currentUser?.stripeId,
   )
 
+  const appointmentTime = dayjs(appointment.time)
+  const { dayOfWeek } = dayjsToDate(appointmentTime)
+
   return (
     <SafeAreaView className="flex flex-1 bg-common-background">
       <View className="flex-1">
         <View className="px-4 py-8 border-b border-neutrals-200">
           <CustomText variant={ECustomTextVariants.HEADING3}>Informações do pedido</CustomText>
           <View className="flex-row mt-4">
-            <View className="flex-1 h-32 p-4 justify-between rounded-2xl border border-neutrals-200">
-              <LocationIcon width={20} height={20} color={theme.colors['neutrals-800']} />
-              <CustomText variant={ECustomTextVariants.BODY3}>{appointment.place?.name}</CustomText>
-            </View>
-            <View className="flex-1 h-32 p-4 justify-between rounded-2xl border border-neutrals-200 ml-4">
-              <CalendarIcon width={20} height={20} color={theme.colors['neutrals-800']} />
-              <CustomText variant={ECustomTextVariants.BODY3}>
-                {dayjs(appointment.time).format('DD [de] MMMM [às] HH:mm')}
-              </CustomText>
-            </View>
+            <AppointmentCard Icon={<LocationIcon />} primaryText={appointment.place?.name} />
+            <AppointmentCard
+              Icon={<CalendarIcon />}
+              primaryText={dayOfWeek}
+              secondaryText={appointmentTime.format('DD [de] MMMM [às] HH:mm')}
+              marginLeft
+            />
           </View>
         </View>
         <View className="px-4 py-8">
