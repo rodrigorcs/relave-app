@@ -3,13 +3,12 @@ import { useState, useEffect } from "react"
 import { theme } from "../theme"
 import { paymentActions } from "../core/actions/payments"
 
-export const useStripePaymentSheet = (amount: number | undefined, stripeCustomerId: string | undefined, dependencies: unknown[] = []) => {
+export const useStripePaymentSheet = (amount: number | undefined, stripeCustomerId: string | undefined) => {
   const { initPaymentSheet, presentPaymentSheet } = useStripe()
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<unknown>(false)
 
-  const initializePaymentSheet = async () => {
-    if (!stripeCustomerId) return
+  const initializePaymentSheet = async (stripeCustomerId: string) => {
     setIsLoading(true)
 
     try {
@@ -50,8 +49,10 @@ export const useStripePaymentSheet = (amount: number | undefined, stripeCustomer
   }
 
   useEffect(() => {
-    initializePaymentSheet()
-  }, dependencies)
+    if (stripeCustomerId) {
+      initializePaymentSheet(stripeCustomerId);
+    }
+  }, [stripeCustomerId]);
 
   const openPaymentSheet = async () => {
     try {

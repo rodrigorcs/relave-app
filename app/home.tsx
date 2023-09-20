@@ -105,7 +105,10 @@ export default function Home() {
                   })}
                 </>
               )}
-              <AddVehicleCard onPress={handleOpenAddVehicleBottomSheet} />
+              <AddVehicleCard
+                onPress={handleOpenAddVehicleBottomSheet}
+                isFirst={vehicles?.length === 0}
+              />
             </ScrollView>
           </View>
           <View className="flex-1 pt-6 pb-2 bg-brand-500">

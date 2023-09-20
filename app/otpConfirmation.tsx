@@ -58,8 +58,7 @@ export default function OTPConfirmation() {
             variant={ECustomTextVariants.SUBHEADING2}
             customClassName="font-normal text-neutrals-500 underline"
           >
-            {userPhoneNumber &&
-              applyMask(userPhoneNumber, EInputMasks.PHONE_NUMBER_WITH_COUNTRY_CODE)}
+            {userPhoneNumber && applyMask(userPhoneNumber, EInputMasks.PHONE_NUMBER)}
           </CustomText>
         </View>
         <View className="items-center">

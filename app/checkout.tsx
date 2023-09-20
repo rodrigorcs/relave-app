@@ -1,7 +1,7 @@
 import { AppointmentCard } from '../components/checkout'
 import { CustomButton, CustomText, ECustomTextVariants } from '../components/common'
 import { usersActions } from '../core/actions/users'
-import { useAsyncData, useStripePaymentSheet } from '../hooks'
+import { useStripePaymentSheet } from '../hooks'
 import { IService } from '../models/contracts/service'
 import { IServiceBundle, IServiceBundleWithDetails } from '../models/contracts/serviceBundle'
 import { IUser } from '../models/contracts/user'
@@ -17,7 +17,7 @@ import {
   Calendar as CalendarIcon,
   PinAlt as LocationIcon,
 } from 'iconoir-react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { SafeAreaView, View } from 'react-native'
 import { useSelector } from 'react-redux'
 
@@ -106,20 +106,24 @@ export default function Checkout() {
   const appointment = useSelector(({ order }: IAppState) => getAppointment(order))
   const serviceBundle = useSelector(({ order }: IAppState) => getServiceBundle(order))
   const additionalServices = useSelector(({ order }: IAppState) => getAdditionalServices(order))
+  const [stripeCustomerId, setStripeCustomerId] = useState<string | null>(null)
 
   const checkoutItems = serviceBundle && cartToCheckoutItems({ serviceBundle, additionalServices })
   const totalAmount = (checkoutItems ?? []).find(
     (checkoutItem) => checkoutItem.type === ECheckoutItemTypes.TOTAL,
   )?.price
 
-  const [stripeCustomerId] = useAsyncData(() =>
-    usersActions.getOrCreateStripeCustomer(currentUser as IUser),
-  )
+  useEffect(() => {
+    const execute = async () => {
+      const id = await usersActions.getOrCreateStripeCustomer(currentUser as IUser)
+      setStripeCustomerId(id)
+    }
+    execute()
+  }, [])
 
   const [openPaymentSheet, isLoading, error] = useStripePaymentSheet(
     totalAmount,
-    currentUser?.stripeId,
-    [stripeCustomerId],
+    stripeCustomerId ?? undefined,
   )
 
   const appointmentTime = dayjs(appointment.time)

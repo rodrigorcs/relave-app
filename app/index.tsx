@@ -2,7 +2,7 @@ import NotificationsIllustration from '../assets/vectors/illustration-push-notif
 import { CustomButton, CustomInput, CustomText, ECustomTextVariants } from '../components/common'
 import { useMaskedInput } from '../hooks'
 import { EInputMasks } from '../models/constants/EInputMasks'
-import { sendOTPToken, signOut } from '../state/slices/auth'
+import { sendOTPToken, signOut, storePhoneNumberToOTP } from '../state/slices/auth'
 import { router } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView, View } from 'react-native'
@@ -23,6 +23,7 @@ export default function SignIn() {
   const handleReceiveOTP = async () => {
     if (!isPhoneNumberValid) return setError('Número invalido, verifique.')
     dispatch(sendOTPToken(unmaskedPhoneNumber) as unknown as AnyAction)
+    dispatch(storePhoneNumberToOTP(unmaskedPhoneNumber))
     router.push('/otpConfirmation')
   }
 
