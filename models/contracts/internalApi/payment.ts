@@ -6,6 +6,6 @@ export interface ICreatePaymentIntentResponseBody {
 }
 
 export interface ICreateCustomerRequestBody {
-  customerInternalId: string
+  userId: string
   phoneNumber: string
 }
