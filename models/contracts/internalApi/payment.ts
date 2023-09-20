@@ -4,3 +4,8 @@ export interface ICreatePaymentIntentResponseBody {
   customerId: string | null,
   publishableKey: string
 }
+
+export interface ICreateCustomerRequestBody {
+  customerInternalId: string
+  phoneNumber: string
+}
