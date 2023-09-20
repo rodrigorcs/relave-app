@@ -1,6 +1,6 @@
 export interface ICreatePaymentIntentResponseBody {
-  paymentIntent: string | null,
-  ephemeralKey: string | undefined,
-  customer: string | null,
+  paymentIntentClientSecret: string | null,
+  customerEphemeralKeySecret: string | undefined,
+  customerId: string | null,
   publishableKey: string
 }

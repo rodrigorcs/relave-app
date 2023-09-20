@@ -13,13 +13,13 @@ export const useStripePaymentSheet = (amount: number | undefined, stripeCustomer
 
     try {
       if (!amount) throw new Error('No amount to charge')
-      const { paymentIntent, ephemeralKey, customer } = await paymentActions.createPaymentIntent(amount, stripeCustomerId ?? null)
+      const { paymentIntentClientSecret, customerEphemeralKeySecret, customerId } = await paymentActions.createPaymentIntent(amount, stripeCustomerId ?? null)
 
       await initPaymentSheet({
         merchantDisplayName: 'Lavei',
-        customerId: customer ?? undefined,
-        customerEphemeralKeySecret: ephemeralKey,
-        paymentIntentClientSecret: paymentIntent as string,
+        customerId: customerId ?? undefined,
+        customerEphemeralKeySecret,
+        paymentIntentClientSecret: paymentIntentClientSecret as string,
         style: 'alwaysLight',
         appearance: {
           colors: {
