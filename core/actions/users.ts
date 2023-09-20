@@ -9,9 +9,11 @@ export const usersActions = {
     const createdUser = await usersService.createUser(user)
     return createdUser
   },
-  createStripeCustomer: async (userId: string, phoneNumber: string) => {
-    const customer = await usersService.createStripeCustomer(userId, phoneNumber)
+  getOrCreateStripeCustomer: async (currentUser: IUser) => {
+    if (currentUser.stripeId) return currentUser.stripeId
 
-    return customer
+    const customerId = await usersService.createStripeCustomer(currentUser.id, currentUser.credentials.phoneNumber ?? '') as string
+
+    return customerId
   }
 }

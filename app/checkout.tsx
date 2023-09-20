@@ -1,8 +1,10 @@
 import { AppointmentCard } from '../components/checkout'
 import { CustomButton, CustomText, ECustomTextVariants } from '../components/common'
-import { useStripePaymentSheet } from '../hooks'
+import { usersActions } from '../core/actions/users'
+import { useAsyncData, useStripePaymentSheet } from '../hooks'
 import { IService } from '../models/contracts/service'
 import { IServiceBundle, IServiceBundleWithDetails } from '../models/contracts/serviceBundle'
+import { IUser } from '../models/contracts/user'
 import { getCurrentUser } from '../state/slices/auth'
 import { getAdditionalServices, getAppointment, getServiceBundle } from '../state/slices/order'
 import { IAppState } from '../state/store'
@@ -110,9 +112,14 @@ export default function Checkout() {
     (checkoutItem) => checkoutItem.type === ECheckoutItemTypes.TOTAL,
   )?.price
 
+  const [stripeCustomerId] = useAsyncData(() =>
+    usersActions.getOrCreateStripeCustomer(currentUser as IUser),
+  )
+
   const [openPaymentSheet, isLoading, error] = useStripePaymentSheet(
     totalAmount,
     currentUser?.stripeId,
+    [stripeCustomerId],
   )
 
   const appointmentTime = dayjs(appointment.time)
