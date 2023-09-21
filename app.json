@@ -18,7 +18,8 @@
       "googleServicesFile": "./GoogleService-Info.plist",
       "supportsTablet": true,
       "infoPlist": {
-        "CFBundleDevelopmentRegion": "pt_BR"
+        "CFBundleDevelopmentRegion": "pt_BR",
+        "LSApplicationQueriesSchemes": ["lavei"]
       }
     },
     "android": {

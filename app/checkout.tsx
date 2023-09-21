@@ -1,7 +1,7 @@
 import { AppointmentCard } from '../components/checkout'
 import { CustomButton, CustomText, ECustomTextVariants } from '../components/common'
 import { usersActions } from '../core/actions/users'
-import { useStripePaymentSheet } from '../hooks'
+import { useCallbackURL, useStripePaymentSheet } from '../hooks'
 import { IService } from '../models/contracts/service'
 import { IServiceBundle, IServiceBundleWithDetails } from '../models/contracts/serviceBundle'
 import { IUser } from '../models/contracts/user'
@@ -102,10 +102,13 @@ const cartToCheckoutItems = ({
 }
 
 export default function Checkout() {
+  useCallbackURL()
+
   const currentUser = useSelector(({ auth }: IAppState) => getCurrentUser(auth))
   const appointment = useSelector(({ order }: IAppState) => getAppointment(order))
   const serviceBundle = useSelector(({ order }: IAppState) => getServiceBundle(order))
   const additionalServices = useSelector(({ order }: IAppState) => getAdditionalServices(order))
+
   const [stripeCustomerId, setStripeCustomerId] = useState<string | null>(null)
 
   const checkoutItems = serviceBundle && cartToCheckoutItems({ serviceBundle, additionalServices })

@@ -20,6 +20,7 @@ export const useStripePaymentSheet = (amount: number | undefined, stripeCustomer
         customerId: customerId ?? undefined,
         customerEphemeralKeySecret,
         paymentIntentClientSecret: paymentIntentClientSecret as string,
+        returnURL: 'lavei://stripe-redirect',
         style: 'alwaysLight',
         appearance: {
           colors: {
