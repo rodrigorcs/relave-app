@@ -1,7 +1,7 @@
 import { daySchedulesAction } from '../../core/actions/daySchedules'
 import { useAsyncData } from '../../hooks'
 import { cn } from '../../utils/cn'
-import { dayjs } from '../../utils/dayjs'
+import { EDateFormats, dayjs, getTimeId } from '../../utils/dayjs'
 import { CustomText, ECustomTextVariants } from '../common'
 import { Skeleton } from '../common/Skeleton'
 import { IDate } from './DaysRail'
@@ -33,8 +33,8 @@ const getTimesArray = (startTime: number, endTime: number, increment: number): I
       .minute((time % 1) * 60)
 
     return {
-      id: current.format('HH-mm'),
-      formattedTime: current.format('HH:mm'),
+      id: getTimeId(current),
+      formattedTime: current.format(EDateFormats.READABLE_TIME),
       hour: current.hour(),
       minute: current.minute(),
     }
@@ -48,7 +48,7 @@ const generatePlaceholders = (length: number, numColumns: number): null[] => {
 
 export const TimesGrid: FC<IProps> = ({ selectedDate, selectedTime, onChange }) => {
   const [availableTimes, isLoadingAvailability] = useAsyncData(
-    () => daySchedulesAction.getByDate(selectedDate.id),
+    () => daySchedulesAction.getAvailableTimesByDate(selectedDate.id),
     [selectedDate],
     true,
   )

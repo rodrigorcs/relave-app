@@ -1,5 +1,6 @@
 import { AppointmentCard } from '../components/checkout'
 import { CustomButton, CustomText, ECustomTextVariants } from '../components/common'
+import { daySchedulesAction } from '../core/actions/daySchedules'
 import { usersActions } from '../core/actions/users'
 import { useCallbackURL, useStripePaymentSheet } from '../hooks'
 import { IService } from '../models/contracts/service'
@@ -10,7 +11,7 @@ import { getAdditionalServices, getAppointment, getServiceBundle } from '../stat
 import { IAppState } from '../state/store'
 import { formatPlaceAddress } from '../utils/address'
 import { cn } from '../utils/cn'
-import { dayjs, dayjsToDate } from '../utils/dayjs'
+import { EDateFormats, dayjs, dayjsToDate } from '../utils/dayjs'
 import { getDisplayPrice } from '../utils/price'
 import {
   ArrowRight as ArrowRightIcon,
@@ -109,12 +110,12 @@ export default function Checkout() {
   const serviceBundle = useSelector(({ order }: IAppState) => getServiceBundle(order))
   const additionalServices = useSelector(({ order }: IAppState) => getAdditionalServices(order))
 
-  const [stripeCustomerId, setStripeCustomerId] = useState<string | null>(null)
-
   const checkoutItems = serviceBundle && cartToCheckoutItems({ serviceBundle, additionalServices })
   const totalAmount = (checkoutItems ?? []).find(
     (checkoutItem) => checkoutItem.type === ECheckoutItemTypes.TOTAL,
   )?.price
+
+  const [stripeCustomerId, setStripeCustomerId] = useState<string | null>(null)
 
   useEffect(() => {
     const execute = async () => {
@@ -138,6 +139,13 @@ export default function Checkout() {
 
   const formattedPlaceAddress = formatPlaceAddress(placeName, placeAddress, placeTypes)
 
+  const handleConfirmOrder = async () => {
+    const timeIsAvailable = await daySchedulesAction.getTimeAvailability(appointmentTime)
+    if (!timeIsAvailable) return
+
+    openPaymentSheet()
+  }
+
   return (
     <SafeAreaView className="flex flex-1 bg-common-background">
       <View className="flex-1">
@@ -152,7 +160,7 @@ export default function Checkout() {
             <AppointmentCard
               Icon={<CalendarIcon />}
               primaryText={dayOfWeek}
-              secondaryText={appointmentTime.format('DD [de] MMMM [às] HH:mm')}
+              secondaryText={appointmentTime.format(EDateFormats.READABLE_DATE_TIME)}
               marginLeft
             />
           </View>
@@ -196,7 +204,7 @@ export default function Checkout() {
       </View>
       <View className="px-4 pt-6 pb-1 border-t border-neutrals-200">
         <CustomButton
-          onPress={() => openPaymentSheet()}
+          onPress={() => handleConfirmOrder()}
           isDisabled={isLoading || !!error}
           IconRight={<ArrowRightIcon />}
         >
