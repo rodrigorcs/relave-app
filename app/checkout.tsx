@@ -1,12 +1,13 @@
 import { AppointmentCard } from '../components/checkout'
 import { CustomButton, CustomText, ECustomTextVariants } from '../components/common'
 import { daySchedulesAction } from '../core/actions/daySchedules'
+import { ordersActions } from '../core/actions/orders'
 import { usersActions } from '../core/actions/users'
 import { useCallbackURL, useStripePaymentSheet } from '../hooks'
 import { EPaymentLineTypes } from '../models/contracts/order'
 import { IUser } from '../models/contracts/user'
 import { getCurrentUser } from '../state/slices/auth'
-import { getAppointment, getPaymentLines, getTotalPrice } from '../state/slices/order'
+import { getAppointment, getOrder, getPaymentLines, getTotalPrice } from '../state/slices/order'
 import { IAppState } from '../state/store'
 import { formatPlaceAddress } from '../utils/address'
 import { cn } from '../utils/cn'
@@ -28,6 +29,7 @@ export default function Checkout() {
   const appointment = useSelector(({ order }: IAppState) => getAppointment(order))
   const paymentLines = useSelector(({ order }: IAppState) => getPaymentLines(order))
   const totalPrice = useSelector(({ order }: IAppState) => getTotalPrice(order))
+  const order = useSelector(({ order }: IAppState) => getOrder(order))
 
   const [stripeCustomerId, setStripeCustomerId] = useState<string | null>(null)
 
@@ -55,7 +57,10 @@ export default function Checkout() {
 
   const handleConfirmOrder = async () => {
     const timeIsAvailable = await daySchedulesAction.getTimeAvailability(appointmentTime)
-    if (!timeIsAvailable) return
+    if (!timeIsAvailable) throw new Error('Appointment time is no longer available.')
+    if (!currentUser?.id) throw new Error('User is not logged in.')
+
+    await ordersActions.createOrder(currentUser.id, order)
 
     openPaymentSheet()
   }

@@ -24,6 +24,8 @@ interface IAppointment {
 }
 
 export interface IOrder {
+  id: string | null
+  userId: string | null
   appointment: IAppointment
   vehicle: IVehicle | null
   serviceBundle: IServiceBundleWithDetails | null

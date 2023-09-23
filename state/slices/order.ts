@@ -55,6 +55,8 @@ const cartToPaymentLines = ({ serviceBundle, additionalServices }: Pick<ICart, '
 type TOrderState = IOrder
 
 const initialState: TOrderState = {
+  id: null,
+  userId: null,
   appointment: {
     place: null,
     time: null
@@ -95,5 +97,6 @@ export const { setAppointment, setItemsFromCart } = orderSlice.actions
 export const getAppointment = (state: TOrderState) => state.appointment
 export const getPaymentLines = (state: TOrderState) => state.paymentLines
 export const getTotalPrice = (state: TOrderState) => state.totalPrice
+export const getOrder = (state: TOrderState) => state
 
 export const orderReducer = orderSlice.reducer
