@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "lavei-app",
-    "slug": "lavei-app",
+    "name": "Lavei",
+    "slug": "laveiapp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
+    "scheme": "laveiapp",
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/images/splash.png",
@@ -19,7 +19,7 @@
       "supportsTablet": true,
       "infoPlist": {
         "CFBundleDevelopmentRegion": "pt_BR",
-        "LSApplicationQueriesSchemes": ["lavei"]
+        "LSApplicationQueriesSchemes": ["laveiapp"]
       }
     },
     "android": {

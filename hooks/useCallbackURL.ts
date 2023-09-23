@@ -1,9 +1,10 @@
 import { useEffect, useCallback } from 'react';
-import { Linking } from 'react-native';
+import * as Linking from 'expo-linking';
 import { useStripe } from '@stripe/stripe-react-native';
 
 export const useCallbackURL = () => {
   const { handleURLCallback } = useStripe();
+  const url = Linking.useURL();
 
   const handleDeepLink = useCallback(
     async (url: string | null) => {
@@ -26,14 +27,9 @@ export const useCallbackURL = () => {
     };
 
     getUrlAsync();
-
-    const deepLinkListener = Linking.addEventListener(
-      'url',
-      (event: { url: string }) => {
-        handleDeepLink(event.url);
-      }
-    );
-
-    return () => deepLinkListener.remove();
   }, [handleDeepLink]);
+
+  useEffect(() => {
+    handleDeepLink(url);
+  }, [url]);
 }
