@@ -1,51 +1,99 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import { TGoogleMapsPlaceResult } from '../../models/contracts/externalApi/googleMaps';
-import { IVehicle } from '../../models/contracts/vehicle';
-import { IServiceBundleWithDetails } from '../../models/contracts/serviceBundle';
-import { IService } from '../../models/contracts/service';
+import { EPaymentLineTypes, IOrder, IPaymentLine } from '../../models/contracts/order';
+import { ICart } from '../../models/contracts/cart';
 
-interface IAppointment {
-  place: TGoogleMapsPlaceResult | null
-  time: number | null
+const calculateSumFromPaymentLines = (paymentLines: IPaymentLine[]): number => {
+  return paymentLines.reduce((accumulator, paymentLine) => {
+    return accumulator + paymentLine.price
+  }, 0)
 }
 
-interface IOrderState {
-  appointment: IAppointment
-  vehicle: IVehicle | null
-  serviceBundle: IServiceBundleWithDetails | null
-  additionalServices: IService[]
+const cartToPaymentLines = ({ serviceBundle, additionalServices }: Pick<ICart, 'serviceBundle' | 'additionalServices'>): IPaymentLine[] => {
+  if (!serviceBundle) throw new Error('No service bundle selected.')
+
+  const serviceBundlePaymentLine: IPaymentLine = {
+    type: EPaymentLineTypes.SERVICE_BUNDLE,
+    id: serviceBundle.id,
+    name: serviceBundle.name,
+    price: serviceBundle.price,
+  }
+
+  const additionalServicesPaymentLines: IPaymentLine[] = additionalServices.map((service) => ({
+    type: EPaymentLineTypes.ADDITIONAL_SERVICE,
+    id: service.id,
+    name: service.name,
+    price: service.price,
+  }))
+
+  const subtotal: IPaymentLine = {
+    type: EPaymentLineTypes.SUBTOTAL,
+    id: EPaymentLineTypes.SUBTOTAL,
+    name: 'Subtotal',
+    price: calculateSumFromPaymentLines([
+      serviceBundlePaymentLine,
+      ...additionalServicesPaymentLines,
+    ]),
+  }
+
+  const discount: IPaymentLine = {
+    type: EPaymentLineTypes.DISCOUNT,
+    id: EPaymentLineTypes.DISCOUNT,
+    name: 'Desconto',
+    price: 0,
+  }
+
+  const total: IPaymentLine = {
+    type: EPaymentLineTypes.TOTAL,
+    id: EPaymentLineTypes.TOTAL,
+    name: 'Total',
+    price: calculateSumFromPaymentLines([subtotal, discount]),
+  }
+
+  return [serviceBundlePaymentLine, ...additionalServicesPaymentLines, subtotal, discount, total]
 }
 
-const initialState: IOrderState = {
+type TOrderState = IOrder
+
+const initialState: TOrderState = {
   appointment: {
     place: null,
     time: null
   },
   vehicle: null,
   serviceBundle: null,
-  additionalServices: []
+  additionalServices: [],
+  paymentLines: [],
+  totalPrice: null
 }
 
 export const orderSlice = createSlice({
   name: 'order',
   initialState,
   reducers: {
-    setAppointment: (state, action: PayloadAction<IAppointment>) => {
+    setAppointment: (state, action: PayloadAction<TOrderState['appointment']>) => {
       state.appointment.place = action.payload.place
       state.appointment.time = action.payload.time
     },
-    setItemsFromCart: (state, action: PayloadAction<Pick<IOrderState, 'vehicle' | 'serviceBundle' | 'additionalServices'>>) => {
-      state.vehicle = action.payload.vehicle
-      state.serviceBundle = action.payload.serviceBundle
-      state.additionalServices = action.payload.additionalServices
+    setItemsFromCart: (state, action: PayloadAction<Pick<TOrderState, 'vehicle' | 'serviceBundle' | 'additionalServices'>>) => {
+      const { vehicle, serviceBundle, additionalServices } = action.payload
+      const paymentLines = cartToPaymentLines({ serviceBundle, additionalServices })
+      const totalPrice = paymentLines.find(
+        (paymentLine) => paymentLine.type === EPaymentLineTypes.TOTAL,
+      )?.price ?? null
+
+      state.vehicle = vehicle
+      state.serviceBundle = serviceBundle
+      state.additionalServices = additionalServices
+      state.paymentLines = paymentLines
+      state.totalPrice = totalPrice
     }
   },
 })
 
 export const { setAppointment, setItemsFromCart } = orderSlice.actions
 
-export const getAppointment = (state: IOrderState) => state.appointment
-export const getServiceBundle = (state: IOrderState) => state.serviceBundle
-export const getAdditionalServices = (state: IOrderState) => state.additionalServices
+export const getAppointment = (state: TOrderState) => state.appointment
+export const getPaymentLines = (state: TOrderState) => state.paymentLines
+export const getTotalPrice = (state: TOrderState) => state.totalPrice
 
 export const orderReducer = orderSlice.reducer

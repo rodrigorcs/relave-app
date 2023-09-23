@@ -3,11 +3,10 @@ import { CustomButton, CustomText, ECustomTextVariants } from '../components/com
 import { daySchedulesAction } from '../core/actions/daySchedules'
 import { usersActions } from '../core/actions/users'
 import { useCallbackURL, useStripePaymentSheet } from '../hooks'
-import { IService } from '../models/contracts/service'
-import { IServiceBundle, IServiceBundleWithDetails } from '../models/contracts/serviceBundle'
+import { EPaymentLineTypes } from '../models/contracts/order'
 import { IUser } from '../models/contracts/user'
 import { getCurrentUser } from '../state/slices/auth'
-import { getAdditionalServices, getAppointment, getServiceBundle } from '../state/slices/order'
+import { getAppointment, getPaymentLines, getTotalPrice } from '../state/slices/order'
 import { IAppState } from '../state/store'
 import { formatPlaceAddress } from '../utils/address'
 import { cn } from '../utils/cn'
@@ -22,98 +21,13 @@ import React, { useEffect, useState } from 'react'
 import { SafeAreaView, View } from 'react-native'
 import { useSelector } from 'react-redux'
 
-enum ECheckoutItemTypes {
-  SERVICE_BUNDLE = 'serviceBundle',
-  ADDITIONAL_SERVICE = 'additionalService',
-  SUBTOTAL = 'subtotal',
-  DISCOUNT = 'discount',
-  TOTAL = 'total',
-}
-
-interface ICheckoutItem {
-  type: ECheckoutItemTypes
-  id: string
-  name: string
-  price: number
-}
-
-interface ICartItems {
-  serviceBundle: IServiceBundle | IServiceBundleWithDetails
-  additionalServices: IService[]
-}
-
-const serviceBundleToCheckoutItem = (
-  serviceBundle: IServiceBundle | IServiceBundleWithDetails,
-): ICheckoutItem => {
-  return {
-    type: ECheckoutItemTypes.SERVICE_BUNDLE,
-    id: serviceBundle.id,
-    name: serviceBundle.name,
-    price: serviceBundle.price,
-  }
-}
-
-const additionalServicesToCheckoutItems = (additionalServices: IService[]): ICheckoutItem[] => {
-  return additionalServices.map((service) => ({
-    type: ECheckoutItemTypes.ADDITIONAL_SERVICE,
-    id: service.id,
-    name: service.name,
-    price: service.price,
-  }))
-}
-
-const calculateSumFromCheckoutItems = (checkoutItems: ICheckoutItem[]): number => {
-  return checkoutItems.reduce((accumulator, checkoutItem) => {
-    return accumulator + checkoutItem.price
-  }, 0)
-}
-
-const cartToCheckoutItems = ({
-  serviceBundle,
-  additionalServices,
-}: ICartItems): ICheckoutItem[] => {
-  const serviceBundleCheckoutItem = serviceBundleToCheckoutItem(serviceBundle)
-  const additionalServicesCheckoutItems = additionalServicesToCheckoutItems(additionalServices)
-
-  const subtotal: ICheckoutItem = {
-    type: ECheckoutItemTypes.SUBTOTAL,
-    id: ECheckoutItemTypes.SUBTOTAL,
-    name: 'Subtotal',
-    price: calculateSumFromCheckoutItems([
-      serviceBundleCheckoutItem,
-      ...additionalServicesCheckoutItems,
-    ]),
-  }
-
-  const discount: ICheckoutItem = {
-    type: ECheckoutItemTypes.DISCOUNT,
-    id: ECheckoutItemTypes.DISCOUNT,
-    name: 'Desconto',
-    price: 0,
-  }
-
-  const total: ICheckoutItem = {
-    type: ECheckoutItemTypes.TOTAL,
-    id: ECheckoutItemTypes.TOTAL,
-    name: 'Total',
-    price: calculateSumFromCheckoutItems([subtotal, discount]),
-  }
-
-  return [serviceBundleCheckoutItem, ...additionalServicesCheckoutItems, subtotal, discount, total]
-}
-
 export default function Checkout() {
   useCallbackURL()
 
   const currentUser = useSelector(({ auth }: IAppState) => getCurrentUser(auth))
   const appointment = useSelector(({ order }: IAppState) => getAppointment(order))
-  const serviceBundle = useSelector(({ order }: IAppState) => getServiceBundle(order))
-  const additionalServices = useSelector(({ order }: IAppState) => getAdditionalServices(order))
-
-  const checkoutItems = serviceBundle && cartToCheckoutItems({ serviceBundle, additionalServices })
-  const totalAmount = (checkoutItems ?? []).find(
-    (checkoutItem) => checkoutItem.type === ECheckoutItemTypes.TOTAL,
-  )?.price
+  const paymentLines = useSelector(({ order }: IAppState) => getPaymentLines(order))
+  const totalPrice = useSelector(({ order }: IAppState) => getTotalPrice(order))
 
   const [stripeCustomerId, setStripeCustomerId] = useState<string | null>(null)
 
@@ -126,7 +40,7 @@ export default function Checkout() {
   }, [])
 
   const [openPaymentSheet, isLoading, error] = useStripePaymentSheet(
-    totalAmount,
+    totalPrice ?? undefined,
     stripeCustomerId ?? undefined,
   )
 
@@ -168,13 +82,13 @@ export default function Checkout() {
         <View className="px-4 py-8">
           <CustomText variant={ECustomTextVariants.HEADING3}>Resumo dos itens</CustomText>
           <View className="mt-4">
-            {(checkoutItems ?? []).map((checkoutItem, index) => {
-              const isSubtotal = checkoutItem.type === ECheckoutItemTypes.SUBTOTAL
-              const isTotal = checkoutItem.type === ECheckoutItemTypes.TOTAL
+            {(paymentLines ?? []).map((paymentLine, index) => {
+              const isSubtotal = paymentLine.type === EPaymentLineTypes.SUBTOTAL
+              const isTotal = paymentLine.type === EPaymentLineTypes.TOTAL
 
               return (
                 <View
-                  key={checkoutItem.id}
+                  key={paymentLine.id}
                   className={cn(
                     'flex-row justify-between',
                     index > 0 && 'mt-2',
@@ -185,7 +99,7 @@ export default function Checkout() {
                     variant={isTotal ? ECustomTextVariants.EXPRESSIVE3 : ECustomTextVariants.BODY3}
                     customClassName="text-neutrals-900"
                   >
-                    {checkoutItem.name}
+                    {paymentLine.name}
                   </CustomText>
                   <CustomText
                     variant={isTotal ? ECustomTextVariants.EXPRESSIVE3 : ECustomTextVariants.BODY3}
@@ -194,7 +108,7 @@ export default function Checkout() {
                       isTotal ? 'text-neutrals-900' : 'text-neutrals-600',
                     )}
                   >
-                    {getDisplayPrice(checkoutItem.price)}
+                    {getDisplayPrice(paymentLine.price)}
                   </CustomText>
                 </View>
               )
