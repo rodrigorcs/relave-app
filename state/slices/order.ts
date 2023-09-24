@@ -65,7 +65,8 @@ const initialState: TOrderState = {
   serviceBundle: null,
   additionalServices: [],
   paymentLines: [],
-  totalPrice: null
+  totalPrice: null,
+  payment: null
 }
 
 export const orderSlice = createSlice({
@@ -88,11 +89,14 @@ export const orderSlice = createSlice({
       state.additionalServices = additionalServices
       state.paymentLines = paymentLines
       state.totalPrice = totalPrice
-    }
+    },
+    setOrderId: (state, action: PayloadAction<TOrderState['id']>) => {
+      state.id = action.payload
+    },
   },
 })
 
-export const { setAppointment, setItemsFromCart } = orderSlice.actions
+export const { setAppointment, setItemsFromCart, setOrderId } = orderSlice.actions
 
 export const getAppointment = (state: TOrderState) => state.appointment
 export const getPaymentLines = (state: TOrderState) => state.paymentLines

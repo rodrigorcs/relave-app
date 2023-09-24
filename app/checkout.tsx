@@ -7,7 +7,13 @@ import { useCallbackURL, useStripePaymentSheet } from '../hooks'
 import { EPaymentLineTypes } from '../models/contracts/order'
 import { IUser } from '../models/contracts/user'
 import { getCurrentUser } from '../state/slices/auth'
-import { getAppointment, getOrder, getPaymentLines, getTotalPrice } from '../state/slices/order'
+import {
+  getAppointment,
+  getOrder,
+  getPaymentLines,
+  getTotalPrice,
+  setOrderId,
+} from '../state/slices/order'
 import { IAppState } from '../state/store'
 import { formatPlaceAddress } from '../utils/address'
 import { cn } from '../utils/cn'
@@ -20,9 +26,11 @@ import {
 } from 'iconoir-react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView, View } from 'react-native'
+import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
 
 export default function Checkout() {
+  const dispatch = useDispatch()
   useCallbackURL()
 
   const currentUser = useSelector(({ auth }: IAppState) => getCurrentUser(auth))
@@ -34,16 +42,24 @@ export default function Checkout() {
   const [stripeCustomerId, setStripeCustomerId] = useState<string | null>(null)
 
   useEffect(() => {
+    if (!currentUser?.id) throw new Error('User is not logged in.')
+
     const execute = async () => {
-      const id = await usersActions.getOrCreateStripeCustomer(currentUser as IUser)
-      setStripeCustomerId(id)
+      const createOrderPromise = ordersActions.createOrder(currentUser.id, order)
+      const customerIdPromise = usersActions.getOrCreateStripeCustomer(currentUser as IUser)
+      const [createdOrder, customerId] = await Promise.all([createOrderPromise, customerIdPromise])
+
+      dispatch(setOrderId(createdOrder.id))
+      setStripeCustomerId(customerId)
     }
+
     execute()
   }, [])
 
   const [openPaymentSheet, isLoading, error] = useStripePaymentSheet(
-    totalPrice ?? undefined,
-    stripeCustomerId ?? undefined,
+    stripeCustomerId,
+    order.id,
+    totalPrice,
   )
 
   const appointmentTime = dayjs(appointment.time)
@@ -58,9 +74,6 @@ export default function Checkout() {
   const handleConfirmOrder = async () => {
     const timeIsAvailable = await daySchedulesAction.getTimeAvailability(appointmentTime)
     if (!timeIsAvailable) throw new Error('Appointment time is no longer available.')
-    if (!currentUser?.id) throw new Error('User is not logged in.')
-
-    await ordersActions.createOrder(currentUser.id, order)
 
     openPaymentSheet()
   }

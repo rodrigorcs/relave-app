@@ -3,11 +3,12 @@ import { ICreatePaymentIntentResponseBody } from "../../models/contracts/interna
 import { httpClient } from "../../utils/httpClient"
 
 export const paymentActions = {
-  createPaymentIntent: async (amount: number, customerStripeId: string | null) => {
+  createPaymentIntent: async (customerStripeId: string | null, orderId: string, amount: number) => {
     const { data: createdPaymentIntent } = await httpClient.post(
       Endpoints.CREATE_STRIPE_PAYMENT_INTENT,
       {
         amount,
+        orderId,
         customerStripeId,
       },
     )

@@ -23,6 +23,14 @@ interface IAppointment {
   time: number | null
 }
 
+interface IPayment {
+  paymentIntentId: string,
+  status: string,
+  totalPaid: number | null,
+  paidAt: number | null,
+  paymentMethodId: string | null
+}
+
 export interface IOrder {
   id: string | null
   userId: string | null
@@ -32,4 +40,5 @@ export interface IOrder {
   additionalServices: IService[]
   paymentLines: IPaymentLine[]
   totalPrice: number | null
+  payment: IPayment | null
 }
