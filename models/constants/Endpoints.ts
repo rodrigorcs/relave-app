@@ -1,8 +1,11 @@
 import { IVehicleBrand } from "../contracts/vehicleBrand";
+import { Platform } from 'react-native';
+
+const LOCALHOST_URL = Platform.OS === 'android' ? 'http://10.0.2.2' : 'http://localhost'
 
 const BaseUrls = {
   GOOGLE_MAPS_API: 'https://maps.googleapis.com/maps/api',
-  FIREBASE_CLOUD_FUNCTIONS: 'http://localhost:5001/lavei-firebase/southamerica-east1'
+  FIREBASE_CLOUD_FUNCTIONS: `${LOCALHOST_URL}:5001/lavei-firebase/southamerica-east1`
 }
 
 export const Endpoints = {
