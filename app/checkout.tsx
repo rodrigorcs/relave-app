@@ -3,9 +3,11 @@ import { CustomButton, CustomText, ECustomTextVariants } from '../components/com
 import { daySchedulesAction } from '../core/actions/daySchedules'
 import { ordersActions } from '../core/actions/orders'
 import { usersActions } from '../core/actions/users'
-import { useCallbackURL, useStripePaymentSheet } from '../hooks'
+import { useCallbackURL, useFirestoreDocument, useStripePaymentSheet } from '../hooks'
+import { EFirestoreCollections } from '../models/constants/EFirestoreCollections'
 import { EPaymentLineTypes } from '../models/contracts/order'
 import { IUser } from '../models/contracts/user'
+import { IOrderEntity } from '../models/entities/order'
 import { getCurrentUser } from '../state/slices/auth'
 import {
   getAppointment,
@@ -25,7 +27,7 @@ import {
   PinAlt as LocationIcon,
 } from 'iconoir-react-native'
 import React, { useEffect, useState } from 'react'
-import { SafeAreaView, View } from 'react-native'
+import { Alert, SafeAreaView, View } from 'react-native'
 import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
 
@@ -77,6 +79,15 @@ export default function Checkout() {
 
     openPaymentSheet()
   }
+
+  useFirestoreDocument<IOrderEntity>(EFirestoreCollections.ORDERS, order.id, (orderData) => {
+    const paymentIsSucceeded = orderData.payment?.status === 'succeeded'
+    if (paymentIsSucceeded) {
+      Alert.alert('Payment succeeded!')
+    }
+
+    return paymentIsSucceeded // Unsubscribe if succeeded
+  })
 
   return (
     <SafeAreaView className="flex flex-1 bg-common-background">
