@@ -36,11 +36,14 @@ export default function Layout() {
         <PaymentsProvider>
           <Stack>
             <Stack.Screen name="index" options={{ title: 'Cadastro' }} />
-            <Stack.Screen name="otpConfirmation" options={{ title: 'Confirmação' }} />
+            <Stack.Screen name="otpConfirmation" options={{ title: 'Confirmação SMS' }} />
             <Stack.Screen name="home" options={{ title: 'Lavei', headerBackVisible: false }} />
             <Stack.Screen name="appointment" options={{ title: 'Lavei' }} />
             <Stack.Screen name="checkout" options={{ title: 'Resumo' }} />
-            <Stack.Screen name="orderConfirmation" options={{ title: 'Confirmação' }} />
+            <Stack.Screen
+              name="orderConfirmation"
+              options={{ title: 'Confirmação', headerBackVisible: false }}
+            />
           </Stack>
         </PaymentsProvider>
       </AuthProvider>

@@ -14,7 +14,8 @@ import {
   getOrder,
   getPaymentLines,
   getTotalPrice,
-  setOrderId,
+  setOrderIds,
+  setPaymentFromDB,
 } from '../state/slices/order'
 import { IAppState } from '../state/store'
 import { formatPlaceAddress } from '../utils/address'
@@ -51,7 +52,7 @@ export default function Checkout() {
       const customerIdPromise = usersActions.getOrCreateStripeCustomer(currentUser as IUser)
       const [createdOrder, customerId] = await Promise.all([createOrderPromise, customerIdPromise])
 
-      dispatch(setOrderId(createdOrder.id))
+      dispatch(setOrderIds({ id: createdOrder.id, shortId: createdOrder.shortId }))
       setStripeCustomerId(customerId)
     }
 
@@ -67,11 +68,7 @@ export default function Checkout() {
   const appointmentTime = dayjs(appointment.time)
   const { dayOfWeek } = dayjsToDate(appointmentTime)
 
-  const placeName = appointment.place?.name ?? null
-  const placeAddress = appointment.place?.formatted_address ?? null
-  const placeTypes = appointment.place?.types ?? []
-
-  const formattedPlaceAddress = formatPlaceAddress(placeName, placeAddress, placeTypes)
+  const formattedPlaceAddress = formatPlaceAddress(appointment.place)
 
   const handleConfirmOrder = async () => {
     const timeIsAvailable = await daySchedulesAction.getTimeAvailability(appointmentTime)
@@ -82,8 +79,10 @@ export default function Checkout() {
 
   useFirestoreDocument<IOrderEntity>(EFirestoreCollections.ORDERS, order.id, (orderData) => {
     const paymentIsSucceeded = orderData.payment?.status === 'succeeded'
-    if (paymentIsSucceeded) router.push('/orderConfirmation')
-
+    if (paymentIsSucceeded) {
+      dispatch(setPaymentFromDB(orderData.payment))
+      router.push('/orderConfirmation')
+    }
     return paymentIsSucceeded // Unsubscribe if succeeded
   })
 

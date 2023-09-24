@@ -25,14 +25,18 @@ interface IAppointment {
 
 interface IPayment {
   paymentIntentId: string,
+  customerId: string,
   status: string,
-  totalPaid: number | null,
-  paidAt: number | null,
-  paymentMethodId: string | null
+  totalPaid: number,
+  paidAt: number,
+  paymentMethodId: string,
+  lastDigits: string | null,
+  cardBrand: string | null,
 }
 
 export interface IOrder {
   id: string | null
+  shortId: string | null
   userId: string | null
   appointment: IAppointment
   vehicle: IVehicle | null

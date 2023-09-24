@@ -1,6 +1,7 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { EPaymentLineTypes, IOrder, IPaymentLine } from '../../models/contracts/order';
 import { ICart } from '../../models/contracts/cart';
+import { IOrderEntity } from '../../models/entities/order';
 
 const calculateSumFromPaymentLines = (paymentLines: IPaymentLine[]): number => {
   return paymentLines.reduce((accumulator, paymentLine) => {
@@ -56,6 +57,7 @@ type TOrderState = IOrder
 
 const initialState: TOrderState = {
   id: null,
+  shortId: null,
   userId: null,
   appointment: {
     place: null,
@@ -90,17 +92,22 @@ export const orderSlice = createSlice({
       state.paymentLines = paymentLines
       state.totalPrice = totalPrice
     },
-    setOrderId: (state, action: PayloadAction<TOrderState['id']>) => {
-      state.id = action.payload
+    setOrderIds: (state, action: PayloadAction<Pick<TOrderState, 'id' | 'shortId'>>) => {
+      state.id = action.payload.id
+      state.shortId = action.payload.shortId
+    },
+    setPaymentFromDB: (state, action: PayloadAction<IOrderEntity['payment']>) => {
+      state.payment = action.payload
     },
   },
 })
 
-export const { setAppointment, setItemsFromCart, setOrderId } = orderSlice.actions
+export const { setAppointment, setItemsFromCart, setOrderIds, setPaymentFromDB } = orderSlice.actions
 
 export const getAppointment = (state: TOrderState) => state.appointment
 export const getPaymentLines = (state: TOrderState) => state.paymentLines
 export const getTotalPrice = (state: TOrderState) => state.totalPrice
+export const getPaymentData = (state: TOrderState) => state.payment
 export const getOrder = (state: TOrderState) => state
 
 export const orderReducer = orderSlice.reducer

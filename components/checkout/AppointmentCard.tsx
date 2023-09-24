@@ -32,7 +32,10 @@ export const AppointmentCard: FC<IProps> = ({ Icon, primaryText, secondaryText, 
       <View>
         <CustomText variant={ECustomTextVariants.BODY3}>{primaryText ?? ''}</CustomText>
         {secondaryText && (
-          <CustomText variant={ECustomTextVariants.BODY4} customClassName="text-neutrals-500 mt-1">
+          <CustomText
+            variant={ECustomTextVariants.HELPER2}
+            customClassName="text-neutrals-500 mt-1"
+          >
             {secondaryText}
           </CustomText>
         )}

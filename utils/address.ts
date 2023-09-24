@@ -1,16 +1,22 @@
-export const formatPlaceAddress = (name: string | null, address: string | null, types: string[]) => {
+import { TGoogleMapsPlaceResult } from "../models/contracts/externalApi/googleMaps"
+
+export const formatPlaceAddress = (place: TGoogleMapsPlaceResult | null) => {
+  const placeName = place?.name ?? null
+  const placeAddress = place?.formatted_address ?? null
+  const placeTypes = place?.types ?? []
+
   const SECTION_DIVIDER = ' - '
-  const isEstablishment = types.includes('establishment')
+  const isEstablishment = placeTypes.includes('establishment')
 
   if (isEstablishment) {
-    const mainAddressSection = address ? address.split(SECTION_DIVIDER)[0].trim() : null
+    const mainAddressSection = placeAddress ? placeAddress.split(SECTION_DIVIDER)[0].trim() : null
     return {
-      primaryText: name ?? '',
+      primaryText: placeName ?? '',
       secondaryText: mainAddressSection
     }
   }
 
-  const splitAddress = address ? address.split(SECTION_DIVIDER) : []
+  const splitAddress = placeAddress ? placeAddress.split(SECTION_DIVIDER) : []
   const [mainSection, ...otherSections] = splitAddress
 
   return {
