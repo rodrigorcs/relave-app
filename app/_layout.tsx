@@ -40,6 +40,7 @@ export default function Layout() {
             <Stack.Screen name="home" options={{ title: 'Lavei', headerBackVisible: false }} />
             <Stack.Screen name="appointment" options={{ title: 'Lavei' }} />
             <Stack.Screen name="checkout" options={{ title: 'Resumo' }} />
+            <Stack.Screen name="orderConfirmation" options={{ title: 'Confirmação' }} />
           </Stack>
         </PaymentsProvider>
       </AuthProvider>

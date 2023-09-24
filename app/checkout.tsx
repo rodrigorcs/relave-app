@@ -21,15 +21,15 @@ import { formatPlaceAddress } from '../utils/address'
 import { cn } from '../utils/cn'
 import { EDateFormats, dayjs, dayjsToDate } from '../utils/dayjs'
 import { getDisplayPrice } from '../utils/price'
+import { router } from 'expo-router'
 import {
   ArrowRight as ArrowRightIcon,
   Calendar as CalendarIcon,
   PinAlt as LocationIcon,
 } from 'iconoir-react-native'
 import React, { useEffect, useState } from 'react'
-import { Alert, SafeAreaView, View } from 'react-native'
-import { useDispatch } from 'react-redux'
-import { useSelector } from 'react-redux'
+import { SafeAreaView, View } from 'react-native'
+import { useDispatch, useSelector } from 'react-redux'
 
 export default function Checkout() {
   const dispatch = useDispatch()
@@ -82,9 +82,7 @@ export default function Checkout() {
 
   useFirestoreDocument<IOrderEntity>(EFirestoreCollections.ORDERS, order.id, (orderData) => {
     const paymentIsSucceeded = orderData.payment?.status === 'succeeded'
-    if (paymentIsSucceeded) {
-      Alert.alert('Payment succeeded!')
-    }
+    if (paymentIsSucceeded) router.push('/orderConfirmation')
 
     return paymentIsSucceeded // Unsubscribe if succeeded
   })
