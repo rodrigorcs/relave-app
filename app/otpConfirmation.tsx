@@ -1,5 +1,5 @@
 import MessagesIllustration from '../assets/vectors/illustration-messages.svg'
-import { CustomButton, CustomText, ECustomTextVariants } from '../components/common'
+import { CustomButton, CustomText, ECustomTextVariants, SafeAreaView } from '../components/common'
 import { OTPInput } from '../components/otpConfirmation'
 import { EInputMasks } from '../models/constants/EInputMasks'
 import { confirmOTPToken, getIsUserSignedIn, getUserPhoneNumber } from '../state/slices/auth'
@@ -7,7 +7,7 @@ import { IAppState } from '../state/store'
 import { applyMask } from '../utils/mask'
 import { router } from 'expo-router'
 import React, { useEffect, useState } from 'react'
-import { SafeAreaView, View } from 'react-native'
+import { View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import { AnyAction } from 'redux'
 
@@ -39,7 +39,7 @@ export default function OTPConfirmation() {
   }, [isUserSignedIn])
 
   return (
-    <SafeAreaView className="flex flex-1 bg-common-background">
+    <SafeAreaView customClassName="flex flex-1 bg-common-background">
       <View className="flex-1 px-6 py-2">
         <View className="my-8 w-fit items-center">
           <MessagesIllustration height={112} pointerEvents="none" />

@@ -1,4 +1,4 @@
-import { CustomText, ECustomTextVariants } from '../components/common'
+import { CustomText, ECustomTextVariants, SafeAreaView } from '../components/common'
 import {
   AddVehicleCard,
   AddVehicleBottomSheet,
@@ -26,7 +26,7 @@ import {
   DropletHalf as DropletIcon,
 } from 'iconoir-react-native'
 import React, { useCallback, useState } from 'react'
-import { SafeAreaView, View } from 'react-native'
+import { View } from 'react-native'
 import { GestureHandlerRootView, ScrollView } from 'react-native-gesture-handler'
 import { useSelector, useDispatch } from 'react-redux'
 
@@ -85,7 +85,7 @@ export default function Home() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <SafeAreaView className="flex flex-1 bg-brand-500">
+      <SafeAreaView customClassName="flex flex-1 bg-brand-500">
         <View className="flex-1">
           <View className="py-8 bg-common-background">
             <CustomText variant={ECustomTextVariants.HEADING3} customClassName="ml-4">

@@ -1,5 +1,5 @@
 import { AppointmentCard } from '../components/checkout'
-import { CustomButton, CustomText, ECustomTextVariants } from '../components/common'
+import { CustomButton, CustomText, ECustomTextVariants, SafeAreaView } from '../components/common'
 import { daySchedulesAction } from '../core/actions/daySchedules'
 import { ordersActions } from '../core/actions/orders'
 import { usersActions } from '../core/actions/users'
@@ -29,7 +29,7 @@ import {
   PinAlt as LocationIcon,
 } from 'iconoir-react-native'
 import React, { useEffect, useState } from 'react'
-import { SafeAreaView, View } from 'react-native'
+import { View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 
 export default function Checkout() {
@@ -87,7 +87,7 @@ export default function Checkout() {
   })
 
   return (
-    <SafeAreaView className="flex flex-1 bg-common-background">
+    <SafeAreaView customClassName="flex flex-1 bg-common-background">
       <View className="flex-1">
         <View className="px-4 py-8 border-b border-neutrals-200">
           <CustomText variant={ECustomTextVariants.HEADING3}>Informações do pedido</CustomText>

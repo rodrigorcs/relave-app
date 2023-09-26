@@ -1,6 +1,6 @@
 import { DaysRail, IDate, PlacesAutocomplete } from '../components/appointment'
 import { ITime, TimesGrid } from '../components/appointment/TimesGrid'
-import { CustomButton, CustomText, ECustomTextVariants } from '../components/common'
+import { CustomButton, CustomText, ECustomTextVariants, SafeAreaView } from '../components/common'
 import { TGoogleMapsPlaceResult } from '../models/contracts/externalApi/googleMaps'
 import { getCart } from '../state/slices/cart'
 import { setAppointment, setItemsFromCart } from '../state/slices/order'
@@ -9,7 +9,7 @@ import { dayjs, dayjsToDate } from '../utils/dayjs'
 import { router } from 'expo-router'
 import { ArrowRight as ArrowRightIcon } from 'iconoir-react-native'
 import React, { useState } from 'react'
-import { SafeAreaView, ScrollView, View } from 'react-native'
+import { ScrollView, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 
 export default function Appointment() {
@@ -32,7 +32,7 @@ export default function Appointment() {
   }
 
   return (
-    <SafeAreaView className="flex flex-1 bg-common-background">
+    <SafeAreaView customClassName="flex flex-1 bg-common-background">
       <ScrollView>
         <View className="px-4 py-8 border-b border-neutrals-200 z-10">
           <CustomText variant={ECustomTextVariants.HEADING3}>

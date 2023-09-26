@@ -1,11 +1,17 @@
 import NotificationsIllustration from '../assets/vectors/illustration-push-notifications.svg'
-import { CustomButton, CustomInput, CustomText, ECustomTextVariants } from '../components/common'
+import {
+  CustomButton,
+  CustomInput,
+  CustomText,
+  ECustomTextVariants,
+  SafeAreaView,
+} from '../components/common'
 import { useMaskedInput } from '../hooks'
 import { EInputMasks } from '../models/constants/EInputMasks'
 import { sendOTPToken, signOut, storePhoneNumberToOTP } from '../state/slices/auth'
 import { router } from 'expo-router'
 import React, { useEffect, useState } from 'react'
-import { SafeAreaView, View } from 'react-native'
+import { View } from 'react-native'
 import { useDispatch } from 'react-redux'
 import { AnyAction } from 'redux'
 
@@ -28,7 +34,7 @@ export default function SignIn() {
   }
 
   return (
-    <SafeAreaView className="flex flex-1 bg-common-background">
+    <SafeAreaView customClassName="flex flex-1 bg-common-background">
       <View className="flex-1 px-6 py-2">
         <View className="my-8 w-fit items-center">
           <NotificationsIllustration height={112} pointerEvents="none" />

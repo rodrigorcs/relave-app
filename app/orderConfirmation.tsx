@@ -1,7 +1,7 @@
 import MastercardLogo from '../assets/vectors/card-logo-mastercard.svg'
 import VisaLogo from '../assets/vectors/card-logo-visa.svg'
 import ConfirmedOrderIllustration from '../assets/vectors/confirmed-order.svg'
-import { CustomButton, CustomText, ECustomTextVariants } from '../components/common'
+import { CustomButton, CustomText, ECustomTextVariants, SafeAreaView } from '../components/common'
 import { EPaymentLineTypes } from '../models/contracts/order'
 import { getAppointment, getPaymentData, getPaymentLines } from '../state/slices/order'
 import { IAppState } from '../state/store'
@@ -17,7 +17,7 @@ import {
   PinAlt as LocationIcon,
 } from 'iconoir-react-native'
 import React from 'react'
-import { SafeAreaView, ScrollView, View } from 'react-native'
+import { ScrollView, View } from 'react-native'
 import { useSelector } from 'react-redux'
 
 export default function OrderConfirmation() {
@@ -34,7 +34,7 @@ export default function OrderConfirmation() {
   console.log({ paymentData })
 
   return (
-    <SafeAreaView className="flex flex-1 bg-common-background">
+    <SafeAreaView customClassName="flex flex-1 bg-common-background">
       <ScrollView>
         <View className="py-8 px-3 py w-fit items-center border-b border-neutrals-200">
           <ConfirmedOrderIllustration height={150} pointerEvents="none" />
