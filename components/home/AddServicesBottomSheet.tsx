@@ -17,8 +17,8 @@ import {
 import { router } from 'expo-router'
 import { ArrowRight as ArrowRightIcon } from 'iconoir-react-native'
 import React, { FC, useRef } from 'react'
-import { FlatList, View } from 'react-native'
-import { TouchableOpacity } from 'react-native-gesture-handler'
+import { View, TouchableOpacity } from 'react-native'
+import { FlatList } from 'react-native-gesture-handler'
 import { useDispatch } from 'react-redux'
 
 interface IProps {
@@ -32,7 +32,7 @@ export const AddServicesBottomSheet: FC<IProps> = ({ selectedServiceBundle, isOp
   const dispatch = useDispatch()
   const bottomSheetRef = useRef<IBottomSheetRefProps>(null)
   const { ref: footerRef, position: footerPosition } = usePosition()
-  const listMargin = footerPosition.height ? footerPosition.height + 28 : null
+  const listMargin = footerPosition.height ? footerPosition.height + 76 : null
 
   const [services] = useAsyncData(() => servicesActions.getAll())
   const serviceIdsInBundle = (selectedServiceBundle?.allServices ?? []).map((service) => service.id)
@@ -62,10 +62,9 @@ export const AddServicesBottomSheet: FC<IProps> = ({ selectedServiceBundle, isOp
         <CustomText variant={ECustomTextVariants.BODY3} customClassName="mt-1 text-neutrals-600">
           Adicione serviços extras para um toque final
         </CustomText>
-        <View className={cn('mt-6 mb-10')}>
+        <View className={cn('mt-6')} style={{ marginBottom: listMargin }}>
           <FlatList
             data={avaliableServices}
-            style={{ marginBottom: listMargin }}
             renderItem={({ item: service, index }) => {
               const isSelected = selectedServiceIds.includes(service.id)
               return (
@@ -95,7 +94,7 @@ export const AddServicesBottomSheet: FC<IProps> = ({ selectedServiceBundle, isOp
             }}
           />
         </View>
-        <View ref={footerRef} className="absolute bottom-0 w-full">
+        <View ref={footerRef} collapsable={false} className="absolute bottom-0 w-full">
           <CustomButton
             onPress={() => handleProceedWithSelection(selectedServiceIds)}
             IconRight={<ArrowRightIcon />}
