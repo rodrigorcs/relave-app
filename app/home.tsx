@@ -40,6 +40,7 @@ export default function Home() {
   const dispatch = useDispatch()
 
   const [openAddVehicleBottomSheet, setOpenAddVehicleBottomSheet] = useState<boolean>(false)
+  const [addedVehicle, setAddedVehicle] = useState<IVehicle | null>(null)
 
   const currentUser = useSelector(({ auth }: IAppState) => getCurrentUser(auth))
   const selectedVehicle = useSelector(({ cart }: IAppState) => getSelectedVehicle(cart))
@@ -49,7 +50,9 @@ export default function Home() {
 
   const [vehicles, isLoadingVehicles] = useAsyncData(
     currentUser ? () => vehiclesActions.getVehiclesByUserId(currentUser.id) : null,
+    [addedVehicle],
   )
+
   const [serviceBundles, isLoadingServiceBundles] = useAsyncData(() =>
     serviceBundlesActions.getAllWithDetails(),
   )
@@ -58,6 +61,10 @@ export default function Home() {
 
   const handleChangeVehicle = (vehicle: IVehicle) => {
     dispatch(setSelectedVehicle(vehicle))
+  }
+
+  const handleAddVehicle = (vehicle: IVehicle) => {
+    setAddedVehicle(vehicle)
   }
 
   const handleOpenAddVehicleBottomSheet = useCallback(() => {
@@ -107,7 +114,7 @@ export default function Home() {
               )}
               <AddVehicleCard
                 onPress={handleOpenAddVehicleBottomSheet}
-                isFirst={vehicles?.length === 0}
+                isFirst={(vehicles ?? []).length === 0}
               />
             </ScrollView>
           </View>
@@ -149,7 +156,7 @@ export default function Home() {
         </View>
         <AddVehicleBottomSheet
           userId={currentUser.id}
-          addVehicle={() => {}}
+          addVehicle={handleAddVehicle}
           isOpen={openAddVehicleBottomSheet}
           close={handleCloseAddVehicleBottomSheet}
         />
