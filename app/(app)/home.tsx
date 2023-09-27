@@ -1,25 +1,34 @@
-import { CustomText, ECustomTextVariants, SafeAreaView } from '../components/common'
+import {
+  CustomButton,
+  CustomText,
+  ECustomButtonVariants,
+  ECustomTextVariants,
+  SafeAreaView,
+} from '../../components/common'
 import {
   AddVehicleCard,
   AddVehicleBottomSheet,
   ServiceBundleCard,
   UserVehicleCard,
-} from '../components/home'
-import { AddServicesBottomSheet } from '../components/home/AddServicesBottomSheet'
-import { UserVehicleCardSkeleton, ServiceBundleCardSkeleton } from '../components/home/skeletons'
-import { serviceBundlesActions } from '../core/actions/serviceBundles'
-import { vehiclesActions } from '../core/actions/vehicles'
-import { useAsyncData, useSkeletonArray } from '../hooks'
-import { EServiceBundleTiers, IServiceBundleWithDetails } from '../models/contracts/serviceBundle'
-import { IVehicle } from '../models/contracts/vehicle'
-import { getCurrentUser } from '../state/slices/auth'
+} from '../../components/home'
+import { AddServicesBottomSheet } from '../../components/home/AddServicesBottomSheet'
+import { UserVehicleCardSkeleton, ServiceBundleCardSkeleton } from '../../components/home/skeletons'
+import { serviceBundlesActions } from '../../core/actions/serviceBundles'
+import { vehiclesActions } from '../../core/actions/vehicles'
+import { useAsyncData, useSkeletonArray } from '../../hooks'
+import {
+  EServiceBundleTiers,
+  IServiceBundleWithDetails,
+} from '../../models/contracts/serviceBundle'
+import { IVehicle } from '../../models/contracts/vehicle'
+import { getCurrentUser, signOut } from '../../state/slices/auth'
 import {
   getSelectedServiceBundle,
   getSelectedVehicle,
   setSelectedServiceBundle,
   setSelectedVehicle,
-} from '../state/slices/cart'
-import { IAppState } from '../state/store'
+} from '../../state/slices/cart'
+import { IAppState } from '../../state/store'
 import {
   Flash as FlashIcon,
   Spark as SparkIcon,
@@ -29,6 +38,7 @@ import React, { useCallback, useState } from 'react'
 import { View } from 'react-native'
 import { GestureHandlerRootView, ScrollView } from 'react-native-gesture-handler'
 import { useSelector, useDispatch } from 'react-redux'
+import { AnyAction } from 'redux'
 
 const TIER_ICONS = Object.freeze({
   [EServiceBundleTiers.SIMPLE]: <FlashIcon />,
@@ -46,10 +56,10 @@ export default function Home() {
   const selectedVehicle = useSelector(({ cart }: IAppState) => getSelectedVehicle(cart))
   const selectedServiceBundle = useSelector(({ cart }: IAppState) => getSelectedServiceBundle(cart))
 
-  if (!currentUser) return console.error('User not logged in') //FIXME: Add auth boundaries so currentUser is always truthy
+  if (!currentUser) throw new Error('No currentUser')
 
   const [vehicles, isLoadingVehicles] = useAsyncData(
-    currentUser ? () => vehiclesActions.getVehiclesByUserId(currentUser.id) : null,
+    () => vehiclesActions.getVehiclesByUserId(currentUser.id),
     [addedVehicle],
   )
 
@@ -87,6 +97,12 @@ export default function Home() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaView customClassName="flex flex-1 bg-brand-500">
         <View className="flex-1">
+          <CustomButton
+            variant={ECustomButtonVariants.PRIMARY}
+            onPress={() => dispatch(signOut as unknown as AnyAction)}
+          >
+            Sign out
+          </CustomButton>
           <View className="py-8 bg-common-background">
             <CustomText variant={ECustomTextVariants.HEADING3} customClassName="ml-4">
               Selecione seu carro

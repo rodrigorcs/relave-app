@@ -1,14 +1,19 @@
-import { AppointmentCard } from '../components/checkout'
-import { CustomButton, CustomText, ECustomTextVariants, SafeAreaView } from '../components/common'
-import { daySchedulesAction } from '../core/actions/daySchedules'
-import { ordersActions } from '../core/actions/orders'
-import { usersActions } from '../core/actions/users'
-import { useCallbackURL, useFirestoreDocument, useStripePaymentSheet } from '../hooks'
-import { EFirestoreCollections } from '../models/constants/EFirestoreCollections'
-import { EPaymentLineTypes } from '../models/contracts/order'
-import { IUser } from '../models/contracts/user'
-import { IOrderEntity } from '../models/entities/order'
-import { getCurrentUser } from '../state/slices/auth'
+import { AppointmentCard } from '../../components/checkout'
+import {
+  CustomButton,
+  CustomText,
+  ECustomTextVariants,
+  SafeAreaView,
+} from '../../components/common'
+import { daySchedulesAction } from '../../core/actions/daySchedules'
+import { ordersActions } from '../../core/actions/orders'
+import { usersActions } from '../../core/actions/users'
+import { useCallbackURL, useFirestoreDocument, useStripePaymentSheet } from '../../hooks'
+import { EFirestoreCollections } from '../../models/constants/EFirestoreCollections'
+import { EPaymentLineTypes } from '../../models/contracts/order'
+import { IUser } from '../../models/contracts/user'
+import { IOrderEntity } from '../../models/entities/order'
+import { getCurrentUser } from '../../state/slices/auth'
 import {
   getAppointment,
   getOrder,
@@ -16,12 +21,12 @@ import {
   getTotalPrice,
   setOrderIds,
   setPaymentFromDB,
-} from '../state/slices/order'
-import { IAppState } from '../state/store'
-import { formatPlaceAddress } from '../utils/address'
-import { cn } from '../utils/cn'
-import { EDateFormats, dayjs, dayjsToDate } from '../utils/dayjs'
-import { getDisplayPrice } from '../utils/price'
+} from '../../state/slices/order'
+import { IAppState } from '../../state/store'
+import { formatPlaceAddress } from '../../utils/address'
+import { cn } from '../../utils/cn'
+import { EDateFormats, dayjs, dayjsToDate } from '../../utils/dayjs'
+import { getDisplayPrice } from '../../utils/price'
 import { router } from 'expo-router'
 import {
   ArrowRight as ArrowRightIcon,
@@ -148,7 +153,7 @@ export default function Checkout() {
           isDisabled={isLoading || !!error}
           IconRight={<ArrowRightIcon />}
         >
-          Confirmar pagamento
+          Pagar
         </CustomButton>
       </View>
     </SafeAreaView>

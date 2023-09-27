@@ -1,15 +1,20 @@
-import MastercardLogo from '../assets/vectors/card-logo-mastercard.svg'
-import VisaLogo from '../assets/vectors/card-logo-visa.svg'
-import ConfirmedOrderIllustration from '../assets/vectors/confirmed-order.svg'
-import { CustomButton, CustomText, ECustomTextVariants, SafeAreaView } from '../components/common'
-import { EPaymentLineTypes } from '../models/contracts/order'
-import { getAppointment, getPaymentData, getPaymentLines } from '../state/slices/order'
-import { IAppState } from '../state/store'
-import { theme } from '../theme'
-import { formatPlaceAddress } from '../utils/address'
-import { cn } from '../utils/cn'
-import { EDateFormats, dayjs } from '../utils/dayjs'
-import { getDisplayPrice } from '../utils/price'
+import MastercardLogo from '../../assets/vectors/card-logo-mastercard.svg'
+import VisaLogo from '../../assets/vectors/card-logo-visa.svg'
+import ConfirmedOrderIllustration from '../../assets/vectors/confirmed-order.svg'
+import {
+  CustomButton,
+  CustomText,
+  ECustomTextVariants,
+  SafeAreaView,
+} from '../../components/common'
+import { EPaymentLineTypes } from '../../models/contracts/order'
+import { getAppointment, getPaymentData, getPaymentLines } from '../../state/slices/order'
+import { IAppState } from '../../state/store'
+import { theme } from '../../theme'
+import { formatPlaceAddress } from '../../utils/address'
+import { cn } from '../../utils/cn'
+import { EDateFormats, dayjs } from '../../utils/dayjs'
+import { getDisplayPrice } from '../../utils/price'
 import { router } from 'expo-router'
 import {
   IconoirProvider,
@@ -30,8 +35,6 @@ export default function OrderConfirmation() {
   const handleReturnToHome = () => {
     router.push('/home')
   }
-
-  console.log({ paymentData })
 
   return (
     <SafeAreaView customClassName="flex flex-1 bg-common-background">

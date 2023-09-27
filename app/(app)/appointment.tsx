@@ -1,11 +1,16 @@
-import { DaysRail, IDate, PlacesAutocomplete } from '../components/appointment'
-import { ITime, TimesGrid } from '../components/appointment/TimesGrid'
-import { CustomButton, CustomText, ECustomTextVariants, SafeAreaView } from '../components/common'
-import { TGoogleMapsPlaceResult } from '../models/contracts/externalApi/googleMaps'
-import { getCart } from '../state/slices/cart'
-import { setAppointment, setItemsFromCart } from '../state/slices/order'
-import { IAppState } from '../state/store'
-import { dayjs, dayjsToDate } from '../utils/dayjs'
+import { DaysRail, IDate, PlacesAutocomplete } from '../../components/appointment'
+import { ITime, TimesGrid } from '../../components/appointment/TimesGrid'
+import {
+  CustomButton,
+  CustomText,
+  ECustomTextVariants,
+  SafeAreaView,
+} from '../../components/common'
+import { TGoogleMapsPlaceResult } from '../../models/contracts/externalApi/googleMaps'
+import { getCart } from '../../state/slices/cart'
+import { setAppointment, setItemsFromCart } from '../../state/slices/order'
+import { IAppState } from '../../state/store'
+import { dayjs, dayjsToDate } from '../../utils/dayjs'
 import { router } from 'expo-router'
 import { ArrowRight as ArrowRightIcon } from 'iconoir-react-native'
 import React, { useState } from 'react'

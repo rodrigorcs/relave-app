@@ -1,11 +1,15 @@
-import MessagesIllustration from '../assets/vectors/illustration-messages.svg'
-import { CustomButton, CustomText, ECustomTextVariants, SafeAreaView } from '../components/common'
-import { OTPInput } from '../components/otpConfirmation'
-import { EInputMasks } from '../models/constants/EInputMasks'
-import { confirmOTPToken, getIsUserSignedIn, getUserPhoneNumber } from '../state/slices/auth'
-import { IAppState } from '../state/store'
-import { applyMask } from '../utils/mask'
-import { router } from 'expo-router'
+import MessagesIllustration from '../../assets/vectors/illustration-messages.svg'
+import {
+  CustomButton,
+  CustomText,
+  ECustomTextVariants,
+  SafeAreaView,
+} from '../../components/common'
+import { OTPInput } from '../../components/otpConfirmation'
+import { EInputMasks } from '../../models/constants/EInputMasks'
+import { confirmOTPToken, getUserPhoneNumber } from '../../state/slices/auth'
+import { IAppState } from '../../state/store'
+import { applyMask } from '../../utils/mask'
 import React, { useEffect, useState } from 'react'
 import { View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
@@ -13,7 +17,6 @@ import { AnyAction } from 'redux'
 
 export default function OTPConfirmation() {
   const dispatch = useDispatch()
-  const isUserSignedIn = useSelector(({ auth }: IAppState) => getIsUserSignedIn(auth))
   const userPhoneNumber = useSelector(({ auth }: IAppState) => getUserPhoneNumber(auth))
 
   const [otpToken, setOTPToken] = useState('')
@@ -33,10 +36,6 @@ export default function OTPConfirmation() {
     handleConfirmOTP()
     setShowError(false)
   }, [isTokenReady])
-
-  useEffect(() => {
-    if (isUserSignedIn) router.push('/home')
-  }, [isUserSignedIn])
 
   return (
     <SafeAreaView customClassName="flex flex-1 bg-common-background">

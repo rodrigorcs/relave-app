@@ -1,14 +1,14 @@
-import NotificationsIllustration from '../assets/vectors/illustration-push-notifications.svg'
+import NotificationsIllustration from '../../assets/vectors/illustration-push-notifications.svg'
 import {
   CustomButton,
   CustomInput,
   CustomText,
   ECustomTextVariants,
   SafeAreaView,
-} from '../components/common'
-import { useMaskedInput } from '../hooks'
-import { EInputMasks } from '../models/constants/EInputMasks'
-import { sendOTPToken, signOut, storePhoneNumberToOTP } from '../state/slices/auth'
+} from '../../components/common'
+import { useMaskedInput } from '../../hooks'
+import { EInputMasks } from '../../models/constants/EInputMasks'
+import { sendOTPToken, signOut, storePhoneNumberToOTP } from '../../state/slices/auth'
 import { router } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import { View } from 'react-native'

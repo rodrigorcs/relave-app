@@ -35,15 +35,9 @@ export default function Layout() {
       <AuthProvider>
         <PaymentsProvider>
           <Stack>
-            <Stack.Screen name="index" options={{ title: 'Cadastro' }} />
-            <Stack.Screen name="otpConfirmation" options={{ title: 'Confirmação SMS' }} />
-            <Stack.Screen name="home" options={{ title: 'Lavei', headerBackVisible: false }} />
-            <Stack.Screen name="appointment" options={{ title: 'Lavei' }} />
-            <Stack.Screen name="checkout" options={{ title: 'Resumo' }} />
-            <Stack.Screen
-              name="orderConfirmation"
-              options={{ title: 'Confirmação', headerBackVisible: false }}
-            />
+            {/* {userIsSignedIn ? <Stack.Screen name="(app)" /> : <Stack.Screen name="(auth)" />} */}
+            <Stack.Screen name="(app)" />
+            <Stack.Screen name="(auth)" />
           </Stack>
         </PaymentsProvider>
       </AuthProvider>
