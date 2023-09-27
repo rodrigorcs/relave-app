@@ -1,11 +1,17 @@
 import '../../global.css'
-import { Stack } from 'expo-router'
+import { getIsUserSignedIn } from '../../state/slices/auth'
+import { IAppState } from '../../state/store'
+import { Redirect, Stack } from 'expo-router'
 import React from 'react'
+import { useSelector } from 'react-redux'
 
 export default function Layout() {
+  const userIsSignedIn = useSelector((state: IAppState) => getIsUserSignedIn(state.auth))
+  if (!userIsSignedIn) return <Redirect href="/signIn" />
+
   return (
     <Stack>
-      <Stack.Screen name="home" options={{ title: 'Lavei', headerBackVisible: false }} />
+      <Stack.Screen name="index" options={{ title: 'Lavei', headerBackVisible: false }} />
       <Stack.Screen name="appointment" options={{ title: 'Lavei' }} />
       <Stack.Screen name="checkout" options={{ title: 'Resumo' }} />
       <Stack.Screen

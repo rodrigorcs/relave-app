@@ -1,11 +1,20 @@
 import { AuthProvider } from '../components/providers/AuthProvider'
 import { PaymentsProvider } from '../components/providers/PaymentsProvider'
 import '../global.css'
-import { store } from '../state/store'
+import { getIsUserSignedIn } from '../state/slices/auth'
+import { IAppState, store } from '../state/store'
 import { useFonts } from 'expo-font'
-import { Stack } from 'expo-router'
+import { Slot, Stack } from 'expo-router'
 import React from 'react'
-import { Provider as ReduxProvider } from 'react-redux'
+import { Provider as ReduxProvider, useSelector } from 'react-redux'
+
+function AppRouter() {
+  const userIsSignedIn = useSelector((state: IAppState) => getIsUserSignedIn(state.auth))
+  console.log({ userIsSignedIn })
+  return (
+    <Stack>{userIsSignedIn ? <Stack.Screen name="(app)" /> : <Stack.Screen name="(auth)" />}</Stack>
+  )
+}
 
 export default function Layout() {
   useFonts({
@@ -34,11 +43,7 @@ export default function Layout() {
     <ReduxProvider store={store}>
       <AuthProvider>
         <PaymentsProvider>
-          <Stack>
-            {/* {userIsSignedIn ? <Stack.Screen name="(app)" /> : <Stack.Screen name="(auth)" />} */}
-            <Stack.Screen name="(app)" />
-            <Stack.Screen name="(auth)" />
-          </Stack>
+          <Slot />
         </PaymentsProvider>
       </AuthProvider>
     </ReduxProvider>
