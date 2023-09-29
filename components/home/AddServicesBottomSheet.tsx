@@ -1,5 +1,5 @@
 import { servicesActions } from '../../core/actions/services'
-import { useAsyncData, usePosition, useSelection } from '../../hooks'
+import { useAsyncData, useSelection } from '../../hooks'
 import { IService } from '../../models/contracts/service'
 import { IServiceBundleWithDetails } from '../../models/contracts/serviceBundle'
 import { setSelectedAdditionalServices } from '../../state/slices/cart'
