@@ -3,7 +3,7 @@ import { cn } from '../../utils/cn'
 import { CustomText, ECustomTextVariants } from './CustomText'
 import { IconoirProvider } from 'iconoir-react-native'
 import React, { FC, ReactNode, RefObject } from 'react'
-import { View, TextInput, KeyboardTypeOptions } from 'react-native'
+import { View, TextInput, KeyboardTypeOptions, TextInputProps } from 'react-native'
 import { ClassNameValue } from 'tailwind-merge'
 
 interface IProps {
@@ -19,6 +19,8 @@ interface IProps {
   iconLeft?: ReactNode
   iconRight?: ReactNode
   isDisabled?: boolean
+  autoComplete?: TextInputProps['autoComplete']
+  autoCorrect?: TextInputProps['autoCorrect']
 }
 
 export const CustomInput: FC<IProps> = ({
@@ -34,6 +36,8 @@ export const CustomInput: FC<IProps> = ({
   iconLeft,
   iconRight,
   isDisabled = false,
+  autoComplete,
+  autoCorrect,
 }) => {
   return (
     <View>
@@ -72,6 +76,8 @@ export const CustomInput: FC<IProps> = ({
               editable={!isDisabled}
               selectTextOnFocus={!isDisabled}
               style={{ fontSize: 16 }} // TODO: Remove default lineHeight from tailwind so that `text-base` class can be used
+              autoComplete={autoComplete}
+              autoCorrect={autoCorrect}
             />
           </View>
           {iconRight && iconRight}

@@ -9,7 +9,7 @@ import {
   NavArrowUp as ChevronUpIcon,
 } from 'iconoir-react-native'
 import React, { Dispatch, FC, ReactNode, SetStateAction, useEffect, useRef, useState } from 'react'
-import { View, TouchableOpacity, TextInput, ScrollView } from 'react-native'
+import { View, TouchableOpacity, TextInput, ScrollView, TextInputProps } from 'react-native'
 
 interface IDropdownExpandButtonProps {
   isDropdownOpen: boolean
@@ -49,6 +49,8 @@ interface IProps<T extends IOption> {
   isDisabled?: boolean
   children?: (option: IOption) => ReactNode
   large?: boolean
+  autoComplete?: TextInputProps['autoComplete']
+  autoCorrect?: TextInputProps['autoCorrect']
 }
 
 export const Autocomplete = <T extends IOption>({
@@ -62,6 +64,8 @@ export const Autocomplete = <T extends IOption>({
   isDisabled = false,
   children,
   large,
+  autoComplete,
+  autoCorrect,
 }: IProps<T>) => {
   const [input, setInput] = useState('')
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
@@ -118,6 +122,8 @@ export const Autocomplete = <T extends IOption>({
           />
         }
         isDisabled={isDisabled}
+        autoComplete={autoComplete}
+        autoCorrect={autoCorrect}
       />
       <View ref={dropdownRef} className={cn('z-10', !isDropdownOpen && 'hidden')}>
         {isDropdownOpen && (

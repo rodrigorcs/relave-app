@@ -29,7 +29,7 @@ import {
   DropletHalf as DropletIcon,
 } from 'iconoir-react-native'
 import React, { useCallback, useState } from 'react'
-import { View } from 'react-native'
+import { KeyboardAvoidingView, View } from 'react-native'
 import { GestureHandlerRootView, ScrollView } from 'react-native-gesture-handler'
 import { useSelector, useDispatch } from 'react-redux'
 
@@ -87,88 +87,98 @@ export default function Home() {
   }
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <SafeAreaView customClassName="flex flex-1 bg-brand-500">
-        <View className="flex-1">
-          <View className="py-8 bg-common-background">
-            <CustomText variant={ECustomTextVariants.HEADING3} customClassName="ml-4">
-              Selecione seu carro
-            </CustomText>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false} className="flex-row mt-4">
-              {isLoadingVehicles ? (
-                vehicleSkeletons.map((_skeleton, index) => (
-                  <UserVehicleCardSkeleton key={index} index={index} />
-                ))
-              ) : (
-                <>
-                  {(vehicles ?? []).map((vehicle, index) => {
-                    const isSelected = vehicle.id === selectedVehicle?.id
-                    return (
-                      <UserVehicleCard
-                        key={vehicle.id}
-                        vehicle={vehicle}
-                        handleChangeVehicle={handleChangeVehicle}
-                        isSelected={isSelected}
-                        index={index}
-                      />
-                    )
-                  })}
-                </>
-              )}
-              <AddVehicleCard
-                onPress={handleOpenAddVehicleBottomSheet}
-                isFirst={(vehicles ?? []).length === 0}
-              />
-            </ScrollView>
+    <KeyboardAvoidingView behavior="padding" className="flex-1">
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <SafeAreaView customClassName="flex flex-1 bg-brand-500">
+          <View className="flex-1">
+            <View className="py-8 bg-common-background">
+              <CustomText variant={ECustomTextVariants.HEADING3} customClassName="ml-4">
+                Selecione seu carro
+              </CustomText>
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                className="flex-row mt-4"
+              >
+                {isLoadingVehicles ? (
+                  vehicleSkeletons.map((_skeleton, index) => (
+                    <UserVehicleCardSkeleton key={index} index={index} />
+                  ))
+                ) : (
+                  <>
+                    {(vehicles ?? []).map((vehicle, index) => {
+                      const isSelected = vehicle.id === selectedVehicle?.id
+                      return (
+                        <UserVehicleCard
+                          key={vehicle.id}
+                          vehicle={vehicle}
+                          handleChangeVehicle={handleChangeVehicle}
+                          isSelected={isSelected}
+                          index={index}
+                        />
+                      )
+                    })}
+                  </>
+                )}
+                <AddVehicleCard
+                  onPress={handleOpenAddVehicleBottomSheet}
+                  isFirst={(vehicles ?? []).length === 0}
+                />
+              </ScrollView>
+            </View>
+            <View className="flex-1 pt-6 pb-2 bg-brand-500">
+              <CustomText variant={ECustomTextVariants.HEADING3} customClassName="ml-4" white>
+                Serviços
+              </CustomText>
+              <CustomText variant={ECustomTextVariants.BODY3} customClassName="ml-4 mt-1" white>
+                Escolha o tipo de cuidado que o seu carro precisa
+              </CustomText>
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                className="flex-row mt-4"
+              >
+                {isLoadingServiceBundles ? (
+                  <>
+                    {serviceBundleSkeletons.map((_skeleton, index) => (
+                      <ServiceBundleCardSkeleton key={index} />
+                    ))}
+                  </>
+                ) : (
+                  <>
+                    {(serviceBundles || []).map((serviceBundle, index) => {
+                      const isLastItem = serviceBundles && index === serviceBundles?.length - 1
+                      const previousBundle =
+                        index > 0 && serviceBundles ? serviceBundles[index - 1] : null
+                      return (
+                        <ServiceBundleCard
+                          key={serviceBundle.id}
+                          serviceBundle={serviceBundle}
+                          previousBundleName={previousBundle?.name}
+                          onPress={handleChooseServiceBundle}
+                          Icon={TIER_ICONS[serviceBundle.tier]}
+                          customClassName={isLastItem && 'mr-4'}
+                        />
+                      )
+                    })}
+                  </>
+                )}
+              </ScrollView>
+            </View>
           </View>
-          <View className="flex-1 pt-6 pb-2 bg-brand-500">
-            <CustomText variant={ECustomTextVariants.HEADING3} customClassName="ml-4" white>
-              Serviços
-            </CustomText>
-            <CustomText variant={ECustomTextVariants.BODY3} customClassName="ml-4 mt-1" white>
-              Escolha o tipo de cuidado que o seu carro precisa
-            </CustomText>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false} className="flex-row mt-4">
-              {isLoadingServiceBundles ? (
-                <>
-                  {serviceBundleSkeletons.map((_skeleton, index) => (
-                    <ServiceBundleCardSkeleton key={index} />
-                  ))}
-                </>
-              ) : (
-                <>
-                  {(serviceBundles || []).map((serviceBundle, index) => {
-                    const isLastItem = serviceBundles && index === serviceBundles?.length - 1
-                    const previousBundle =
-                      index > 0 && serviceBundles ? serviceBundles[index - 1] : null
-                    return (
-                      <ServiceBundleCard
-                        key={serviceBundle.id}
-                        serviceBundle={serviceBundle}
-                        previousBundleName={previousBundle?.name}
-                        onPress={handleChooseServiceBundle}
-                        Icon={TIER_ICONS[serviceBundle.tier]}
-                        customClassName={isLastItem && 'mr-4'}
-                      />
-                    )
-                  })}
-                </>
-              )}
-            </ScrollView>
-          </View>
-        </View>
-        <AddVehicleBottomSheet
-          userId={currentUser.id}
-          addVehicle={handleAddVehicle}
-          isOpen={openAddVehicleBottomSheet}
-          close={handleCloseAddVehicleBottomSheet}
-        />
-        <AddServicesBottomSheet
-          selectedServiceBundle={selectedServiceBundle}
-          isOpen={selectedServiceBundle !== null}
-          close={handleCloseAddServicesBottomSheet}
-        />
-      </SafeAreaView>
-    </GestureHandlerRootView>
+          <AddVehicleBottomSheet
+            userId={currentUser.id}
+            addVehicle={handleAddVehicle}
+            isOpen={openAddVehicleBottomSheet}
+            close={handleCloseAddVehicleBottomSheet}
+          />
+          <AddServicesBottomSheet
+            selectedServiceBundle={selectedServiceBundle}
+            isOpen={selectedServiceBundle !== null}
+            close={handleCloseAddServicesBottomSheet}
+          />
+        </SafeAreaView>
+      </GestureHandlerRootView>
+    </KeyboardAvoidingView>
   )
 }

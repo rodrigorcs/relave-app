@@ -1,11 +1,12 @@
 import { vehicleBrandsActions } from '../../core/actions/vehicleBrands'
 import { vehicleModelsActions } from '../../core/actions/vehicleModels'
 import { vehiclesActions } from '../../core/actions/vehicles'
-import { useAsyncData } from '../../hooks'
+import { useAsyncData, useKeyboardVisibility } from '../../hooks'
 import { IUser } from '../../models/contracts/user'
 import { IVehicle } from '../../models/contracts/vehicle'
 import { IVehicleBrand } from '../../models/contracts/vehicleBrand'
 import { IVehicleModel } from '../../models/contracts/vehicleModel'
+import { cn } from '../../utils/cn'
 import {
   BottomSheet,
   CustomText,
@@ -29,6 +30,7 @@ export const AddVehicleBottomSheet: FC<IProps> = ({ addVehicle, userId, isOpen, 
   const [selectedBrand, setSelectedBrand] = useState<IVehicleBrand | null>(null)
   const [selectedModel, setSelectedModel] = useState<IVehicleModel | null>(null)
 
+  const isKeyboardVisible = useKeyboardVisibility()
   const [vehicleBrands] = useAsyncData(() => vehicleBrandsActions.getAll())
   const [vehicleModels] = useAsyncData(
     selectedBrand ? () => vehicleModelsActions.getByBrandId(selectedBrand?.id) : null,
@@ -62,6 +64,8 @@ export const AddVehicleBottomSheet: FC<IProps> = ({ addVehicle, userId, isOpen, 
           onChange={setSelectedBrand}
           title="Marca"
           placeholder="Digite a marca..."
+          autoComplete="off"
+          autoCorrect={false}
         />
         {/* @ts-expect-error // FIXME: IVehicleModel does not satisfy IOption */}
         <Autocomplete<IVehicleModel>
@@ -71,8 +75,13 @@ export const AddVehicleBottomSheet: FC<IProps> = ({ addVehicle, userId, isOpen, 
           title="Modelo"
           placeholder="Digite o modelo..."
           isDisabled={!selectedBrand}
+          autoComplete="off"
+          autoCorrect={false}
         />
-        <CustomButton onPress={handleCreateVehicle} customClassName="absolute bottom-0 w-full">
+        <CustomButton
+          onPress={handleCreateVehicle}
+          customClassName={cn('w-full', isKeyboardVisible ? 'mt-8' : 'absolute bottom-0')}
+        >
           Confirmar escolha
         </CustomButton>
       </View>
