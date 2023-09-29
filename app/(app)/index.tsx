@@ -1,10 +1,4 @@
-import {
-  CustomButton,
-  CustomText,
-  ECustomButtonVariants,
-  ECustomTextVariants,
-  SafeAreaView,
-} from '../../components/common'
+import { CustomText, ECustomTextVariants, SafeAreaView } from '../../components/common'
 import {
   AddVehicleCard,
   AddVehicleBottomSheet,
@@ -21,7 +15,7 @@ import {
   IServiceBundleWithDetails,
 } from '../../models/contracts/serviceBundle'
 import { IVehicle } from '../../models/contracts/vehicle'
-import { getCurrentUser, signOut } from '../../state/slices/auth'
+import { getCurrentUser } from '../../state/slices/auth'
 import {
   getSelectedServiceBundle,
   getSelectedVehicle,
@@ -38,7 +32,6 @@ import React, { useCallback, useState } from 'react'
 import { View } from 'react-native'
 import { GestureHandlerRootView, ScrollView } from 'react-native-gesture-handler'
 import { useSelector, useDispatch } from 'react-redux'
-import { AnyAction } from 'redux'
 
 const TIER_ICONS = Object.freeze({
   [EServiceBundleTiers.SIMPLE]: <FlashIcon />,
