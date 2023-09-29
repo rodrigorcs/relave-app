@@ -10,6 +10,7 @@ export enum ECustomButtonVariants {
   PRIMARY = 'h-14 bg-brand-500',
   SECONDARY = 'h-14 border border-brand-500',
   TERTIARY = 'h-8',
+  ICON = 'h-14 px-6 bg-brand-500',
 }
 
 interface IProps {
@@ -53,18 +54,26 @@ export const CustomButton: FC<IProps> = ({
               : theme.colors['neutrals-white'],
         }}
       >
-        {IconLeft && IconLeft}
-        <CustomText
-          variant={ECustomTextVariants.HEADING5}
-          customClassName={cn(
-            IconLeft && 'ml-4',
-            IconRight && 'mr-4',
-            variant === ECustomButtonVariants.PRIMARY ? 'text-neutrals-white' : 'text-brand-500',
-          )}
-        >
-          {children}
-        </CustomText>
-        {IconRight && IconRight}
+        {variant === ECustomButtonVariants.ICON ? (
+          children
+        ) : (
+          <>
+            {IconLeft && IconLeft}
+            <CustomText
+              variant={ECustomTextVariants.HEADING5}
+              customClassName={cn(
+                IconLeft && 'ml-4',
+                IconRight && 'mr-4',
+                variant === ECustomButtonVariants.PRIMARY
+                  ? 'text-neutrals-white'
+                  : 'text-brand-500',
+              )}
+            >
+              {children}
+            </CustomText>
+            {IconRight && IconRight}
+          </>
+        )}
       </IconoirProvider>
     </TouchableOpacity>
   )
