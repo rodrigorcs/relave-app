@@ -97,12 +97,6 @@ export default function Home() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaView customClassName="flex flex-1 bg-brand-500">
         <View className="flex-1">
-          <CustomButton
-            variant={ECustomButtonVariants.PRIMARY}
-            onPress={() => dispatch(signOut as unknown as AnyAction)}
-          >
-            Sign out
-          </CustomButton>
           <View className="py-8 bg-common-background">
             <CustomText variant={ECustomTextVariants.HEADING3} customClassName="ml-4">
               Selecione seu carro
