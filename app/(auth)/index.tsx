@@ -1,79 +1,52 @@
-import NotificationsIllustration from '../../assets/vectors/illustration-push-notifications.svg'
-import {
-  CustomButton,
-  CustomInput,
-  CustomText,
-  ECustomTextVariants,
-  SafeAreaView,
-} from '../../components/common'
-import { useMaskedInput } from '../../hooks'
-import { EInputMasks } from '../../models/constants/EInputMasks'
-import { sendOTPToken, signOut, storePhoneNumberToOTP } from '../../state/slices/auth'
-import { router } from 'expo-router'
-import React, { useEffect, useState } from 'react'
-import { View } from 'react-native'
-import { useDispatch } from 'react-redux'
-import { AnyAction } from 'redux'
+/**
+ * Sample React Native App
+ * https://github.com/facebook/react-native
+ *
+ * @format
+ * @flow
+ */
+import React from 'react'
+import { SafeAreaView, ScrollView, View, Text, Dimensions, Platform } from 'react-native'
 
-export default function SignIn() {
-  const dispatch = useDispatch()
+const { width: screenWidth, height: screenHeight } = Dimensions.get('window')
+const CARD_WIDTH = screenWidth * 0.8
+const CARD_HEIGHT = screenHeight * 0.7
+const SPACING_FOR_CARD_INSET = screenWidth * 0.1 - 10
 
-  const [maskedPhoneNumber, unmaskedPhoneNumber, handlePhoneNumberChange, isPhoneNumberValid] =
-    useMaskedInput(EInputMasks.PHONE_NUMBER)
-  const [error, setError] = useState<string | null>(null)
+const cards = [{ name: 'Card 1' }, { name: 'Card 2' }, { name: 'Card 3' }]
 
-  useEffect(() => {
-    setError(null)
-  }, [unmaskedPhoneNumber])
-
-  const handleReceiveOTP = async () => {
-    if (!isPhoneNumberValid) return setError('Número invalido, verifique.')
-    dispatch(sendOTPToken(unmaskedPhoneNumber) as unknown as AnyAction)
-    dispatch(storePhoneNumberToOTP(unmaskedPhoneNumber))
-    router.push('/otpConfirmation')
-  }
-
+export default function Onboarding() {
   return (
-    <SafeAreaView customClassName="flex flex-1 bg-common-background">
-      <View className="flex-1 px-6 py-2">
-        <View className="my-8 w-fit items-center">
-          <NotificationsIllustration height={112} pointerEvents="none" />
-        </View>
-        <CustomText variant={ECustomTextVariants.HEADING3}>
-          Qual o número do seu celular?
-        </CustomText>
-        <CustomText
-          variant={ECustomTextVariants.SUBHEADING2}
-          customClassName="font-normal text-neutrals-500"
-        >
-          Você receberá um código por SMS
-        </CustomText>
-        <CustomInput
-          error={error}
-          value={maskedPhoneNumber}
-          handleValueChange={handlePhoneNumberChange}
-          placeholder="(71) 90000-0000"
-          keyboardType="phone-pad"
-          prefix="+55"
-          customClassName="mt-6"
-        />
-        <CustomButton
-          isDisabled={!isPhoneNumberValid}
-          onPress={handleReceiveOTP}
-          customClassName="mt-6"
-        >
-          Receber SMS
-        </CustomButton>
-        <CustomButton
-          onPress={() => dispatch(signOut as unknown as AnyAction)}
-          customClassName="mt-6"
-        >
-          Sair
-        </CustomButton>
-        <CustomButton onPress={() => router.push('/(app)')} customClassName="mt-2">
-          Ir para Home
-        </CustomButton>
-      </View>
+    <SafeAreaView className="flex-1">
+      <ScrollView
+        horizontal // Change the direction to horizontal
+        pagingEnabled // Enable paging
+        decelerationRate={0} // Disable deceleration
+        snapToInterval={CARD_WIDTH + 10} // Calculate the size for a card including marginLeft and marginRight
+        snapToAlignment="center" // Snap to the center
+        contentInset={{
+          // iOS ONLY
+          top: 0,
+          left: SPACING_FOR_CARD_INSET, // Left spacing for the very first card
+          bottom: 0,
+          right: SPACING_FOR_CARD_INSET, // Right spacing for the very last card
+        }}
+        contentContainerStyle={{
+          // contentInset alternative for Android
+          paddingHorizontal: Platform.OS === 'android' ? SPACING_FOR_CARD_INSET : 0, // Horizontal spacing before and after the ScrollView
+        }}
+      >
+        {cards.map((card) => {
+          return (
+            <View
+              className="mx-[10] bg-feedback-positive-300 rounded-2xl"
+              style={{ width: CARD_WIDTH, height: CARD_HEIGHT }}
+            >
+              <Text>{card.name}</Text>
+            </View>
+          )
+        })}
+      </ScrollView>
     </SafeAreaView>
   )
 }
