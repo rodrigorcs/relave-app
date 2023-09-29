@@ -31,9 +31,6 @@ export const AddServicesBottomSheet: FC<IProps> = ({ selectedServiceBundle, isOp
   const HEIGHT = 600
   const dispatch = useDispatch()
   const bottomSheetRef = useRef<IBottomSheetRefProps>(null)
-  const { ref: footerRef, position: footerPosition } = usePosition()
-  const listMargin = footerPosition.height ? footerPosition.height + 76 : null
-
   const [services] = useAsyncData(() => servicesActions.getAll())
   const serviceIdsInBundle = (selectedServiceBundle?.allServices ?? []).map((service) => service.id)
   const avaliableServices = (services ?? []).filter(
@@ -62,7 +59,7 @@ export const AddServicesBottomSheet: FC<IProps> = ({ selectedServiceBundle, isOp
         <CustomText variant={ECustomTextVariants.BODY3} customClassName="mt-1 text-neutrals-600">
           Adicione serviços extras para um toque final
         </CustomText>
-        <View className={cn('mt-6')} style={{ marginBottom: listMargin }}>
+        <View className={cn('flex-1 mt-6')}>
           <FlatList
             data={avaliableServices}
             renderItem={({ item: service, index }) => {
@@ -94,7 +91,7 @@ export const AddServicesBottomSheet: FC<IProps> = ({ selectedServiceBundle, isOp
             }}
           />
         </View>
-        <View ref={footerRef} collapsable={false} className="absolute bottom-0 w-full">
+        <View className="mt-6 w-full">
           <CustomButton
             onPress={() => handleProceedWithSelection(selectedServiceIds)}
             IconRight={<ArrowRightIcon />}
