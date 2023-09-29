@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux'
 
 export default function Layout() {
   const userIsSignedIn = useSelector((state: IAppState) => getIsUserSignedIn(state.auth))
-  if (!userIsSignedIn) return <Redirect href="/signIn" />
+  if (!userIsSignedIn) return <Redirect href="/(auth)" />
 
   return (
     <Stack>

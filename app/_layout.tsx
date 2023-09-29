@@ -1,20 +1,11 @@
 import { AuthProvider } from '../components/providers/AuthProvider'
 import { PaymentsProvider } from '../components/providers/PaymentsProvider'
 import '../global.css'
-import { getIsUserSignedIn } from '../state/slices/auth'
-import { IAppState, store } from '../state/store'
+import { store } from '../state/store'
 import { useFonts } from 'expo-font'
-import { Slot, Stack } from 'expo-router'
+import { Slot } from 'expo-router'
 import React from 'react'
-import { Provider as ReduxProvider, useSelector } from 'react-redux'
-
-function AppRouter() {
-  const userIsSignedIn = useSelector((state: IAppState) => getIsUserSignedIn(state.auth))
-  console.log({ userIsSignedIn })
-  return (
-    <Stack>{userIsSignedIn ? <Stack.Screen name="(app)" /> : <Stack.Screen name="(auth)" />}</Stack>
-  )
-}
+import { Provider as ReduxProvider } from 'react-redux'
 
 export default function Layout() {
   useFonts({

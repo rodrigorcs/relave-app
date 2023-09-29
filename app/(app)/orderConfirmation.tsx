@@ -33,7 +33,7 @@ export default function OrderConfirmation() {
   const formattedPlaceAddress = formatPlaceAddress(appointment.place)
 
   const handleReturnToHome = () => {
-    router.push('/home')
+    router.push('/(app)')
   }
 
   return (

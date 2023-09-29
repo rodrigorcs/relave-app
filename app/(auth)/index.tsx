@@ -70,7 +70,7 @@ export default function SignIn() {
         >
           Sair
         </CustomButton>
-        <CustomButton onPress={() => router.push('/home')} customClassName="mt-2">
+        <CustomButton onPress={() => router.push('/(app)')} customClassName="mt-2">
           Ir para Home
         </CustomButton>
       </View>
