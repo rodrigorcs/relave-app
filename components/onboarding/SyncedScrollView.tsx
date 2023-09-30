@@ -1,8 +1,8 @@
 import { SyncedScrollViewContext } from './SyncedScrollViewContext'
-import { Ref, forwardRef, useContext, useEffect, useRef, useState } from 'react'
-import React, { Animated, ScrollView, ScrollViewProps } from 'react-native'
+import { Ref, RefObject, forwardRef, useContext, useEffect, useRef, useState } from 'react'
+import React, { Animated, LayoutChangeEvent, ScrollView, ScrollViewProps } from 'react-native'
 
-// Code from https://github.com/MaximilianDietel03/react-native-synced-scroll-views/
+// Code adapted from https://github.com/MaximilianDietel03/react-native-synced-scroll-views/
 
 // ----------------------------------------------------------------------------
 
@@ -15,6 +15,11 @@ export const SyncedScrollView = forwardRef(
     const { id, ...rest } = props
     const { activeScrollView, offsetPercent } = useContext(SyncedScrollViewContext)
     const scrollViewRef = forwardedRef ?? useRef<ScrollView>(null)
+    const activeScrollViewRef = useRef(0)
+
+    activeScrollView.addListener(({ value }) => {
+      activeScrollViewRef.current = value
+    })
 
     // Get relevant ScrollView Dimensions --------------------------------------------------
 
@@ -33,7 +38,7 @@ export const SyncedScrollView = forwardRef(
       nativeEvent: {
         layout: { width, height },
       },
-    }: any) => {
+    }: LayoutChangeEvent) => {
       // The length of the scrollView depends on the orientation we scroll in
       setScrollViewLength(props.horizontal ? width : height)
     }
@@ -48,10 +53,9 @@ export const SyncedScrollView = forwardRef(
     offsetPercent?.addListener(({ value }) => {
       // Only respond to changes of the offsetPercent if this scrollView is NOT the activeScrollView
       // --> The active ScrollView responding to its own changes would cause an infinite loop
-      // @ts-ignore
-      if (id !== activeScrollView._value && scrollableLength > 0) {
+      if (id !== activeScrollViewRef.current && scrollableLength > 0) {
         // Depending on the orientation we scroll in, we need to use different properties
-        scrollViewRef.current?.scrollTo({
+        ;(scrollViewRef as RefObject<ScrollView>).current?.scrollTo({
           [props.horizontal ? 'x' : 'y']: value * scrollableLength,
           animated: false,
         })
@@ -71,8 +75,7 @@ export const SyncedScrollView = forwardRef(
     offset.addListener(({ value }) => {
       // Only change the offsetPercent if the scrollView IS the activeScrollView
       // --> The inactive ScrollViews changing the offsetPercent would cause an infinite loop
-      // @ts-ignore
-      if (id === activeScrollView._value && scrollableLength > 0) {
+      if (id === activeScrollViewRef.current && scrollableLength > 0) {
         offsetPercent.setValue(value / scrollableLength)
       }
     })
