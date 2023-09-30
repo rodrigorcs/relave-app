@@ -1,80 +1,45 @@
+import { CustomText, ECustomTextVariants } from '../../components/common'
 import {
-  CustomButton,
-  CustomText,
-  ECustomButtonVariants,
-  ECustomTextVariants,
-} from '../../components/common'
-import { SyncedScrollView } from '../../components/onboarding/SyncedScrollView'
-import {
+  AnimatedButton,
+  PageMarker,
+  SyncedScrollView,
   SyncedScrollViewContext,
   syncedScrollViewState,
-} from '../../components/onboarding/SyncedScrollViewContext'
+} from '../../components/onboarding'
 import { cn } from '../../utils/cn'
-import { NavArrowRight as ChevronRightIcon } from 'iconoir-react-native'
-import React, { FC, useContext, useEffect, useRef, useState } from 'react'
-import { SafeAreaView, View, Dimensions, Image, Animated, ScrollView } from 'react-native'
+import { router } from 'expo-router'
+import React, { useContext, useRef, useState } from 'react'
+import { SafeAreaView, View, Dimensions, Image, ScrollView } from 'react-native'
 
 const HINTS = [
   {
     imageUrl:
       'https://images.theconversation.com/files/76578/original/image-20150331-1231-1ttwii6.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=926&fit=clip',
-    title: 'Lorem ipsum dolor sit amet consectetur',
+    title: 'Estética automotiva de alto padrão',
     subtitle:
-      'Lorem ipsum dolor sit amet consectetur. Ut ultrices nec sed nibh purus adipiscing ut.',
+      'Experimente uma limpeza excepcional sem sair do conforto da sua casa, ou da sua rotina de trabalho.',
   },
   {
     imageUrl:
       'https://images.theconversation.com/files/76578/original/image-20150331-1231-1ttwii6.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=926&fit=clip',
-    title: 'Lorem ipsum dolor sit amet',
+    title: 'Profissionais altamente capacitados',
     subtitle:
-      'Lorem ipsum dolor sit amet consectetur. Ut ultrices nec sed nibh purus adipiscing ut.',
+      'Nossos colaboradores são altamente treinados para proporcionar um serviço confiável e tranquilo.',
   },
   {
     imageUrl:
       'https://images.theconversation.com/files/76578/original/image-20150331-1231-1ttwii6.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=926&fit=clip',
-    title: 'Lorem ipsum dolor sit',
-    subtitle:
-      'Lorem ipsum dolor sit amet consectetur. Ut ultrices nec sed nibh purus adipiscing ut.',
+    title: 'Agendamento simples e fácil',
+    subtitle: 'Apenas escolha o serviço e defina onde e quando. \nNós cuidaremos do resto!',
   },
 ] as const
-
-interface IProps {
-  index: number
-  page: number
-}
-
-const PageMarker: FC<IProps> = ({ index, page }) => {
-  const animationValue = useRef(new Animated.Value(page === index ? 1 : 0)).current
-
-  useEffect(() => {
-    Animated.timing(animationValue, {
-      toValue: page === index ? 1 : 0,
-      duration: 300,
-      useNativeDriver: false,
-    }).start()
-  }, [page])
-
-  const width = animationValue.interpolate({
-    inputRange: [0, 1],
-    outputRange: [8, 32],
-  })
-
-  return (
-    <Animated.View
-      className={cn(
-        'h-2 rounded-full bg-neutrals-200',
-        index > 0 && 'ml-1',
-        index === page && 'bg-brand-500',
-      )}
-      style={{ width }}
-    />
-  )
-}
 
 export default function Onboarding() {
   const { width: screenWidth } = Dimensions.get('window')
   const imageWidth = screenWidth * 0.91 - 16
+
   const [page, setPage] = useState(0)
+
   const offsetPercentRef = useRef(0)
   const detailsScrollViewRef = useRef<ScrollView>(null)
 
@@ -90,6 +55,9 @@ export default function Onboarding() {
 
   const handleGoToNextHint = () => {
     detailsScrollViewRef.current?.scrollTo({ x: screenWidth * (page + 1), animated: true })
+  }
+  const handleGoToSignIn = () => {
+    router.push('/signIn')
   }
 
   return (
@@ -154,9 +122,11 @@ export default function Onboarding() {
                 <PageMarker key={index} index={index} page={page} />
               ))}
             </View>
-            <CustomButton variant={ECustomButtonVariants.ICON} onPress={handleGoToNextHint}>
-              <ChevronRightIcon />
-            </CustomButton>
+            <AnimatedButton
+              isLastPage={page === HINTS.length - 1}
+              onNext={handleGoToNextHint}
+              onFinish={handleGoToSignIn}
+            />
           </View>
         </View>
       </SafeAreaView>

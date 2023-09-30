@@ -1,7 +1,7 @@
 import { cn } from '../../utils/cn'
 import { FC, ReactNode } from 'react'
 import React from 'react'
-import { Text } from 'react-native'
+import { StyleProp, Text, TextStyle } from 'react-native'
 import { ClassNameValue } from 'tailwind-merge'
 
 export enum ECustomTextVariants {
@@ -37,10 +37,25 @@ interface ICustomTextProps {
   variant: ECustomTextVariants
   customClassName?: ClassNameValue
   white?: boolean
+  numberOfLines?: number
+  style?: StyleProp<TextStyle>
 }
 
-export const CustomText: FC<ICustomTextProps> = ({ children, variant, customClassName, white }) => {
+export const CustomText: FC<ICustomTextProps> = ({
+  children,
+  variant,
+  customClassName,
+  white,
+  numberOfLines,
+  style,
+}) => {
   return (
-    <Text className={cn(variant, customClassName, white && 'text-neutrals-white')}>{children}</Text>
+    <Text
+      className={cn(variant, customClassName, white && 'text-neutrals-white')}
+      numberOfLines={numberOfLines}
+      style={style}
+    >
+      {children}
+    </Text>
   )
 }

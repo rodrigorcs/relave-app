@@ -3,14 +3,14 @@ import { cn } from '../../utils/cn'
 import { CustomText, ECustomTextVariants } from './CustomText'
 import { IconoirProvider } from 'iconoir-react-native'
 import React, { FC, ReactNode } from 'react'
-import { TouchableOpacity } from 'react-native'
+import { StyleProp, TextStyle, TouchableOpacity, ViewStyle } from 'react-native'
 import { ClassNameValue } from 'tailwind-merge'
 
 export enum ECustomButtonVariants {
-  PRIMARY = 'h-14 bg-brand-500',
+  PRIMARY = 'h-14 px-6 bg-brand-500',
   SECONDARY = 'h-14 border border-brand-500',
   TERTIARY = 'h-8',
-  ICON = 'h-14 px-6 bg-brand-500',
+  ICON = 'h-14 px-6 bg-brand-500 ',
 }
 
 interface IProps {
@@ -21,6 +21,8 @@ interface IProps {
   customClassName?: ClassNameValue
   IconLeft?: ReactNode
   IconRight?: ReactNode
+  style?: StyleProp<ViewStyle>
+  textStyle?: StyleProp<TextStyle>
 }
 
 export const CustomButton: FC<IProps> = ({
@@ -31,6 +33,8 @@ export const CustomButton: FC<IProps> = ({
   customClassName,
   IconLeft,
   IconRight,
+  style,
+  textStyle,
 }) => {
   return (
     <TouchableOpacity
@@ -42,6 +46,7 @@ export const CustomButton: FC<IProps> = ({
       )}
       onPress={onPress}
       activeOpacity={isDisabled ? 1 : 0.2}
+      style={style}
     >
       <IconoirProvider
         iconProps={{
@@ -68,6 +73,8 @@ export const CustomButton: FC<IProps> = ({
                   ? 'text-neutrals-white'
                   : 'text-brand-500',
               )}
+              style={textStyle}
+              numberOfLines={1}
             >
               {children}
             </CustomText>
