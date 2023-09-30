@@ -11,16 +11,8 @@ import {
 } from '../../components/onboarding/SyncedScrollViewContext'
 import { cn } from '../../utils/cn'
 import { NavArrowRight as ChevronRightIcon } from 'iconoir-react-native'
-import React, { FC, useEffect, useRef, useState } from 'react'
-import {
-  SafeAreaView,
-  View,
-  Dimensions,
-  Image,
-  NativeScrollEvent,
-  NativeSyntheticEvent,
-  Animated,
-} from 'react-native'
+import React, { FC, useContext, useEffect, useRef, useState } from 'react'
+import { SafeAreaView, View, Dimensions, Image, Animated, ScrollView } from 'react-native'
 
 const HINTS = [
   {
@@ -83,15 +75,21 @@ export default function Onboarding() {
   const { width: screenWidth } = Dimensions.get('window')
   const imageWidth = screenWidth * 0.91 - 16
   const [page, setPage] = useState(0)
+  const offsetPercentRef = useRef(0)
+  const detailsScrollViewRef = useRef<ScrollView>(null)
 
-  const handleGoToNextHint = () => {
-    setPage(page + 1)
+  const { offsetPercent } = useContext(SyncedScrollViewContext)
+  offsetPercent.addListener(({ value }) => {
+    offsetPercentRef.current = value
+  })
+
+  const onPageChange = () => {
+    const currentPage = offsetPercentRef.current * (HINTS.length - 1)
+    setPage(currentPage)
   }
 
-  const onPageChange = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const { x: scrollOffset } = event.nativeEvent.contentOffset
-    const currentPage = scrollOffset / screenWidth
-    setPage(currentPage)
+  const handleGoToNextHint = () => {
+    detailsScrollViewRef.current?.scrollTo({ x: screenWidth * (page + 1), animated: true })
   }
 
   return (
@@ -124,6 +122,7 @@ export default function Onboarding() {
           <View>
             <SyncedScrollView
               id={2}
+              ref={detailsScrollViewRef}
               onMomentumScrollEnd={onPageChange}
               horizontal
               pagingEnabled
