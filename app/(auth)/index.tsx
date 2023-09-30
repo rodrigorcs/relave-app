@@ -1,4 +1,4 @@
-import { CustomText, ECustomTextVariants } from '../../components/common'
+import { CustomText, ECustomTextVariants, CloudImage } from '../../components/common'
 import {
   AnimatedButton,
   PageMarker,
@@ -6,40 +6,38 @@ import {
   SyncedScrollViewContext,
   syncedScrollViewState,
 } from '../../components/onboarding'
+import { onboardingHintsActions } from '../../core/actions/onboardingHints'
+import { useAsyncData, useCloudImage } from '../../hooks'
+import { Endpoints } from '../../models/constants/Endpoints'
 import { cn } from '../../utils/cn'
 import { router } from 'expo-router'
-import React, { useContext, useRef, useState } from 'react'
-import { SafeAreaView, View, Dimensions, Image, ScrollView } from 'react-native'
+import React, { FC, useContext, useRef, useState } from 'react'
+import { SafeAreaView, View, Dimensions, ScrollView } from 'react-native'
 
-const HINTS = [
-  {
-    imageUrl:
-      'https://images.theconversation.com/files/76578/original/image-20150331-1231-1ttwii6.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=926&fit=clip',
-    title: 'Estética automotiva de alto padrão',
-    subtitle:
-      'Experimente uma limpeza excepcional sem sair do conforto da sua casa, ou da sua rotina de trabalho.',
-  },
-  {
-    imageUrl:
-      'https://images.theconversation.com/files/76578/original/image-20150331-1231-1ttwii6.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=926&fit=clip',
-    title: 'Profissionais altamente capacitados',
-    subtitle:
-      'Nossos colaboradores são altamente treinados para proporcionar um serviço confiável e tranquilo.',
-  },
-  {
-    imageUrl:
-      'https://images.theconversation.com/files/76578/original/image-20150331-1231-1ttwii6.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=926&fit=clip',
-    title: 'Agendamento simples e fácil',
-    subtitle: 'Apenas escolha o serviço e defina onde e quando. \nNós cuidaremos do resto!',
-  },
-] as const
+interface IProps {
+  hintSlug: string
+  imageWidth: number
+  isLastImage: boolean
+}
+
+export const OnboardingHintImage: FC<IProps> = ({ hintSlug, imageWidth, isLastImage }) => {
+  const [imageUrl, hasImageError] = useCloudImage(Endpoints.ONBOARDING_HINTS_IMAGES(hintSlug))
+
+  return (
+    <CloudImage
+      imageUrl={imageUrl}
+      hasImageUrlError={!!hasImageError}
+      width={imageWidth}
+      customClassName={cn('flex-1 rounded-2xl ml-4', isLastImage && 'mr-4')}
+    />
+  )
+}
 
 export default function Onboarding() {
   const { width: screenWidth } = Dimensions.get('window')
-  const imageWidth = screenWidth * 0.91 - 16
+  const imageWidth = screenWidth * 0.91 - 32
 
   const [page, setPage] = useState(0)
-
   const offsetPercentRef = useRef(0)
   const detailsScrollViewRef = useRef<ScrollView>(null)
 
@@ -48,8 +46,11 @@ export default function Onboarding() {
     offsetPercentRef.current = value
   })
 
+  const [fetchedHints] = useAsyncData(() => onboardingHintsActions.getAll())
+  const hints = (fetchedHints ?? []).sort((a, b) => (a.order > b.order ? 1 : -1))
+
   const onPageChange = () => {
-    const currentPage = offsetPercentRef.current * (HINTS.length - 1)
+    const currentPage = offsetPercentRef.current * (hints.length - 1)
     setPage(currentPage)
   }
 
@@ -75,14 +76,12 @@ export default function Onboarding() {
               showsHorizontalScrollIndicator={false}
               scrollEnabled={false}
             >
-              {HINTS.map((hint, index) => (
-                <Image
-                  key={hint.title}
-                  source={{
-                    uri: hint.imageUrl,
-                  }}
-                  className={cn('rounded-2xl ml-4', index === 2 && 'mr-4')}
-                  style={{ width: imageWidth }}
+              {hints.map((hint, index) => (
+                <OnboardingHintImage
+                  key={hint.id}
+                  hintSlug={hint.slug}
+                  imageWidth={imageWidth}
+                  isLastImage={index === hints.length - 1}
                 />
               ))}
             </SyncedScrollView>
@@ -99,7 +98,7 @@ export default function Onboarding() {
               snapToAlignment="center"
               showsHorizontalScrollIndicator={false}
             >
-              {HINTS.map((hint) => (
+              {hints.map((hint) => (
                 <View
                   key={hint.title}
                   style={{ width: screenWidth, paddingHorizontal: 16 }}
@@ -118,12 +117,12 @@ export default function Onboarding() {
           </View>
           <View className="flex-row mt-4 px-8 items-center justify-between">
             <View className="flex-row">
-              {HINTS.map((_hint, index) => (
+              {hints.map((_hint, index) => (
                 <PageMarker key={index} index={index} page={page} />
               ))}
             </View>
             <AnimatedButton
-              isLastPage={page === HINTS.length - 1}
+              isLastPage={page === hints.length - 1}
               onNext={handleGoToNextHint}
               onFinish={handleGoToSignIn}
             />

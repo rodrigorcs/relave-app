@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { storage } from '../utils/firebase';
 
-export const useCloudImage = (imageEndpoint: string): [string | null, boolean, unknown | null] => {
+export const useCloudImage = (imageEndpoint: string): [string | null, unknown | null] => {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<unknown | null>(null);
 
@@ -15,6 +16,7 @@ export const useCloudImage = (imageEndpoint: string): [string | null, boolean, u
         setImageUrl(_imageUrl)
         if (_imageUrl === null) setError('Image does not exist')
       } catch (e) {
+        console.warn(e)
         setError(e);
       } finally {
         setLoading(false);
@@ -24,5 +26,5 @@ export const useCloudImage = (imageEndpoint: string): [string | null, boolean, u
     fetchData();
   }, []);
 
-  return [imageUrl, loading, error];
+  return [imageUrl, error];
 };

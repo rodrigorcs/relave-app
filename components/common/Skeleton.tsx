@@ -1,11 +1,11 @@
 import { cn } from '../../utils/cn'
 import React, { FC, useRef, useEffect, ReactNode } from 'react'
-import { Animated, View } from 'react-native'
+import { Animated, StyleProp, View, ViewStyle } from 'react-native'
 import { ClassNameValue } from 'tailwind-merge'
 
 interface IProps {
   customClassName: ClassNameValue
-  style?: Record<string, unknown>
+  style?: StyleProp<ViewStyle>
   isLoaded?: boolean
   children?: ReactNode
 }
@@ -34,7 +34,7 @@ export const Skeleton: FC<IProps> = ({ customClassName, style, isLoaded, childre
     <View>
       {!isLoaded && (
         <Animated.View
-          style={{ opacity: opacity.current, ...style }}
+          style={{ opacity: opacity.current, ...(style as Record<string, unknown>) }}
           className={cn('bg-neutrals-200 rounded', customClassName)}
         />
       )}

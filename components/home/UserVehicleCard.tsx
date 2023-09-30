@@ -67,8 +67,7 @@ export const UserVehicleCard: FC<IProps> = ({
   isSelected,
   handleChangeVehicle,
 }) => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [brandLogoUrl, _isFetchingUrl, hasImageError] = useCloudImage(
+  const [brandLogoUrl, hasImageError] = useCloudImage(
     Endpoints.VEHICLE_BRANDS_LOGOS(vehicle.brandSlug),
   )
 
