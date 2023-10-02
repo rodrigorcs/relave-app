@@ -12,7 +12,7 @@ import { Endpoints } from '../../models/constants/Endpoints'
 import { cn } from '../../utils/cn'
 import { router } from 'expo-router'
 import React, { FC, useContext, useRef, useState } from 'react'
-import { View, Dimensions, ScrollView } from 'react-native'
+import { View, Dimensions, ScrollView, Platform } from 'react-native'
 
 interface IProps {
   hintSlug: string
@@ -56,7 +56,9 @@ export default function Onboarding() {
 
   const handleGoToNextHint = () => {
     detailsScrollViewRef.current?.scrollTo({ x: screenWidth * (page + 1), animated: true })
+    if (Platform.OS === 'android') setPage(page + 1)
   }
+
   const handleGoToSignIn = () => {
     router.push('/signIn')
   }

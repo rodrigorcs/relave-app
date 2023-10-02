@@ -78,6 +78,7 @@ export const SyncedScrollView = forwardRef(
     const handleScroll = Animated.event(
       // Depending on the orientation we scroll in, we need to use different properties
       [{ nativeEvent: { contentOffset: { [props.horizontal ? 'x' : 'y']: offset } } }],
+      // FIXME: Use native driver on android
       { useNativeDriver: Platform.OS !== 'android' },
     )
 
