@@ -1,4 +1,4 @@
-import { CustomText, ECustomTextVariants, CloudImage } from '../../components/common'
+import { SafeAreaView, CustomText, ECustomTextVariants, CloudImage } from '../../components/common'
 import {
   AnimatedButton,
   PageMarker,
@@ -12,7 +12,7 @@ import { Endpoints } from '../../models/constants/Endpoints'
 import { cn } from '../../utils/cn'
 import { router } from 'expo-router'
 import React, { FC, useContext, useRef, useState } from 'react'
-import { SafeAreaView, View, Dimensions, ScrollView } from 'react-native'
+import { View, Dimensions, ScrollView } from 'react-native'
 
 interface IProps {
   hintSlug: string
@@ -51,7 +51,7 @@ export default function Onboarding() {
 
   const onPageChange = () => {
     const currentPage = offsetPercentRef.current * (hints.length - 1)
-    setPage(currentPage)
+    setPage(Math.round(currentPage))
   }
 
   const handleGoToNextHint = () => {
@@ -63,7 +63,7 @@ export default function Onboarding() {
 
   return (
     <SyncedScrollViewContext.Provider value={syncedScrollViewState}>
-      <SafeAreaView className="flex-1 bg-common-background">
+      <SafeAreaView hiddenStatusBar customClassName="flex-1 bg-common-background">
         <View className="flex-1 pt-6 pb-2">
           <View className="flex-1">
             <SyncedScrollView
@@ -88,7 +88,7 @@ export default function Onboarding() {
           </View>
           <View>
             <SyncedScrollView
-              id={2}
+              id={0}
               ref={detailsScrollViewRef}
               onMomentumScrollEnd={onPageChange}
               horizontal

@@ -1,6 +1,12 @@
 import { SyncedScrollViewContext } from './SyncedScrollViewContext'
 import { Ref, RefObject, forwardRef, useContext, useEffect, useRef, useState } from 'react'
-import React, { Animated, LayoutChangeEvent, ScrollView, ScrollViewProps } from 'react-native'
+import React, {
+  Animated,
+  LayoutChangeEvent,
+  Platform,
+  ScrollView,
+  ScrollViewProps,
+} from 'react-native'
 
 // Code adapted from https://github.com/MaximilianDietel03/react-native-synced-scroll-views/
 
@@ -50,10 +56,13 @@ export const SyncedScrollView = forwardRef(
 
     // handle yPercent change ----------------------------------------------------
 
+    const isActiveScrollView = id === activeScrollViewRef.current
     offsetPercent?.addListener(({ value }) => {
-      // Only respond to changes of the offsetPercent if this scrollView is NOT the activeScrollView
-      // --> The active ScrollView responding to its own changes would cause an infinite loop
-      if (id !== activeScrollViewRef.current && scrollableLength > 0) {
+      if (scrollableLength === 0) return
+
+      if (!isActiveScrollView) {
+        // Only respond to changes of the offsetPercent if this scrollView is NOT the activeScrollView
+        // --> The active ScrollView responding to its own changes would cause an infinite loop
         // Depending on the orientation we scroll in, we need to use different properties
         ;(scrollViewRef as RefObject<ScrollView>).current?.scrollTo({
           [props.horizontal ? 'x' : 'y']: value * scrollableLength,
@@ -69,7 +78,7 @@ export const SyncedScrollView = forwardRef(
     const handleScroll = Animated.event(
       // Depending on the orientation we scroll in, we need to use different properties
       [{ nativeEvent: { contentOffset: { [props.horizontal ? 'x' : 'y']: offset } } }],
-      { useNativeDriver: true },
+      { useNativeDriver: Platform.OS !== 'android' },
     )
 
     offset.addListener(({ value }) => {
