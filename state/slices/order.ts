@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import { EPaymentLineTypes, IOrder, IPaymentLine } from '../../models/contracts/order';
+import { EOrderStatus, EPaymentLineTypes, IOrder, IPaymentLine } from '../../models/contracts/order';
 import { ICart } from '../../models/contracts/cart';
 import { IOrderEntity } from '../../models/entities/order';
 
@@ -59,9 +59,12 @@ const initialState: TOrderState = {
   id: null,
   shortId: null,
   userId: null,
+  employeeId: null,
+  dateId: null,
+  status: EOrderStatus.NOT_CREATED,
   appointment: {
     place: null,
-    time: null
+    time: null,
   },
   vehicle: null,
   serviceBundle: null,
@@ -95,9 +98,11 @@ export const orderSlice = createSlice({
     setOrderIds: (state, action: PayloadAction<Pick<TOrderState, 'id' | 'shortId'>>) => {
       state.id = action.payload.id
       state.shortId = action.payload.shortId
+      state.status = EOrderStatus.CREATED
     },
     setPaymentFromDB: (state, action: PayloadAction<IOrderEntity['payment']>) => {
       state.payment = action.payload
+      if (action.payload?.paidAt) state.status = EOrderStatus.PAID
     },
   },
 })

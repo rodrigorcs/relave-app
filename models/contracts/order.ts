@@ -3,6 +3,12 @@ import { IService } from "./service"
 import { IServiceBundleWithDetails } from "./serviceBundle"
 import { IVehicle } from "./vehicle"
 
+export enum EOrderStatus {
+  NOT_CREATED = 'not-created',
+  CREATED = 'created',
+  PAID = 'paid'
+}
+
 export enum EPaymentLineTypes {
   SERVICE_BUNDLE = 'serviceBundle',
   ADDITIONAL_SERVICE = 'additionalService',
@@ -38,6 +44,9 @@ export interface IOrder {
   id: string | null
   shortId: string | null
   userId: string | null
+  employeeId: string | null
+  dateId: string | null
+  status: string
   appointment: IAppointment
   vehicle: IVehicle | null
   serviceBundle: IServiceBundleWithDetails | null
