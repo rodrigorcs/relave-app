@@ -70,7 +70,7 @@ export default function Checkout() {
     totalPrice,
   )
 
-  const appointmentTime = dayjs(appointment.time)
+  const appointmentTime = dayjs.unix(appointment.time ?? 0)
   const { dayOfWeek } = dayjsToDate(appointmentTime)
 
   const formattedPlaceAddress = formatPlaceAddress(appointment.place)

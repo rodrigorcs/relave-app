@@ -30,7 +30,7 @@ export default function Appointment() {
     const { year, month, day } = selectedDate
     const { hour, minute } = selectedTime
     const datetime = `${year}-${month}-${day} ${hour}:${minute}`
-    dispatch(setAppointment({ place: selectedPlace, time: dayjs(datetime).valueOf() }))
+    dispatch(setAppointment({ place: selectedPlace, time: dayjs(datetime).unix() }))
     dispatch(setItemsFromCart(cart))
 
     router.push('/checkout')
