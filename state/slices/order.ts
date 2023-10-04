@@ -62,6 +62,8 @@ const initialState: TOrderState = {
   employeeId: null,
   dateId: null,
   status: EOrderStatus.NOT_CREATED,
+  plannedStart: null,
+  duration: null,
   appointment: {
     place: null,
     time: null,

@@ -47,6 +47,8 @@ export interface IOrder {
   employeeId: string | null
   dateId: string | null
   status: string
+  plannedStart: number | null
+  duration: number | null
   appointment: IAppointment
   vehicle: IVehicle | null
   serviceBundle: IServiceBundleWithDetails | null
