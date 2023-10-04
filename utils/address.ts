@@ -21,7 +21,7 @@ export const formatPlaceAddress = (place: TGoogleMapsPlaceResult | null) => {
 
   return {
     primaryText: mainSection.trim(),
-    secondaryText: otherSections.join(SECTION_DIVIDER).trim()
+    secondaryText: otherSections?.join(SECTION_DIVIDER)?.trim()
   }
 
 }

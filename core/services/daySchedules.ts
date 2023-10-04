@@ -11,8 +11,8 @@ const bitStringToTimeArray = (bitString: string, intervalMinutes: number): strin
 export const daySchedulesService = {
   getAvailableTimesByDate: async (dateId: IDate['id']): Promise<string[]> => {
     const daySchedule = await daySchedulesRepository.getOneDaySchedule(dateId)
-    const times = bitStringToTimeArray(daySchedule.busyTimes, 30);
 
-    return times
+    if (!daySchedule) return bitStringToTimeArray('0'.repeat(48), 30);
+    return bitStringToTimeArray(daySchedule.busyTimes, 30);
   }
 }
