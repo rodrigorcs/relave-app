@@ -58,6 +58,7 @@ export default function Appointment() {
               selectedDate={selectedDate}
               selectedTime={selectedTime}
               onChange={setSelectedTime}
+              duration={cart.duration ?? 0}
             />
           </View>
         </View>

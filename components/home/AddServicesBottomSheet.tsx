@@ -2,9 +2,10 @@ import { servicesActions } from '../../core/actions/services'
 import { useAsyncData, useSelection } from '../../hooks'
 import { IService } from '../../models/contracts/service'
 import { IServiceBundleWithDetails } from '../../models/contracts/serviceBundle'
-import { setSelectedAdditionalServices } from '../../state/slices/cart'
+import { confirmSelectedServices } from '../../state/slices/cart'
 import { cn } from '../../utils/cn'
 import { getDisplayPrice } from '../../utils/price'
+import { getDuration } from '../../utils/service'
 import {
   BottomSheet,
   CustomText,
@@ -47,7 +48,12 @@ export const AddServicesBottomSheet: FC<IProps> = ({ selectedServiceBundle, isOp
     const selectedServices = avaliableServices.filter((service) =>
       selectedServiceIds.includes(service.id),
     )
-    dispatch(setSelectedAdditionalServices(selectedServices))
+    const duration = getDuration([
+      ...(selectedServiceBundle?.allServices ?? []),
+      ...selectedServices,
+    ])
+
+    dispatch(confirmSelectedServices({ additionalServices: selectedServices, duration }))
     router.push('/appointment')
   }
 

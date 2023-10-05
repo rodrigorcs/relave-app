@@ -19,6 +19,7 @@ interface IProps {
   selectedDate: IDate
   selectedTime: ITime | null
   onChange: (selectedTime: ITime) => void
+  duration: number
 }
 
 const getTimesArray = (startTime: number, endTime: number, increment: number): ITime[] => {
@@ -46,9 +47,9 @@ const generatePlaceholders = (length: number, numColumns: number): null[] => {
   return Array(placeholdersToAdd).fill(null)
 }
 
-export const TimesGrid: FC<IProps> = ({ selectedDate, selectedTime, onChange }) => {
+export const TimesGrid: FC<IProps> = ({ selectedDate, selectedTime, onChange, duration }) => {
   const [availableTimes, isLoadingAvailability] = useAsyncData(
-    () => daySchedulesAction.getAvailableTimesByDate(selectedDate.id),
+    () => daySchedulesAction.getAvailableTimesByDate(selectedDate.id, duration),
     [selectedDate],
     true,
   )

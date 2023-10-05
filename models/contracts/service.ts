@@ -3,4 +3,5 @@ export interface IService {
   name: string
   onlyInBundle: boolean
   price: number
+  duration: number
 }

@@ -84,8 +84,8 @@ export const orderSlice = createSlice({
       state.appointment.place = action.payload.place
       state.appointment.time = action.payload.time
     },
-    setItemsFromCart: (state, action: PayloadAction<Pick<TOrderState, 'vehicle' | 'serviceBundle' | 'additionalServices'>>) => {
-      const { vehicle, serviceBundle, additionalServices } = action.payload
+    setItemsFromCart: (state, action: PayloadAction<Pick<TOrderState, 'vehicle' | 'serviceBundle' | 'additionalServices' | 'duration'>>) => {
+      const { vehicle, serviceBundle, additionalServices, duration } = action.payload
       const paymentLines = cartToPaymentLines({ serviceBundle, additionalServices })
       const totalPrice = paymentLines.find(
         (paymentLine) => paymentLine.type === EPaymentLineTypes.TOTAL,
@@ -96,6 +96,7 @@ export const orderSlice = createSlice({
       state.additionalServices = additionalServices
       state.paymentLines = paymentLines
       state.totalPrice = totalPrice
+      state.duration = duration
     },
     setOrderIds: (state, action: PayloadAction<Pick<TOrderState, 'id' | 'shortId'>>) => {
       state.id = action.payload.id
