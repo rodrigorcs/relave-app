@@ -78,7 +78,10 @@ export const Autocomplete = <T extends IOption>({
   }, [onInputChange, input])
 
   useEffect(() => {
-    if (!selectedOption) setInput('')
+    if (!selectedOption) {
+      setInput('')
+      setIsDropdownOpen(false)
+    }
   }, [selectedOption])
 
   // FIXME: CustomInput overrides state input value, hasSelectedOption is an workaround

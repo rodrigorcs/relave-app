@@ -85,7 +85,9 @@ export const UserVehicleCard: FC<IProps> = ({
         <CustomText variant={ECustomTextVariants.EYEBROW2} customClassName="mt-4">
           {vehicle.brandName}
         </CustomText>
-        <CustomText variant={ECustomTextVariants.BODY3}>{vehicle.modelName}</CustomText>
+        <CustomText variant={ECustomTextVariants.BODY3} customClassName="text-neutrals-600">
+          {vehicle.modelName}
+        </CustomText>
       </TouchableOpacity>
       {isSelected && (
         <View className="w-5 h-5 bg-brand-500 rounded-full items-center justify-center absolute bottom-0 left-[54]">
