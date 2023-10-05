@@ -71,7 +71,7 @@ export const AddServicesBottomSheet: FC<IProps> = ({ selectedServiceBundle, isOp
                   onPress={() => toggleService(service.id)}
                   className={cn('flex-row', index > 0 && 'mt-4')}
                 >
-                  <Checkbox id={service.id} isSelected={isSelected} />
+                  <Checkbox key={service.id} isSelected={isSelected} />
                   <View className="ml-4">
                     <CustomText
                       variant={ECustomTextVariants.BODY2}
