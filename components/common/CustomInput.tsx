@@ -2,7 +2,7 @@ import { theme } from '../../theme'
 import { cn } from '../../utils/cn'
 import { CustomText, ECustomTextVariants } from './CustomText'
 import { IconoirProvider } from 'iconoir-react-native'
-import React, { FC, ReactNode, RefObject } from 'react'
+import React, { FC, ReactNode, RefObject, useState } from 'react'
 import { View, TextInput, KeyboardTypeOptions, TextInputProps } from 'react-native'
 import { ClassNameValue } from 'tailwind-merge'
 
@@ -11,6 +11,7 @@ interface IProps {
   value: string
   handleValueChange: (text: string) => void
   placeholder: string
+  title?: string
   keyboardType?: KeyboardTypeOptions
   prefix?: string
   customClassName?: ClassNameValue
@@ -28,6 +29,7 @@ export const CustomInput: FC<IProps> = ({
   value,
   handleValueChange,
   placeholder,
+  title,
   keyboardType,
   prefix,
   customClassName,
@@ -39,13 +41,29 @@ export const CustomInput: FC<IProps> = ({
   autoComplete,
   autoCorrect,
 }) => {
+  const [isFocused, setIsFocused] = useState(false)
+
+  const handleOnFocus = () => {
+    setIsFocused(true)
+    if (onFocus) onFocus()
+  }
+
+  const handleOnBlur = () => {
+    setIsFocused(false)
+  }
+
   return (
-    <View>
+    <View className={cn(customClassName)}>
+      {title && (
+        <CustomText variant={ECustomTextVariants.HEADING5} customClassName="mb-1 text-neutrals-700">
+          {title}
+        </CustomText>
+      )}
       <View
         className={cn(
-          'h-14 flex-row justify-center items-center rounded-xl border border-neutrals-200 px-3',
+          'h-14 flex-row justify-center items-center rounded-xl border border-neutrals-400 px-3',
+          isFocused && 'border-neutrals-600',
           error && 'border-feedback-negative-300',
-          customClassName,
         )}
       >
         {prefix && (
@@ -72,7 +90,8 @@ export const CustomInput: FC<IProps> = ({
               placeholderTextColor={
                 isDisabled ? theme.colors['neutrals-200'] : theme.colors['neutrals-400']
               }
-              onFocus={onFocus}
+              onFocus={handleOnFocus}
+              onBlur={handleOnBlur}
               editable={!isDisabled}
               selectTextOnFocus={!isDisabled}
               style={{ fontSize: 16 }} // TODO: Remove default lineHeight from tailwind so that `text-base` class can be used

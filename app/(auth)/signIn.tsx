@@ -1,9 +1,10 @@
-import NotificationsIllustration from '../../assets/vectors/illustration-push-notifications.svg'
 import {
   CustomButton,
   CustomInput,
   CustomText,
+  ECustomButtonVariants,
   ECustomTextVariants,
+  HeaderProgressBar,
   SafeAreaView,
 } from '../../components/common'
 import { useMaskedInput } from '../../hooks'
@@ -11,7 +12,7 @@ import { EInputMasks } from '../../models/constants/EInputMasks'
 import { sendOTPToken, signOut, storePhoneNumberToOTP } from '../../state/slices/auth'
 import { router } from 'expo-router'
 import React, { useEffect, useState } from 'react'
-import { View } from 'react-native'
+import { KeyboardAvoidingView, View } from 'react-native'
 import { useDispatch } from 'react-redux'
 import { AnyAction } from 'redux'
 
@@ -34,46 +35,56 @@ export default function SignIn() {
   }
 
   return (
-    <SafeAreaView customClassName="flex flex-1 bg-common-background">
-      <View className="flex-1 px-6 py-2">
-        <View className="my-8 w-fit items-center">
-          <NotificationsIllustration height={112} pointerEvents="none" />
+    <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={96} className="flex-1">
+      <SafeAreaView customClassName="flex flex-1 bg-common-background">
+        <View className="flex-1">
+          <HeaderProgressBar progress={1 / 3} />
+          <View className="flex-1 px-4 py-12">
+            <CustomText variant={ECustomTextVariants.HEADING2}>
+              Qual o número do seu celular?
+            </CustomText>
+            <CustomText
+              variant={ECustomTextVariants.BODY2}
+              customClassName="mt-4 text-neutrals-600"
+            >
+              Você receberá um código por SMS
+            </CustomText>
+            <CustomInput
+              title="Insira seu número"
+              error={error}
+              value={maskedPhoneNumber}
+              handleValueChange={handlePhoneNumberChange}
+              placeholder="(71) 90000-0000"
+              keyboardType="phone-pad"
+              prefix="+55"
+              customClassName="mt-6"
+            />
+            {false && (
+              <>
+                <CustomButton
+                  onPress={() => dispatch(signOut as unknown as AnyAction)}
+                  variant={ECustomButtonVariants.TERTIARY}
+                  customClassName="mt-6"
+                >
+                  Sair
+                </CustomButton>
+                <CustomButton
+                  onPress={() => router.push('/(app)')}
+                  variant={ECustomButtonVariants.TERTIARY}
+                  customClassName="mt-2"
+                >
+                  Ir para Home
+                </CustomButton>
+              </>
+            )}
+          </View>
         </View>
-        <CustomText variant={ECustomTextVariants.HEADING3}>
-          Qual o número do seu celular?
-        </CustomText>
-        <CustomText
-          variant={ECustomTextVariants.SUBHEADING2}
-          customClassName="font-normal text-neutrals-500"
-        >
-          Você receberá um código por SMS
-        </CustomText>
-        <CustomInput
-          error={error}
-          value={maskedPhoneNumber}
-          handleValueChange={handlePhoneNumberChange}
-          placeholder="(71) 90000-0000"
-          keyboardType="phone-pad"
-          prefix="+55"
-          customClassName="mt-6"
-        />
-        <CustomButton
-          isDisabled={!isPhoneNumberValid}
-          onPress={handleReceiveOTP}
-          customClassName="mt-6"
-        >
-          Receber SMS
-        </CustomButton>
-        <CustomButton
-          onPress={() => dispatch(signOut as unknown as AnyAction)}
-          customClassName="mt-6"
-        >
-          Sair
-        </CustomButton>
-        <CustomButton onPress={() => router.push('/(app)')} customClassName="mt-2">
-          Ir para Home
-        </CustomButton>
-      </View>
-    </SafeAreaView>
+        <View className="justify-center h-24 px-4">
+          <CustomButton isDisabled={!isPhoneNumberValid} onPress={handleReceiveOTP}>
+            Receber SMS
+          </CustomButton>
+        </View>
+      </SafeAreaView>
+    </KeyboardAvoidingView>
   )
 }
