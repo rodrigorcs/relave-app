@@ -77,6 +77,10 @@ export const Autocomplete = <T extends IOption>({
     if (onInputChange && input) onInputChange(input)
   }, [onInputChange, input])
 
+  useEffect(() => {
+    if (!selectedOption) setInput('')
+  }, [selectedOption])
+
   // FIXME: CustomInput overrides state input value, hasSelectedOption is an workaround
   const handleChangeSelectedOption = (option: T) => {
     setInput(option.name)
@@ -92,7 +96,7 @@ export const Autocomplete = <T extends IOption>({
   }
 
   const getDropdownOptions = (): T[] => {
-    if (!filterOnType || input.length > 2) return options
+    if (!filterOnType || input.length === 0) return options
     return options?.filter((option) => option.name.toLowerCase().includes(input.toLowerCase()))
   }
 

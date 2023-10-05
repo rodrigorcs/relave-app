@@ -15,7 +15,7 @@ import {
   IBottomSheetRefProps,
   Autocomplete,
 } from '../common'
-import React, { FC, useRef, useState } from 'react'
+import React, { FC, useEffect, useRef, useState } from 'react'
 import { View } from 'react-native'
 
 interface IProps {
@@ -36,6 +36,10 @@ export const AddVehicleBottomSheet: FC<IProps> = ({ addVehicle, userId, isOpen, 
     selectedBrand ? () => vehicleModelsActions.getByBrandId(selectedBrand?.id) : null,
     [selectedBrand],
   )
+
+  useEffect(() => {
+    if (selectedModel) setSelectedModel(null)
+  }, [selectedBrand])
 
   const handleCreateVehicle = async () => {
     if (!selectedBrand || !selectedModel) return
