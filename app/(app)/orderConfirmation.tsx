@@ -79,7 +79,7 @@ export default function OrderConfirmation() {
               <View className="flex-row items-center h-10 mt-1">
                 <LocationIcon />
                 <CustomText variant={ECustomTextVariants.BODY3} customClassName="ml-3">
-                  {dayjs(appointment.time).format(EDateFormats.READABLE_DATE_TIME)}
+                  {dayjs.unix(appointment.time ?? 0).format(EDateFormats.READABLE_DATE_TIME)}
                 </CustomText>
               </View>
             </IconoirProvider>

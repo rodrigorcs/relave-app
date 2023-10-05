@@ -11,7 +11,7 @@ export const ordersService = {
       ...order,
       id: uuid(),
       shortId: generateShortId(8),
-      dateId: dayjs(order.appointment.time).format(EDateFormats.DATE_ID),
+      dateId: dayjs.unix(order.appointment.time ?? 0).format(EDateFormats.DATE_ID),
       status: EOrderStatus.CREATED,
       plannedStart: order.appointment.time,
       duration: 90, // TODO: Use dynamic timing based on services
