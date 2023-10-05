@@ -16,12 +16,15 @@ interface ISingleDigitProps {
 const SingleDigit: FC<ISingleDigitProps> = ({ digit, isFocused, customClassName }) => (
   <View
     className={cn(
-      'h-12 justify-center items-center rounded border bg-neutrals-white border-neutrals-200 w-11 shadow',
-      isFocused && 'border-neutrals-300',
+      'h-16 justify-center items-center rounded border bg-neutrals-white border-neutrals-400 w-12',
+      isFocused && 'border-neutrals-500',
       customClassName,
     )}
   >
-    <CustomText variant={ECustomTextVariants.HEADING3} customClassName="text-center">
+    <CustomText
+      variant={ECustomTextVariants.EXPRESSIVE1}
+      customClassName="text-center text-neutrals-600"
+    >
       {digit}
     </CustomText>
   </View>

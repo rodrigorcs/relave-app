@@ -37,8 +37,8 @@ export default function SignIn() {
   return (
     <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={96} className="flex-1">
       <SafeAreaView customClassName="flex flex-1 bg-common-background">
+        <HeaderProgressBar progress={1 / 3} />
         <View className="flex-1">
-          <HeaderProgressBar progress={1 / 3} />
           <View className="flex-1 px-4 py-12">
             <CustomText variant={ECustomTextVariants.HEADING2}>
               Qual o número do seu celular?
@@ -59,7 +59,7 @@ export default function SignIn() {
               prefix="+55"
               customClassName="mt-6"
             />
-            {false && (
+            {true && (
               <>
                 <CustomButton
                   onPress={() => dispatch(signOut as unknown as AnyAction)}
