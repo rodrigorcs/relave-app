@@ -9,6 +9,7 @@ export const usersActions = {
     const createdUser = await usersService.createUser(user)
     return createdUser
   },
+  updateUser: usersService.updateUser,
   getOrCreateStripeCustomer: async (currentUser: IUser) => {
     if (currentUser.stripeId) return currentUser.stripeId
 
