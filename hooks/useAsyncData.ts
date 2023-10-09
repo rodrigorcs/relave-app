@@ -13,6 +13,7 @@ export const useAsyncData = <T>(action: (() => Promise<T>) | null, dependencies:
         const result = action ? await action() : null
         setData(result);
       } catch (e) {
+        console.error(e)
         setError(e);
       } finally {
         setLoading(false);

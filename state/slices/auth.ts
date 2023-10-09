@@ -5,12 +5,14 @@ import { authActions } from '../../core/actions/auth';
 
 interface IAuthState {
   user: IUser | null
+  name: string | null
   phoneNumberToSendOTP: string | null
   isUserSignedIn: boolean
 }
 
 const initialState: IAuthState = {
   user: null,
+  name: null,
   phoneNumberToSendOTP: null,
   isUserSignedIn: false
 }
@@ -29,13 +31,17 @@ export const authSlice = createSlice({
     },
     storePhoneNumberToOTP: (state, action: PayloadAction<string>) => {
       state.phoneNumberToSendOTP = action.payload
+    },
+    storeName: (state, action: PayloadAction<string>) => {
+      state.name = action.payload
     }
   },
 })
 
-export const { storeUser, clearCredentials, storePhoneNumberToOTP } = authSlice.actions
+export const { storeUser, clearCredentials, storePhoneNumberToOTP, storeName } = authSlice.actions
 
-let smsConfirmationObj: FirebaseAuthTypes.ConfirmationResult | null = null; // TODO: Alternative - Can't put into slice as it's not serializable
+// TODO: Alternative - Can't put into slice as it's not serializable
+let smsConfirmationObj: FirebaseAuthTypes.ConfirmationResult | null = null;
 
 export const sendOTPToken = (phoneNumber: string) => async () => {
   const confirmation = await authActions.sendOTPToken(phoneNumber)
@@ -51,5 +57,6 @@ export const signOut = () => authActions.signOut()
 export const getCurrentUser = (state: IAuthState) => state.user
 export const getUserPhoneNumber = (state: IAuthState) => state.phoneNumberToSendOTP
 export const getIsUserSignedIn = (state: IAuthState) => state.isUserSignedIn
+export const getName = (state: IAuthState) => state.name
 
 export const authReducer = authSlice.reducer

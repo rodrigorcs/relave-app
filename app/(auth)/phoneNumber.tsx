@@ -16,7 +16,7 @@ import { KeyboardAvoidingView, View } from 'react-native'
 import { useDispatch } from 'react-redux'
 import { AnyAction } from 'redux'
 
-export default function SignIn() {
+export default function PhoneNumber() {
   const dispatch = useDispatch()
 
   const [maskedPhoneNumber, unmaskedPhoneNumber, handlePhoneNumberChange, isPhoneNumberValid] =
@@ -37,7 +37,7 @@ export default function SignIn() {
   return (
     <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={96} className="flex-1">
       <SafeAreaView customClassName="flex flex-1 bg-common-background">
-        <HeaderProgressBar progress={1 / 3} />
+        <HeaderProgressBar progress={2 / 3} />
         <View className="flex-1">
           <View className="flex-1 px-4 py-12">
             <CustomText variant={ECustomTextVariants.HEADING2}>

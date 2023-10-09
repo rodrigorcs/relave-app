@@ -1,7 +1,6 @@
 import { FirebaseAuthTypes } from "@react-native-firebase/auth";
 
 type IFirebaseUser = Pick<FirebaseAuthTypes.User,
-  'displayName' |
   'email' |
   'emailVerified' |
   'isAnonymous' |
@@ -15,9 +14,9 @@ type IFirebaseUser = Pick<FirebaseAuthTypes.User,
 
 export interface IUser {
   id: string
+  name: string | null
   firebaseId: IFirebaseUser['uid'],
   stripeId?: string,
-  displayName: IFirebaseUser['displayName'],
   credentials: {
     isAnonymous: IFirebaseUser['isAnonymous'],
     metadata: IFirebaseUser['metadata'],

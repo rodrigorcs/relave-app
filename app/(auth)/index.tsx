@@ -60,7 +60,7 @@ export default function Onboarding() {
   }
 
   const handleGoToSignIn = () => {
-    router.push('/signIn')
+    router.push('/name')
   }
 
   return (

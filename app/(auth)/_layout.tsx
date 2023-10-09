@@ -12,8 +12,9 @@ export default function Layout() {
   return (
     <Stack>
       <Stack.Screen name="index" options={{ headerShown: false }} />
-      <Stack.Screen name="signIn" options={{ title: 'Cadastro' }} />
-      <Stack.Screen name="otpConfirmation" options={{ title: 'Confirmação SMS' }} />
+      <Stack.Screen name="name" options={{ title: 'Seu nome' }} />
+      <Stack.Screen name="phoneNumber" options={{ title: 'Seu número' }} />
+      <Stack.Screen name="otpConfirmation" options={{ title: 'Código SMS' }} />
     </Stack>
   )
 }
