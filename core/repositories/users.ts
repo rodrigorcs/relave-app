@@ -17,7 +17,7 @@ export const usersRepository = {
     return user
   },
   updateUser: async (id: IUser['id'], attributes: Partial<IUser>) => {
-    await usersCollection.doc(id).set(attributes)
+    await usersCollection.doc(id).update(attributes)
 
     return id
   },

@@ -28,7 +28,7 @@ import {
   Spark as SparkIcon,
   DropletHalf as DropletIcon,
 } from 'iconoir-react-native'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { KeyboardAvoidingView, View } from 'react-native'
 import { GestureHandlerRootView, ScrollView } from 'react-native-gesture-handler'
 import { useSelector, useDispatch } from 'react-redux'
@@ -49,18 +49,26 @@ export default function Home() {
   const selectedVehicle = useSelector(({ cart }: IAppState) => getSelectedVehicle(cart))
   const selectedServiceBundle = useSelector(({ cart }: IAppState) => getSelectedServiceBundle(cart))
 
-  if (!currentUser) throw new Error('No currentUser')
+  if (!currentUser) throw new Error('No user logged in')
 
   const [vehicles, isLoadingVehicles] = useAsyncData(
     () => vehiclesActions.getVehiclesByUserId(currentUser.id),
     [addedVehicle],
   )
-
   const [serviceBundles, isLoadingServiceBundles] = useAsyncData(() =>
     serviceBundlesActions.getAllWithDetails(),
   )
+
   const vehicleSkeletons = useSkeletonArray(3)
   const serviceBundleSkeletons = useSkeletonArray(3)
+
+  useEffect(() => {
+    if (vehicles?.length === 1) dispatch(setSelectedVehicle(vehicles[0]))
+  }, [vehicles])
+
+  useEffect(() => {
+    if (addedVehicle) dispatch(setSelectedVehicle(addedVehicle))
+  }, [addedVehicle])
 
   const handleChangeVehicle = (vehicle: IVehicle) => {
     dispatch(setSelectedVehicle(vehicle))
