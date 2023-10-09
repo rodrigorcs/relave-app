@@ -48,7 +48,7 @@ export default function OTPConfirmation() {
   return (
     <KeyboardAvoidingView behavior="padding" className="flex-1" keyboardVerticalOffset={96}>
       <SafeAreaView customClassName="flex flex-1 bg-common-background">
-        <HeaderProgressBar progress={3 / 3} />
+        <HeaderProgressBar progress={2 / 3} />
         <ScrollView
           ref={scrollViewRef}
           className="flex-1"

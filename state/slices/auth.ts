@@ -5,14 +5,12 @@ import { authActions } from '../../core/actions/auth';
 
 interface IAuthState {
   user: IUser | null
-  name: string | null
   phoneNumberToSendOTP: string | null
   isUserSignedIn: boolean
 }
 
 const initialState: IAuthState = {
   user: null,
-  name: null,
   phoneNumberToSendOTP: null,
   isUserSignedIn: false
 }
@@ -33,7 +31,7 @@ export const authSlice = createSlice({
       state.phoneNumberToSendOTP = action.payload
     },
     storeName: (state, action: PayloadAction<string>) => {
-      state.name = action.payload
+      state.user = { ...state.user, name: action.payload } as IUser
     }
   },
 })
@@ -57,6 +55,5 @@ export const signOut = () => authActions.signOut()
 export const getCurrentUser = (state: IAuthState) => state.user
 export const getUserPhoneNumber = (state: IAuthState) => state.phoneNumberToSendOTP
 export const getIsUserSignedIn = (state: IAuthState) => state.isUserSignedIn
-export const getName = (state: IAuthState) => state.name
 
 export const authReducer = authSlice.reducer

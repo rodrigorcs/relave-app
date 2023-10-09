@@ -1,4 +1,4 @@
-import { IUser } from '../../models/contracts/user'
+import { ICreateUser } from '../../models/contracts/user'
 import { usersRepository } from '../repositories/users'
 import { uuid } from '../../utils/uuid'
 import { httpClient } from '../../utils/httpClient'
@@ -8,7 +8,7 @@ import { ICreateCustomerRequestBody } from '../../models/contracts/internalApi/p
 
 export const usersService = {
   getUserByFirebaseId: usersRepository.getUserByFirebaseId,
-  createUser: async (user: Omit<IUser, 'id'>) => {
+  createUser: async (user: ICreateUser) => {
     const newUser = { ...user, id: uuid() }
     const createdUser = await usersRepository.createUser(newUser)
 

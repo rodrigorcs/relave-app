@@ -1,25 +1,23 @@
 import { usersActions } from '../../core/actions/users'
-import { storeUser, clearCredentials, getName } from '../../state/slices/auth'
+import { storeUser, clearCredentials } from '../../state/slices/auth'
 import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth'
 import React, { FC, ReactNode, useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { AnyAction } from 'redux'
-import { IAppState } from '../../state/store'
-import { IUser } from '../../models/contracts/user'
+import { ICreateUser } from '../../models/contracts/user'
 
 interface IProps {
   children: ReactNode
 }
 
 export const AuthProvider: FC<IProps> = ({ children }) => {
-  const name = useSelector((state: IAppState) => getName(state.auth))
   const dispatch = useDispatch()
 
   async function onAuthStateChanged(user: FirebaseAuthTypes.User | null) {
     if (!user) return dispatch(clearCredentials() as unknown as AnyAction)
 
-    const uncheckedUser: Omit<IUser, "id"> = {
-      name,
+    const uncheckedUser: ICreateUser = {
+      name: null,
       firebaseId: user.uid,
       credentials: {
         isAnonymous: user.isAnonymous,

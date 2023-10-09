@@ -26,3 +26,7 @@ export interface IUser {
     providerId: IFirebaseUser['providerId'],
   },
 }
+
+export interface ICreateUser extends Omit<IUser, "id" | "name"> {
+  name: string | null
+}

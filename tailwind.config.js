@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 // TODO: Check how to avoid require
-const { black, white } = require('tailwindcss/colors')
 
 module.exports = {
   content: ['./app/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'],
@@ -33,10 +32,10 @@ module.exports = {
       'neutrals-300': '#C1C4C9',
       'neutrals-200': '#D7DBE0',
       'neutrals-100': '#F0F1F5',
-      'neutrals-white': white,
-      'neutrals-black': black,
+      'neutrals-white': '#FFFFFF',
+      'neutrals-black': '#000000',
 
-      'common-background': white,
+      'common-background': '#FFFFFF',
     },
   },
 }
