@@ -10,8 +10,9 @@
     "ios:clear": "yarn clear && yarn ios --no-build-cache",
     "web": "expo start --web",
     "test": "jest --watchAll",
+    "lint": "eslint '**/*.{ts,tsx,json}'",
     "format": "yarn prettier '**/*.{ts,tsx,json}' --write",
-    "lint": "eslint app && yarn format"
+    "check": "yarn lint && yarn format"
   },
   "jest": {
     "preset": "jest-expo"
