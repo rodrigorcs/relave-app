@@ -9,5 +9,5 @@ export enum EVehicleModelKeys {
   ID = 'id',
   BRAND_ID = 'brandId',
   NAME = 'name',
-  SLUG = 'slug'
+  SLUG = 'slug',
 }

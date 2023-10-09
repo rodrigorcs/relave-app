@@ -16,7 +16,7 @@ interface ISingleDigitProps {
 const SingleDigit: FC<ISingleDigitProps> = ({ digit, isFocused, customClassName }) => (
   <View
     className={cn(
-      'h-16 justify-center items-center rounded border bg-neutrals-white border-neutrals-400 w-12',
+      'h-16 w-12 items-center justify-center rounded border border-neutrals-400 bg-neutrals-white',
       isFocused && 'border-neutrals-500',
       customClassName,
     )}

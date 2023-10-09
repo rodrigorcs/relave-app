@@ -14,7 +14,7 @@ export const AddVehicleCard: FC<IProps> = ({ onPress, isFirst }) => {
   return (
     <TouchableOpacity
       className={cn(
-        'h-32 w-32 bg-neutrals-100 rounded-2xl items-center justify-center ml-2 mr-4',
+        'ml-2 mr-4 h-32 w-32 items-center justify-center rounded-2xl bg-neutrals-100',
         isFirst && 'ml-4',
       )}
       onPress={onPress}

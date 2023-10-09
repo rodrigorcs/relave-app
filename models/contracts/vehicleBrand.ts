@@ -7,5 +7,5 @@ export interface IVehicleBrand {
 export enum EVehicleBrandKeys {
   ID = 'id',
   SLUG = 'slug',
-  NAME = 'name'
+  NAME = 'name',
 }

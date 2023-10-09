@@ -1,6 +1,6 @@
-import { EFirestoreCollections } from "../../models/constants/EFirestoreCollections"
-import { IOnboardingHint } from "../../models/contracts/onboardingHint"
-import { firestore } from "../../utils/firebase"
+import { EFirestoreCollections } from '../../models/constants/EFirestoreCollections'
+import { IOnboardingHint } from '../../models/contracts/onboardingHint'
+import { firestore } from '../../utils/firebase'
 
 const onboardingHintsCollection = firestore().collection(EFirestoreCollections.ONBOARDING_HINTS)
 

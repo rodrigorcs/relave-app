@@ -1,9 +1,9 @@
-import { IService } from "./service"
+import { IService } from './service'
 
 export enum EServiceBundleTiers {
   SIMPLE = 'simple',
   ADVANCED = 'advanced',
-  PREMIUM = 'premium'
+  PREMIUM = 'premium',
 }
 
 export interface IServiceBundle {
@@ -11,11 +11,12 @@ export interface IServiceBundle {
   name: string
   tier: EServiceBundleTiers
   price: number
-  exclusiveServices: (IService['id'])[]
-  allServices: (IService['id'])[]
+  exclusiveServices: IService['id'][]
+  allServices: IService['id'][]
 }
 
-export interface IServiceBundleWithDetails extends Omit<IServiceBundle, 'exclusiveServices' | 'allServices'> {
+export interface IServiceBundleWithDetails
+  extends Omit<IServiceBundle, 'exclusiveServices' | 'allServices'> {
   exclusiveServices: IService[]
   allServices: IService[]
 }
@@ -26,5 +27,5 @@ export enum EServiceBundleKeys {
   TIER = 'tier',
   PRICE = 'price',
   EXCLUSIVE_SERVICES = 'exclusiveServices',
-  ALL_SERVICES = 'allServices'
+  ALL_SERVICES = 'allServices',
 }

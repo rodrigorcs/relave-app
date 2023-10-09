@@ -1,10 +1,10 @@
 import { usersActions } from '../../core/actions/users'
+import { ICreateUser } from '../../models/contracts/user'
 import { storeUser, clearCredentials } from '../../state/slices/auth'
 import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth'
 import React, { FC, ReactNode, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { AnyAction } from 'redux'
-import { ICreateUser } from '../../models/contracts/user'
 
 interface IProps {
   children: ReactNode

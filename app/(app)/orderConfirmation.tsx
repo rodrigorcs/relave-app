@@ -39,7 +39,7 @@ export default function OrderConfirmation() {
   return (
     <SafeAreaView customClassName="flex flex-1 bg-common-background">
       <ScrollView>
-        <View className="py-8 px-3 py w-fit items-center border-b border-neutrals-200">
+        <View className="py w-fit items-center border-b border-neutrals-200 px-3 py-8">
           <ConfirmedOrderIllustration height={150} pointerEvents="none" />
           <CustomText variant={ECustomTextVariants.HEADING2} customClassName="mt-8">
             Pedido confirmado
@@ -52,7 +52,7 @@ export default function OrderConfirmation() {
             realizar a lavagem do seu veículo.
           </CustomText>
         </View>
-        <View className="px-4 py-8 border-b border-neutrals-200">
+        <View className="border-b border-neutrals-200 px-4 py-8">
           <CustomText variant={ECustomTextVariants.HEADING3}>Informações do pedido</CustomText>
           <View className="mt-4">
             <IconoirProvider
@@ -62,7 +62,7 @@ export default function OrderConfirmation() {
                 color: theme.colors['neutrals-600'],
               }}
             >
-              <View className="flex-row items-center h-10">
+              <View className="h-10 flex-row items-center">
                 <CalendarIcon />
                 <View className="ml-3">
                   <CustomText variant={ECustomTextVariants.BODY3}>
@@ -76,7 +76,7 @@ export default function OrderConfirmation() {
                   </CustomText>
                 </View>
               </View>
-              <View className="flex-row items-center h-10 mt-1">
+              <View className="mt-1 h-10 flex-row items-center">
                 <LocationIcon />
                 <CustomText variant={ECustomTextVariants.BODY3} customClassName="ml-3">
                   {dayjs.unix(appointment.time ?? 0).format(EDateFormats.READABLE_DATE_TIME)}
@@ -85,7 +85,7 @@ export default function OrderConfirmation() {
             </IconoirProvider>
           </View>
         </View>
-        <View className="px-4 py-8 border-b border-neutrals-200">
+        <View className="border-b border-neutrals-200 px-4 py-8">
           <CustomText variant={ECustomTextVariants.HEADING3}>Resumo dos itens</CustomText>
           <View className="mt-4">
             {(paymentLines ?? []).map((paymentLine, index) => {
@@ -98,7 +98,7 @@ export default function OrderConfirmation() {
                   className={cn(
                     'flex-row justify-between',
                     index > 0 && 'mt-2',
-                    isSubtotal && 'pt-4 mt-4 border-t border-neutrals-200',
+                    isSubtotal && 'mt-4 border-t border-neutrals-200 pt-4',
                   )}
                 >
                   <CustomText
@@ -123,8 +123,8 @@ export default function OrderConfirmation() {
         </View>
         <View className="px-4 py-8">
           <CustomText variant={ECustomTextVariants.HEADING3}>Pagamento</CustomText>
-          <View className="flex-row mt-4 p-4 items-center bg-neutrals-100 rounded-xl">
-            <View className="w-9 bg-neutrals-white rounded">
+          <View className="mt-4 flex-row items-center rounded-xl bg-neutrals-100 p-4">
+            <View className="w-9 rounded bg-neutrals-white">
               {paymentData?.cardBrand === 'mastercard' && (
                 <MastercardLogo height={24} pointerEvents="none" />
               )}
@@ -136,7 +136,7 @@ export default function OrderConfirmation() {
           </View>
         </View>
       </ScrollView>
-      <View className="px-4 pt-6 pb-1 border-t border-neutrals-200">
+      <View className="border-t border-neutrals-200 px-4 pb-1 pt-6">
         <CustomButton onPress={handleReturnToHome}>Voltar ao Início</CustomButton>
       </View>
     </SafeAreaView>

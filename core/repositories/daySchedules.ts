@@ -1,6 +1,6 @@
-import { EFirestoreCollections } from "../../models/constants/EFirestoreCollections"
-import { IDaySchedule } from "../../models/contracts/daySchedule"
-import { firestore } from "../../utils/firebase"
+import { EFirestoreCollections } from '../../models/constants/EFirestoreCollections'
+import { IDaySchedule } from '../../models/contracts/daySchedule'
+import { firestore } from '../../utils/firebase'
 
 const daySchedulesCollection = firestore().collection(EFirestoreCollections.DAY_SCHEDULES)
 

@@ -1,5 +1,5 @@
-import { useRef, useState, useEffect } from 'react';
-import { View } from 'react-native';
+import { useRef, useState, useEffect } from 'react'
+import { View } from 'react-native'
 
 interface IPosition {
   startPosX: number | null
@@ -11,27 +11,34 @@ interface IPosition {
 }
 
 export const usePosition = () => {
-  const ref = useRef<View>(null);
+  const ref = useRef<View>(null)
   const [position, setPosition] = useState<IPosition>({
     startPosX: null,
     startPosY: null,
     endPosX: null,
     endPosY: null,
     width: null,
-    height: null
-  });
+    height: null,
+  })
 
   const updatePosition = () => {
     if (ref.current) {
       ref.current.measure((_fx, _fy, w, h, px, py) => {
-        setPosition({ startPosX: px, startPosY: py, endPosX: px + w, endPosY: py + h, width: w, height: h })
-      });
+        setPosition({
+          startPosX: px,
+          startPosY: py,
+          endPosX: px + w,
+          endPosY: py + h,
+          width: w,
+          height: h,
+        })
+      })
     }
-  };
+  }
 
   useEffect(() => {
-    updatePosition();
-  }, [ref]);
+    updatePosition()
+  }, [ref])
 
-  return { ref, position } as const;
-};
+  return { ref, position } as const
+}

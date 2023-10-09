@@ -79,7 +79,7 @@ export default function PhoneNumber() {
             )}
           </View>
         </View>
-        <View className="justify-center h-24 px-4">
+        <View className="h-24 justify-center px-4">
           <CustomButton isDisabled={!isPhoneNumberValid} onPress={handleReceiveOTP}>
             Receber SMS
           </CustomButton>

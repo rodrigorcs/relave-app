@@ -1,7 +1,7 @@
-import { EFirestoreCollections } from "../../models/constants/EFirestoreCollections"
-import { IUser } from "../../models/contracts/user"
-import { EVehicleKeys, IVehicle } from "../../models/contracts/vehicle"
-import { firestore } from "../../utils/firebase"
+import { EFirestoreCollections } from '../../models/constants/EFirestoreCollections'
+import { IUser } from '../../models/contracts/user'
+import { EVehicleKeys, IVehicle } from '../../models/contracts/vehicle'
+import { firestore } from '../../utils/firebase'
 
 const vehiclesCollection = firestore().collection(EFirestoreCollections.VEHICLES)
 
@@ -16,5 +16,5 @@ export const vehiclesRepository = {
     await vehiclesCollection.doc(vehicle.id).set(vehicle)
 
     return vehicle
-  }
+  },
 }

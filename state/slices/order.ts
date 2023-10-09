@@ -1,7 +1,7 @@
+import { ICart } from '../../models/contracts/cart'
+import { EOrderStatus, EPaymentLineTypes, IOrder, IPaymentLine } from '../../models/contracts/order'
+import { IOrderEntity } from '../../models/entities/order'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import { EOrderStatus, EPaymentLineTypes, IOrder, IPaymentLine } from '../../models/contracts/order';
-import { ICart } from '../../models/contracts/cart';
-import { IOrderEntity } from '../../models/entities/order';
 
 const calculateSumFromPaymentLines = (paymentLines: IPaymentLine[]): number => {
   return paymentLines.reduce((accumulator, paymentLine) => {
@@ -9,7 +9,10 @@ const calculateSumFromPaymentLines = (paymentLines: IPaymentLine[]): number => {
   }, 0)
 }
 
-const cartToPaymentLines = ({ serviceBundle, additionalServices }: Pick<ICart, 'serviceBundle' | 'additionalServices'>): IPaymentLine[] => {
+const cartToPaymentLines = ({
+  serviceBundle,
+  additionalServices,
+}: Pick<ICart, 'serviceBundle' | 'additionalServices'>): IPaymentLine[] => {
   if (!serviceBundle) throw new Error('No service bundle selected.')
 
   const serviceBundlePaymentLine: IPaymentLine = {
@@ -73,7 +76,7 @@ const initialState: TOrderState = {
   additionalServices: [],
   paymentLines: [],
   totalPrice: null,
-  payment: null
+  payment: null,
 }
 
 export const orderSlice = createSlice({
@@ -84,12 +87,17 @@ export const orderSlice = createSlice({
       state.appointment.place = action.payload.place
       state.appointment.time = action.payload.time
     },
-    setItemsFromCart: (state, action: PayloadAction<Pick<TOrderState, 'vehicle' | 'serviceBundle' | 'additionalServices' | 'duration'>>) => {
+    setItemsFromCart: (
+      state,
+      action: PayloadAction<
+        Pick<TOrderState, 'vehicle' | 'serviceBundle' | 'additionalServices' | 'duration'>
+      >,
+    ) => {
       const { vehicle, serviceBundle, additionalServices, duration } = action.payload
       const paymentLines = cartToPaymentLines({ serviceBundle, additionalServices })
-      const totalPrice = paymentLines.find(
-        (paymentLine) => paymentLine.type === EPaymentLineTypes.TOTAL,
-      )?.price ?? null
+      const totalPrice =
+        paymentLines.find((paymentLine) => paymentLine.type === EPaymentLineTypes.TOTAL)?.price ??
+        null
 
       state.vehicle = vehicle
       state.serviceBundle = serviceBundle
@@ -110,7 +118,8 @@ export const orderSlice = createSlice({
   },
 })
 
-export const { setAppointment, setItemsFromCart, setOrderIds, setPaymentFromDB } = orderSlice.actions
+export const { setAppointment, setItemsFromCart, setOrderIds, setPaymentFromDB } =
+  orderSlice.actions
 
 export const getAppointment = (state: TOrderState) => state.appointment
 export const getPaymentLines = (state: TOrderState) => state.paymentLines

@@ -1,7 +1,7 @@
-import { vehiclesRepository } from '../repositories/vehicles'
-import { uuid } from '../../utils/uuid'
 import { IVehicle } from '../../models/contracts/vehicle'
+import { uuid } from '../../utils/uuid'
 import { formatVehicleName } from '../../utils/vehicle'
+import { vehiclesRepository } from '../repositories/vehicles'
 
 export const vehiclesService = {
   getVehiclesByUserId: async (userId: string) => {
@@ -9,7 +9,7 @@ export const vehiclesService = {
     const formattedVehicles: IVehicle[] = vehicles.map((vehicle) => {
       return {
         ...vehicle,
-        modelName: formatVehicleName(vehicle.brandSlug, vehicle.modelName)
+        modelName: formatVehicleName(vehicle.brandSlug, vehicle.modelName),
       }
     })
     return formattedVehicles
@@ -19,5 +19,5 @@ export const vehiclesService = {
     const createdVehicle = await vehiclesRepository.createVehicle(newVehicle)
 
     return createdVehicle
-  }
+  },
 }

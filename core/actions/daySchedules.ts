@@ -1,6 +1,6 @@
-import { Dayjs } from "dayjs";
-import { daySchedulesService } from "../services/daySchedules";
-import { dayjsToDate, getTimeId } from "../../utils/dayjs";
+import { dayjsToDate, getTimeId } from '../../utils/dayjs'
+import { daySchedulesService } from '../services/daySchedules'
+import { Dayjs } from 'dayjs'
 
 export const daySchedulesAction = {
   getAvailableTimesByDate: daySchedulesService.getAvailableTimesByDate,

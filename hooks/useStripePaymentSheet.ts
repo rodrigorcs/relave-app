@@ -1,9 +1,13 @@
-import { useStripe } from "@stripe/stripe-react-native"
-import { useState, useEffect } from "react"
-import { theme } from "../theme"
-import { paymentActions } from "../core/actions/payments"
+import { paymentActions } from '../core/actions/payments'
+import { theme } from '../theme'
+import { useStripe } from '@stripe/stripe-react-native'
+import { useState, useEffect } from 'react'
 
-export const useStripePaymentSheet = (stripeCustomerId: string | null, orderId: string | null, amount: number | null,) => {
+export const useStripePaymentSheet = (
+  stripeCustomerId: string | null,
+  orderId: string | null,
+  amount: number | null,
+) => {
   const { initPaymentSheet, presentPaymentSheet } = useStripe()
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<unknown>(false)
@@ -13,7 +17,8 @@ export const useStripePaymentSheet = (stripeCustomerId: string | null, orderId: 
 
     try {
       if (!amount) throw new Error('No amount to charge')
-      const { paymentIntentClientSecret, customerEphemeralKeySecret, customerId } = await paymentActions.createPaymentIntent(validStripeCustomerId, validOrderId, amount)
+      const { paymentIntentClientSecret, customerEphemeralKeySecret, customerId } =
+        await paymentActions.createPaymentIntent(validStripeCustomerId, validOrderId, amount)
 
       await initPaymentSheet({
         merchantDisplayName: 'Lavei',
@@ -51,9 +56,9 @@ export const useStripePaymentSheet = (stripeCustomerId: string | null, orderId: 
 
   useEffect(() => {
     if (stripeCustomerId && orderId) {
-      initializePaymentSheet(stripeCustomerId, orderId);
+      initializePaymentSheet(stripeCustomerId, orderId)
     }
-  }, [stripeCustomerId, orderId]);
+  }, [stripeCustomerId, orderId])
 
   const openPaymentSheet = async () => {
     try {

@@ -1,12 +1,12 @@
-import { TGoogleMapsPlaceResult } from "./externalApi/googleMaps"
-import { IService } from "./service"
-import { IServiceBundleWithDetails } from "./serviceBundle"
-import { IVehicle } from "./vehicle"
+import { TGoogleMapsPlaceResult } from './externalApi/googleMaps'
+import { IService } from './service'
+import { IServiceBundleWithDetails } from './serviceBundle'
+import { IVehicle } from './vehicle'
 
 export enum EOrderStatus {
   NOT_CREATED = 'not-created',
   CREATED = 'created',
-  PAID = 'paid'
+  PAID = 'paid',
 }
 
 export enum EPaymentLineTypes {
@@ -30,14 +30,14 @@ interface IAppointment {
 }
 
 interface IPayment {
-  paymentIntentId: string,
-  customerId: string,
-  status: string,
-  totalPaid: number,
-  paidAt: number,
-  paymentMethodId: string,
-  lastDigits: string | null,
-  cardBrand: string | null,
+  paymentIntentId: string
+  customerId: string
+  status: string
+  totalPaid: number
+  paidAt: number
+  paymentMethodId: string
+  lastDigits: string | null
+  cardBrand: string | null
 }
 
 export interface IOrder {

@@ -1,7 +1,7 @@
-import { FirebaseAuthTypes } from '@react-native-firebase/auth';
+import { authActions } from '../../core/actions/auth'
+import { IUser } from '../../models/contracts/user'
+import { FirebaseAuthTypes } from '@react-native-firebase/auth'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import { IUser } from '../../models/contracts/user';
-import { authActions } from '../../core/actions/auth';
 
 interface IAuthState {
   user: IUser | null
@@ -12,7 +12,7 @@ interface IAuthState {
 const initialState: IAuthState = {
   user: null,
   phoneNumberToSendOTP: null,
-  isUserSignedIn: false
+  isUserSignedIn: false,
 }
 
 export const authSlice = createSlice({
@@ -32,14 +32,14 @@ export const authSlice = createSlice({
     },
     storeName: (state, action: PayloadAction<string>) => {
       state.user = { ...state.user, name: action.payload } as IUser
-    }
+    },
   },
 })
 
 export const { storeUser, clearCredentials, storePhoneNumberToOTP, storeName } = authSlice.actions
 
 // TODO: Alternative - Can't put into slice as it's not serializable
-let smsConfirmationObj: FirebaseAuthTypes.ConfirmationResult | null = null;
+let smsConfirmationObj: FirebaseAuthTypes.ConfirmationResult | null = null
 
 export const sendOTPToken = (phoneNumber: string) => async () => {
   const confirmation = await authActions.sendOTPToken(phoneNumber)

@@ -12,7 +12,7 @@ export const Checkbox: FC<IProps> = ({ isSelected }) => {
   return (
     <View
       className={cn(
-        'w-6 h-6 rounded items-center justify-center',
+        'h-6 w-6 items-center justify-center rounded',
         isSelected ? 'bg-brand-500' : 'border border-neutrals-500',
       )}
     >

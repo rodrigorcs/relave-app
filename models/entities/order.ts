@@ -1,4 +1,4 @@
-import { IOrder } from "../contracts/order";
+import { IOrder } from '../contracts/order'
 
 export interface IOrderEntity extends IOrder {
   id: string

@@ -75,7 +75,7 @@ export const UserVehicleCard: FC<IProps> = ({
     <View key={vehicle.id} className={cn(index > 0 && 'ml-2', index === 0 && 'ml-4')}>
       <TouchableOpacity
         className={cn(
-          'h-32 w-32 mb-2 bg-neutrals-100 rounded-2xl items-center justify-center',
+          'mb-2 h-32 w-32 items-center justify-center rounded-2xl bg-neutrals-100',
           isSelected && 'border border-brand-500',
         )}
         activeOpacity={0.6}
@@ -90,7 +90,7 @@ export const UserVehicleCard: FC<IProps> = ({
         </CustomText>
       </TouchableOpacity>
       {isSelected && (
-        <View className="w-5 h-5 bg-brand-500 rounded-full items-center justify-center absolute bottom-0 left-[54]">
+        <View className="absolute bottom-0 left-[54] h-5 w-5 items-center justify-center rounded-full bg-brand-500">
           <CheckIcon
             width={16}
             height={16}

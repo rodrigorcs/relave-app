@@ -1,9 +1,9 @@
-import { ordersRepository } from '../repositories/orders'
-import { uuid } from '../../utils/uuid'
 import { EOrderStatus, IOrder } from '../../models/contracts/order'
-import { generateShortId } from '../../utils/nanoid'
-import { EDateFormats, dayjs } from '../../utils/dayjs'
 import { IOrderEntity } from '../../models/entities/order'
+import { EDateFormats, dayjs } from '../../utils/dayjs'
+import { generateShortId } from '../../utils/nanoid'
+import { uuid } from '../../utils/uuid'
+import { ordersRepository } from '../repositories/orders'
 
 export const ordersService = {
   createOrder: async (userId: string, order: IOrder) => {
@@ -15,7 +15,7 @@ export const ordersService = {
       status: EOrderStatus.CREATED,
       plannedStart: order.appointment.time,
       duration: 90, // TODO: Use dynamic timing based on services
-      userId
+      userId,
     }
     const createdOrder = await ordersRepository.createOrder(newOrder)
 

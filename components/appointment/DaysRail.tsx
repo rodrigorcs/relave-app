@@ -33,14 +33,14 @@ export const DaysRail: FC<IProps> = ({ selectedDate, onChange }) => {
   const upcomingDays = getUpcomingDays(today, 7)
 
   return (
-    <ScrollView horizontal showsHorizontalScrollIndicator={false} className="flex-row mt-4">
+    <ScrollView horizontal showsHorizontalScrollIndicator={false} className="mt-4 flex-row">
       {upcomingDays.map((date, index) => {
         const isSelected = date.id === selectedDate?.id
         return (
           <TouchableOpacity
             key={date.id}
             className={cn(
-              'h-[86] w-[72] bg-neutrals-100 rounded-2xl items-center justify-center',
+              'h-[86] w-[72] items-center justify-center rounded-2xl bg-neutrals-100',
               isSelected && 'bg-brand-500',
               index > 0 && 'ml-2',
               index === 0 && 'ml-4',

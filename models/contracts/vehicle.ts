@@ -1,6 +1,6 @@
-import { IUser } from "./user"
-import { IVehicleBrand } from "./vehicleBrand"
-import { IVehicleModel } from "./vehicleModel"
+import { IUser } from './user'
+import { IVehicleBrand } from './vehicleBrand'
+import { IVehicleModel } from './vehicleModel'
 
 export interface IVehicle {
   id: string
@@ -20,4 +20,4 @@ export enum EVehicleKeys {
   BRAND_SLUG = 'brandSlug',
   MODEL_ID = 'modelId',
   MODEL_NAME = 'modelName',
-} 
+}

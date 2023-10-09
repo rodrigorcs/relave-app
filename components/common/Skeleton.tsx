@@ -35,7 +35,7 @@ export const Skeleton: FC<IProps> = ({ customClassName, style, isLoaded, childre
       {!isLoaded && (
         <Animated.View
           style={{ opacity: opacity.current, ...(style as Record<string, unknown>) }}
-          className={cn('bg-neutrals-200 rounded', customClassName)}
+          className={cn('rounded bg-neutrals-200', customClassName)}
         />
       )}
       {children}

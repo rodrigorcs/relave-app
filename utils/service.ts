@@ -1,4 +1,4 @@
-import { IService } from "../models/contracts/service";
+import { IService } from '../models/contracts/service'
 
 export const getDuration = (services: IService[] | undefined) => {
   if (!services) return 0

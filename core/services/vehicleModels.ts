@@ -1,4 +1,4 @@
-import { vehicleModelsRepository } from "../repositories/vehicleModels";
+import { vehicleModelsRepository } from '../repositories/vehicleModels'
 
 export const vehicleModelsService = {
   getVehicleModelsByBrandId: vehicleModelsRepository.getVehicleModelsByBrandId,

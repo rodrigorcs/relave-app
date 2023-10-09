@@ -65,7 +65,7 @@ export const AddServicesBottomSheet: FC<IProps> = ({ selectedServiceBundle, isOp
         <CustomText variant={ECustomTextVariants.BODY3} customClassName="mt-1 text-neutrals-600">
           Adicione serviços extras para um toque final
         </CustomText>
-        <View className={cn('flex-1 mt-6')}>
+        <View className={cn('mt-6 flex-1')}>
           <FlatList
             data={avaliableServices}
             renderItem={({ item: service, index }) => {

@@ -72,7 +72,7 @@ export const TimesGrid: FC<IProps> = ({ selectedDate, selectedTime, onChange, du
           <View
             key={item?.formattedTime ?? `placeholder-${position}`}
             className={cn(
-              'flex-row flex-1',
+              'flex-1 flex-row',
               `items-${position}`,
               position !== 'start' && 'ml-4',
               index > 2 && 'mt-4',
@@ -81,7 +81,7 @@ export const TimesGrid: FC<IProps> = ({ selectedDate, selectedTime, onChange, du
             {item && (
               <TouchableOpacity
                 className={cn(
-                  'flex-1 bg-neutrals-100 rounded-full h-10 items-center justify-center',
+                  'h-10 flex-1 items-center justify-center rounded-full bg-neutrals-100',
                   isSelected && 'bg-brand-500',
                 )}
                 onPress={() => onChange(item)}

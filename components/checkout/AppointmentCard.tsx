@@ -16,7 +16,7 @@ export const AppointmentCard: FC<IProps> = ({ Icon, primaryText, secondaryText, 
   return (
     <View
       className={cn(
-        'flex-1 h-36 p-4 justify-between rounded-2xl border border-neutrals-200',
+        'h-36 flex-1 justify-between rounded-2xl border border-neutrals-200 p-4',
         marginLeft && 'ml-4',
       )}
     >

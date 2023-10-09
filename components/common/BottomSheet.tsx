@@ -84,7 +84,7 @@ export const BottomSheet = React.forwardRef<IBottomSheetRefProps, IBottomSheetPr
     return (
       <>
         <AnimatedPressable
-          className="absolute top-0 left-0 right-0 bottom-0 bg-neutrals-black opacity-0"
+          className="absolute bottom-0 left-0 right-0 top-0 bg-neutrals-black opacity-0"
           style={rOverlayStyle}
           pointerEvents={isOpen ? 'auto' : 'none'}
           onPress={() => close()}
@@ -92,12 +92,12 @@ export const BottomSheet = React.forwardRef<IBottomSheetRefProps, IBottomSheetPr
         <GestureDetector gesture={gesture}>
           <Animated.View
             className={cn(
-              'w-full bg-neutrals-white absolute rounded-t-3xl px-6 pt-14 pb-8 bottom-0',
+              'absolute bottom-0 w-full rounded-t-3xl bg-neutrals-white px-6 pb-8 pt-14',
             )}
             style={[rBottomSheetStyle, { height }]}
           >
             <TouchableOpacity
-              className="absolute top-6 right-6 w-6 h-6 rounded-full items-center justify-center bg-neutrals-100"
+              className="absolute right-6 top-6 h-6 w-6 items-center justify-center rounded-full bg-neutrals-100"
               onPress={() => close()}
             >
               <CloseIcon

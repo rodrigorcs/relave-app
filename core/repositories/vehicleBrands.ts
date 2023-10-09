@@ -1,6 +1,6 @@
-import { EFirestoreCollections } from "../../models/constants/EFirestoreCollections"
-import { IVehicleBrand } from "../../models/contracts/vehicleBrand"
-import { firestore } from "../../utils/firebase"
+import { EFirestoreCollections } from '../../models/constants/EFirestoreCollections'
+import { IVehicleBrand } from '../../models/contracts/vehicleBrand'
+import { firestore } from '../../utils/firebase'
 
 const vehicleBrandsCollection = firestore().collection(EFirestoreCollections.VEHICLE_BRANDS)
 

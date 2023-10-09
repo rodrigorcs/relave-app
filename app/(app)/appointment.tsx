@@ -39,14 +39,14 @@ export default function Appointment() {
   return (
     <SafeAreaView customClassName="flex flex-1 bg-common-background">
       <ScrollView>
-        <View className="px-4 py-8 border-b border-neutrals-200 z-10">
+        <View className="z-10 border-b border-neutrals-200 px-4 py-8">
           <CustomText variant={ECustomTextVariants.HEADING3}>
             Onde devemos realizar o serviço?
           </CustomText>
           <PlacesAutocomplete selectedPlace={selectedPlace} onChange={setSelectedPlace} />
         </View>
         <View className="flex-col py-8">
-          <View className="flex-row justify-between items-center px-4">
+          <View className="flex-row items-center justify-between px-4">
             <CustomText variant={ECustomTextVariants.HEADING3}>Quando você precisa?</CustomText>
             <CustomText variant={ECustomTextVariants.HEADING6} customClassName="text-brand-500">
               ver mais
@@ -63,7 +63,7 @@ export default function Appointment() {
           </View>
         </View>
       </ScrollView>
-      <View className="px-4 pt-6 pb-1 border-t border-neutrals-200">
+      <View className="border-t border-neutrals-200 px-4 pb-1 pt-6">
         <CustomButton
           onPress={onSubmit}
           isDisabled={!selectedPlace || !selectedTime}

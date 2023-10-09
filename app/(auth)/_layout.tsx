@@ -10,8 +10,8 @@ export default function Layout() {
   const currentRoute = usePathname()
 
   if (user && currentRoute !== '/name') {
-    if (!user.name) return <Redirect href='/name' />
-    return <Redirect href='/(app)' />
+    if (!user.name) return <Redirect href="/name" />
+    return <Redirect href="/(app)" />
   }
 
   return (

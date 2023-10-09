@@ -8,14 +8,14 @@ export const ServiceBundleCardSkeleton: FC = () => {
   const servicesSkeletons = useSkeletonArray(3)
 
   return (
-    <View className={cn('w-[272] bg-neutrals-white rounded-2xl ml-4')}>
-      <View className="flex-row justify-between items-center border-b border-neutrals-200 px-6 py-5">
+    <View className={cn('ml-4 w-[272] rounded-2xl bg-neutrals-white')}>
+      <View className="flex-row items-center justify-between border-b border-neutrals-200 px-6 py-5">
         <Skeleton customClassName="w-10 h-10 rounded-full" />
         <Skeleton customClassName="w-16 h-8" />
       </View>
-      <View className="p-6 flex-1">
+      <View className="flex-1 p-6">
         <Skeleton customClassName="w-44 h-6" />
-        <View className="flex-1 mt-4">
+        <View className="mt-4 flex-1">
           {servicesSkeletons.map((randomFactor, index) => {
             const width = 160 * randomFactor
             return (

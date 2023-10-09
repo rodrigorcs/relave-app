@@ -1,6 +1,6 @@
-import { Endpoints } from "../../models/constants/Endpoints"
-import { ICreatePaymentIntentResponseBody } from "../../models/contracts/internalApi/payment"
-import { httpClient } from "../../utils/httpClient"
+import { Endpoints } from '../../models/constants/Endpoints'
+import { ICreatePaymentIntentResponseBody } from '../../models/contracts/internalApi/payment'
+import { httpClient } from '../../utils/httpClient'
 
 export const paymentActions = {
   createPaymentIntent: async (customerStripeId: string | null, orderId: string, amount: number) => {
@@ -13,12 +13,13 @@ export const paymentActions = {
       },
     )
 
-    const { paymentIntentClientSecret, customerEphemeralKeySecret, customerId } = createdPaymentIntent as ICreatePaymentIntentResponseBody
+    const { paymentIntentClientSecret, customerEphemeralKeySecret, customerId } =
+      createdPaymentIntent as ICreatePaymentIntentResponseBody
 
     return {
       paymentIntentClientSecret,
       customerEphemeralKeySecret,
       customerId,
     }
-  }
+  },
 }

@@ -1,6 +1,6 @@
-import { EFirestoreCollections } from "../../models/constants/EFirestoreCollections"
-import { EServiceBundleKeys, IServiceBundle } from "../../models/contracts/serviceBundle"
-import { firestore } from "../../utils/firebase"
+import { EFirestoreCollections } from '../../models/constants/EFirestoreCollections'
+import { EServiceBundleKeys, IServiceBundle } from '../../models/contracts/serviceBundle'
+import { firestore } from '../../utils/firebase'
 
 const serviceBundlesCollection = firestore().collection(EFirestoreCollections.SERVICE_BUNDLES)
 

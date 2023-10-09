@@ -1,9 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react'
 
-export const useAsyncData = <T>(action: (() => Promise<T>) | null, dependencies: unknown[] = [], resetWhenLoading?: boolean): [T | null, boolean, unknown | null] => {
-  const [data, setData] = useState<T | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<unknown | null>(null);
+export const useAsyncData = <T>(
+  action: (() => Promise<T>) | null,
+  dependencies: unknown[] = [],
+  resetWhenLoading?: boolean,
+): [T | null, boolean, unknown | null] => {
+  const [data, setData] = useState<T | null>(null)
+  const [loading, setLoading] = useState<boolean>(true)
+  const [error, setError] = useState<unknown | null>(null)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -11,17 +15,17 @@ export const useAsyncData = <T>(action: (() => Promise<T>) | null, dependencies:
       if (resetWhenLoading) setData(null)
       try {
         const result = action ? await action() : null
-        setData(result);
+        setData(result)
       } catch (e) {
         console.error(e)
-        setError(e);
+        setError(e)
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
-    };
+    }
 
-    fetchData();
-  }, dependencies);
+    fetchData()
+  }, dependencies)
 
-  return [data, loading, error];
-};
+  return [data, loading, error]
+}

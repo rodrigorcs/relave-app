@@ -1,6 +1,6 @@
-import { EFirestoreCollections } from "../../models/constants/EFirestoreCollections"
-import { IService } from "../../models/contracts/service"
-import { firestore } from "../../utils/firebase"
+import { EFirestoreCollections } from '../../models/constants/EFirestoreCollections'
+import { IService } from '../../models/contracts/service'
+import { firestore } from '../../utils/firebase'
 
 const servicesCollection = firestore().collection(EFirestoreCollections.SERVICES)
 

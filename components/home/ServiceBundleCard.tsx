@@ -39,9 +39,9 @@ export const ServiceBundleCard: FC<IProps> = ({
       : serviceBundle.exclusiveServices) ?? []
 
   return (
-    <View className={cn('w-[272] bg-neutrals-white rounded-2xl ml-4', customClassName)}>
-      <View className="flex-row justify-between items-center border-b border-neutrals-200 px-6 py-5">
-        <View className="w-10 h-10 items-center justify-center rounded-full bg-brand-300">
+    <View className={cn('ml-4 w-[272] rounded-2xl bg-neutrals-white', customClassName)}>
+      <View className="flex-row items-center justify-between border-b border-neutrals-200 px-6 py-5">
+        <View className="h-10 w-10 items-center justify-center rounded-full bg-brand-300">
           <IconoirProvider
             iconProps={{
               width: 20,
@@ -57,7 +57,7 @@ export const ServiceBundleCard: FC<IProps> = ({
           {getDisplayPrice(serviceBundle.price)}
         </CustomText>
       </View>
-      <View className="p-6 flex-1">
+      <View className="flex-1 p-6">
         <CustomText variant={ECustomTextVariants.HEADING4} customClassName="mb-4">
           {serviceBundle.name}
         </CustomText>
@@ -65,7 +65,7 @@ export const ServiceBundleCard: FC<IProps> = ({
           {services.map((service, index) => {
             return (
               <View key={service.id} className={cn('flex-row items-center', index > 0 && 'mt-3')}>
-                <View className="w-5 h-5 bg-brand-500 rounded-full items-center justify-center">
+                <View className="h-5 w-5 items-center justify-center rounded-full bg-brand-500">
                   <CheckIcon
                     width={16}
                     height={16}

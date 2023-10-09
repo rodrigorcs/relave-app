@@ -99,7 +99,7 @@ export default function OTPConfirmation() {
             </View>
           </View>
         </ScrollView>
-        <View className="justify-center h-24 px-4">
+        <View className="h-24 justify-center px-4">
           <CustomButton isDisabled={!isTokenReady} onPress={handleConfirmOTP}>
             Continuar
           </CustomButton>

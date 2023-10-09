@@ -91,14 +91,14 @@ export default function Home() {
       <GestureHandlerRootView style={{ flex: 1 }}>
         <SafeAreaView customClassName="flex flex-1 bg-brand-500">
           <View className="flex-1">
-            <View className="py-8 bg-common-background">
+            <View className="bg-common-background py-8">
               <CustomText variant={ECustomTextVariants.HEADING3} customClassName="ml-4">
                 Selecione seu carro
               </CustomText>
               <ScrollView
                 horizontal
                 showsHorizontalScrollIndicator={false}
-                className="flex-row mt-4"
+                className="mt-4 flex-row"
               >
                 {isLoadingVehicles ? (
                   vehicleSkeletons.map((_skeleton, index) => (
@@ -126,7 +126,7 @@ export default function Home() {
                 />
               </ScrollView>
             </View>
-            <View className="flex-1 pt-6 pb-2 bg-brand-500">
+            <View className="flex-1 bg-brand-500 pb-2 pt-6">
               <CustomText variant={ECustomTextVariants.HEADING3} customClassName="ml-4" white>
                 Serviços
               </CustomText>
@@ -136,7 +136,7 @@ export default function Home() {
               <ScrollView
                 horizontal
                 showsHorizontalScrollIndicator={false}
-                className="flex-row mt-4"
+                className="mt-4 flex-row"
               >
                 {isLoadingServiceBundles ? (
                   <>

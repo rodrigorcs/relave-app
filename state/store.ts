@@ -1,7 +1,7 @@
-import { configureStore } from '@reduxjs/toolkit';
-import { authReducer } from './slices/auth';
-import { cartReducer } from './slices/cart';
-import { orderReducer } from './slices/order';
+import { authReducer } from './slices/auth'
+import { cartReducer } from './slices/cart'
+import { orderReducer } from './slices/order'
+import { configureStore } from '@reduxjs/toolkit'
 
 export const store = configureStore({
   reducer: {
@@ -9,6 +9,6 @@ export const store = configureStore({
     cart: cartReducer,
     order: orderReducer,
   },
-});
+})
 
-export type IAppState = ReturnType<typeof store.getState>;
+export type IAppState = ReturnType<typeof store.getState>

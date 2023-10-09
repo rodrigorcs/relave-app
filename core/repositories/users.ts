@@ -1,6 +1,6 @@
-import { EFirestoreCollections } from "../../models/constants/EFirestoreCollections"
-import { IUser } from "../../models/contracts/user"
-import { firestore } from "../../utils/firebase"
+import { EFirestoreCollections } from '../../models/constants/EFirestoreCollections'
+import { IUser } from '../../models/contracts/user'
+import { firestore } from '../../utils/firebase'
 
 const usersCollection = firestore().collection(EFirestoreCollections.USERS)
 
@@ -15,5 +15,5 @@ export const usersRepository = {
     await usersCollection.doc(user.id).set(user)
 
     return user
-  }
+  },
 }

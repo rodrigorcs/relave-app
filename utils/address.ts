@@ -1,4 +1,4 @@
-import { TGoogleMapsPlaceResult } from "../models/contracts/externalApi/googleMaps"
+import { TGoogleMapsPlaceResult } from '../models/contracts/externalApi/googleMaps'
 
 export const formatPlaceAddress = (place: TGoogleMapsPlaceResult | null) => {
   const placeName = place?.name ?? null
@@ -12,7 +12,7 @@ export const formatPlaceAddress = (place: TGoogleMapsPlaceResult | null) => {
     const mainAddressSection = placeAddress ? placeAddress.split(SECTION_DIVIDER)[0].trim() : null
     return {
       primaryText: placeName ?? '',
-      secondaryText: mainAddressSection
+      secondaryText: mainAddressSection,
     }
   }
 
@@ -21,7 +21,6 @@ export const formatPlaceAddress = (place: TGoogleMapsPlaceResult | null) => {
 
   return {
     primaryText: mainSection.trim(),
-    secondaryText: otherSections?.join(SECTION_DIVIDER)?.trim()
+    secondaryText: otherSections?.join(SECTION_DIVIDER)?.trim(),
   }
-
 }

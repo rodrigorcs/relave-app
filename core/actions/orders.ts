@@ -1,5 +1,5 @@
-import { ordersService } from "../services/orders"
+import { ordersService } from '../services/orders'
 
 export const ordersActions = {
-  createOrder: ordersService.createOrder
+  createOrder: ordersService.createOrder,
 }

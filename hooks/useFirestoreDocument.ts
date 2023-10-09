@@ -1,36 +1,36 @@
-import { useEffect, useState, useCallback } from 'react';
-import firestore from '@react-native-firebase/firestore';
-import { EFirestoreCollections } from '../models/constants/EFirestoreCollections';
+import { EFirestoreCollections } from '../models/constants/EFirestoreCollections'
+import firestore from '@react-native-firebase/firestore'
+import { useEffect, useState, useCallback } from 'react'
 
 export const useFirestoreDocument = <T>(
   collection: EFirestoreCollections,
   docId: string | null,
-  onSnapshot: (documentData: T) => boolean  // Returns true to unsubscribe
+  onSnapshot: (documentData: T) => boolean, // Returns true to unsubscribe
 ) => {
-  const [error, setError] = useState<Error | null>(null);
+  const [error, setError] = useState<Error | null>(null)
 
-  const handleSuccess = useCallback(onSnapshot, []);
+  const handleSuccess = useCallback(onSnapshot, [])
 
   useEffect(() => {
-    if (!docId) return;
+    if (!docId) return
 
     const subscriber = firestore()
       .collection(collection)
       .doc(docId)
       .onSnapshot(
         (documentSnapshot) => {
-          const documentData = documentSnapshot.data() as T;
+          const documentData = documentSnapshot.data() as T
 
-          const unsubscribe = handleSuccess(documentData);
-          if (unsubscribe) subscriber();
+          const unsubscribe = handleSuccess(documentData)
+          if (unsubscribe) subscriber()
         },
         (error) => {
-          setError(error);
-        }
-      );
+          setError(error)
+        },
+      )
 
-    return () => subscriber();
-  }, [collection, docId, handleSuccess]);
+    return () => subscriber()
+  }, [collection, docId, handleSuccess])
 
-  return { error };
+  return { error }
 }

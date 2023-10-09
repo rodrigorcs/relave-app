@@ -66,7 +66,7 @@ export default function Onboarding() {
   return (
     <SyncedScrollViewContext.Provider value={syncedScrollViewState}>
       <SafeAreaView hiddenStatusBar customClassName="flex-1 bg-common-background">
-        <View className="flex-1 pt-6 pb-2">
+        <View className="flex-1 pb-2 pt-6">
           <View className="flex-1">
             <SyncedScrollView
               id={1}
@@ -117,7 +117,7 @@ export default function Onboarding() {
               ))}
             </SyncedScrollView>
           </View>
-          <View className="flex-row mt-4 px-8 items-center justify-between">
+          <View className="mt-4 flex-row items-center justify-between px-8">
             <View className="flex-row">
               {hints.map((_hint, index) => (
                 <PageMarker key={index} index={index} page={page} />

@@ -1,21 +1,21 @@
-import dayjs, { Dayjs } from "dayjs";
-import { Days } from "../models/constants/Days";
+import { Days } from '../models/constants/Days'
+import dayjs, { Dayjs } from 'dayjs'
 import 'dayjs/locale/pt-br'
 
 export enum EDateFormats {
   READABLE_DATE_TIME = 'DD [de] MMMM [às] HH:mm',
   READABLE_TIME = 'HH:mm',
   TIME_ID = 'HH-mm',
-  DATE_ID = 'YYYY-MM-DD'
+  DATE_ID = 'YYYY-MM-DD',
 }
 
 export const getRelativeDayOfWeek = (date: Dayjs) => {
-  const today = dayjs().startOf('day');
-  const tomorrow = today.add(1, 'day');
+  const today = dayjs().startOf('day')
+  const tomorrow = today.add(1, 'day')
 
-  if (date.isSame(today, 'd')) return 'Hoje';
-  if (date.isSame(tomorrow, 'd')) return 'Amanhã';
-  return Days.DAYS_OF_WEEK[date.day()];
+  if (date.isSame(today, 'd')) return 'Hoje'
+  if (date.isSame(tomorrow, 'd')) return 'Amanhã'
+  return Days.DAYS_OF_WEEK[date.day()]
 }
 
 export const getTimeId = (time: Dayjs) => {
@@ -37,6 +37,6 @@ export const dayjsToDate = (date: Dayjs) => {
   }
 }
 
-dayjs.locale('pt-br');
+dayjs.locale('pt-br')
 
 export { dayjs }

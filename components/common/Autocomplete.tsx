@@ -142,9 +142,9 @@ export const Autocomplete = <T extends IOption>({
               hasOptions && large && 'max-h-80',
             )}
           >
-            <View className={cn(`shadow bg-neutrals-white mt-1 rounded-lg`)}>
+            <View className={cn(`mt-1 rounded-lg bg-neutrals-white shadow`)}>
               {dropdownOptions.length === 0 ? (
-                <View className="flex-row justify-between items-center px-4 py-3 bg-neutrals-white">
+                <View className="flex-row items-center justify-between bg-neutrals-white px-4 py-3">
                   <CustomText variant={ECustomTextVariants.HELPER1}>Sem opções.</CustomText>
                 </View>
               ) : (
@@ -156,7 +156,7 @@ export const Autocomplete = <T extends IOption>({
                         key={option.id}
                         onPress={() => handleChangeSelectedOption(option)}
                         className={cn(
-                          'flex-row justify-between items-center px-4 py-3 border-b border-neutrals-100 bg-neutrals-white',
+                          'flex-row items-center justify-between border-b border-neutrals-100 bg-neutrals-white px-4 py-3',
                           isSelected && 'bg-neutrals-100',
                         )}
                       >

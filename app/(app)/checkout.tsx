@@ -94,9 +94,9 @@ export default function Checkout() {
   return (
     <SafeAreaView customClassName="flex flex-1 bg-common-background">
       <View className="flex-1">
-        <View className="px-4 py-8 border-b border-neutrals-200">
+        <View className="border-b border-neutrals-200 px-4 py-8">
           <CustomText variant={ECustomTextVariants.HEADING3}>Informações do pedido</CustomText>
-          <View className="flex-row mt-4">
+          <View className="mt-4 flex-row">
             <AppointmentCard
               Icon={<LocationIcon />}
               primaryText={formattedPlaceAddress.primaryText}
@@ -123,7 +123,7 @@ export default function Checkout() {
                   className={cn(
                     'flex-row justify-between',
                     index > 0 && 'mt-2',
-                    isSubtotal && 'pt-4 mt-4 border-t border-neutrals-200',
+                    isSubtotal && 'mt-4 border-t border-neutrals-200 pt-4',
                   )}
                 >
                   <CustomText
@@ -147,7 +147,7 @@ export default function Checkout() {
           </View>
         </View>
       </View>
-      <View className="px-4 pt-6 pb-1 border-t border-neutrals-200">
+      <View className="border-t border-neutrals-200 px-4 pb-1 pt-6">
         <CustomButton
           onPress={() => handleConfirmOrder()}
           isDisabled={isLoading || !!error}
