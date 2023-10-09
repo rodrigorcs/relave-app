@@ -44,6 +44,7 @@ export default function Home() {
 
   const [openAddVehicleBottomSheet, setOpenAddVehicleBottomSheet] = useState<boolean>(false)
   const [addedVehicle, setAddedVehicle] = useState<IVehicle | null>(null)
+  const [error, setError] = useState<string | null>(null)
 
   const currentUser = useSelector(({ auth }: IAppState) => getCurrentUser(auth))
   const selectedVehicle = useSelector(({ cart }: IAppState) => getSelectedVehicle(cart))
@@ -70,6 +71,10 @@ export default function Home() {
     if (addedVehicle) dispatch(setSelectedVehicle(addedVehicle))
   }, [addedVehicle])
 
+  useEffect(() => {
+    if (selectedVehicle && error) setError(null)
+  }, [selectedVehicle])
+
   const handleChangeVehicle = (vehicle: IVehicle) => {
     dispatch(setSelectedVehicle(vehicle))
   }
@@ -91,6 +96,7 @@ export default function Home() {
   }, [])
 
   const handleChooseServiceBundle = (serviceBundle: IServiceBundleWithDetails) => {
+    if (!selectedVehicle) return setError('Selecione o seu carro para fazer o pedido.')
     dispatch(setSelectedServiceBundle(serviceBundle))
   }
 
@@ -133,6 +139,16 @@ export default function Home() {
                   isFirst={(vehicles ?? []).length === 0}
                 />
               </ScrollView>
+              <View className="mx-4">
+                {error && (
+                  <CustomText
+                    variant={ECustomTextVariants.HELPER1}
+                    customClassName="mt-1 text-feedback-negative-300"
+                  >
+                    {error}
+                  </CustomText>
+                )}
+              </View>
             </View>
             <View className="flex-1 bg-brand-500 pb-2 pt-6">
               <CustomText variant={ECustomTextVariants.HEADING3} customClassName="ml-4" white>
