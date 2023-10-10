@@ -7,6 +7,7 @@ import {
   ECustomTextVariants,
   SafeAreaView,
 } from '../../components/common'
+import { useDeviceLocation } from '../../hooks'
 import { TGoogleMapsPlaceResult } from '../../models/contracts/externalApi/googleMaps'
 import { getCart } from '../../state/slices/cart'
 import { setAppointment, setItemsFromCart } from '../../state/slices/order'
@@ -21,6 +22,8 @@ import { useDispatch, useSelector } from 'react-redux'
 export default function Appointment() {
   const dispatch = useDispatch()
   const cart = useSelector(({ cart }: IAppState) => getCart(cart))
+
+  const location = useDeviceLocation()
 
   const [selectedPlace, setSelectedPlace] = useState<TGoogleMapsPlaceResult | null>(null)
   const [selectedDate, setSelectedDate] = useState<IDate>(dayjsToDate(dayjs()))
@@ -49,7 +52,11 @@ export default function Appointment() {
           <CustomText variant={ECustomTextVariants.HEADING3}>
             Onde devemos realizar o serviço?
           </CustomText>
-          <PlacesAutocomplete selectedPlace={selectedPlace} onChange={setSelectedPlace} />
+          <PlacesAutocomplete
+            selectedPlace={selectedPlace}
+            onChange={setSelectedPlace}
+            location={location}
+          />
           <CustomInput
             title="Complemento"
             placeholder="Ap. 602, Torre C..."

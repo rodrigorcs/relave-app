@@ -14,14 +14,15 @@ interface IPlaceOption {
 interface IProps {
   selectedPlace: TGoogleMapsPlaceResult | null
   onChange: (selectedPlace: TGoogleMapsPlaceResult | null) => void
+  location: never[] | readonly [number, number]
 }
 
-export const PlacesAutocomplete: FC<IProps> = ({ selectedPlace, onChange }) => {
+export const PlacesAutocomplete: FC<IProps> = ({ selectedPlace, onChange, location }) => {
   const [input, setInput] = useState('')
   const debouncedInput = useDebounce(input, 500)
 
   const [places] = useAsyncData(
-    () => locationActions.getNearbyPlaces(debouncedInput),
+    () => locationActions.getNearbyPlaces(debouncedInput, location),
     [debouncedInput],
   )
 
