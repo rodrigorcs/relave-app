@@ -76,9 +76,10 @@ export default function Checkout() {
   const formattedPlaceAddress = formatPlaceAddress(appointment.place)
 
   const handleConfirmOrder = async () => {
-    if (!order.dateId || !order.duration) throw new Error('Order not found.')
+    if (!order.duration) throw new Error('Order duration not specified.')
+
     const timeIsAvailable = await daySchedulesAction.getTimeAvailability(
-      order.dateId,
+      appointmentTime,
       order.duration,
     )
     if (!timeIsAvailable) throw new Error('Appointment time is no longer available.')

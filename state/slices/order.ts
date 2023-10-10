@@ -70,6 +70,7 @@ const initialState: TOrderState = {
   appointment: {
     place: null,
     time: null,
+    addressDetails: null
   },
   vehicle: null,
   serviceBundle: null,
@@ -86,6 +87,7 @@ export const orderSlice = createSlice({
     setAppointment: (state, action: PayloadAction<TOrderState['appointment']>) => {
       state.appointment.place = action.payload.place
       state.appointment.time = action.payload.time
+      state.appointment.addressDetails = action.payload.addressDetails
     },
     setItemsFromCart: (
       state,

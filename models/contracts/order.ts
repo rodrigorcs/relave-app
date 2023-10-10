@@ -26,6 +26,7 @@ export interface IPaymentLine {
 
 interface IAppointment {
   place: TGoogleMapsPlaceResult | null
+  addressDetails: string | null
   time: number | null
 }
 

@@ -2,6 +2,7 @@ import { DaysRail, IDate, PlacesAutocomplete } from '../../components/appointmen
 import { ITime, TimesGrid } from '../../components/appointment/TimesGrid'
 import {
   CustomButton,
+  CustomInput,
   CustomText,
   ECustomTextVariants,
   SafeAreaView,
@@ -24,13 +25,18 @@ export default function Appointment() {
   const [selectedPlace, setSelectedPlace] = useState<TGoogleMapsPlaceResult | null>(null)
   const [selectedDate, setSelectedDate] = useState<IDate>(dayjsToDate(dayjs()))
   const [selectedTime, setSelectedTime] = useState<ITime | null>(null)
+  const [addressDetails, setAddressDetails] = useState('')
+
+  const handleAddressDetailsChange = (newValue: string) => {
+    setAddressDetails(newValue)
+  }
 
   const onSubmit = () => {
     if (!selectedTime) return
     const { year, month, day } = selectedDate
     const { hour, minute } = selectedTime
     const datetime = `${year}-${month}-${day} ${hour}:${minute}`
-    dispatch(setAppointment({ place: selectedPlace, time: dayjs(datetime).unix() }))
+    dispatch(setAppointment({ place: selectedPlace, time: dayjs(datetime).unix(), addressDetails }))
     dispatch(setItemsFromCart(cart))
 
     router.push('/checkout')
@@ -44,6 +50,14 @@ export default function Appointment() {
             Onde devemos realizar o serviço?
           </CustomText>
           <PlacesAutocomplete selectedPlace={selectedPlace} onChange={setSelectedPlace} />
+          <CustomInput
+            title="Complemento"
+            placeholder="Ap. 602, Torre C..."
+            value={addressDetails}
+            handleValueChange={handleAddressDetailsChange}
+            error=""
+            customClassName="mt-2"
+          />
         </View>
         <View className="flex-col py-8">
           <View className="flex-row items-center justify-between px-4">
