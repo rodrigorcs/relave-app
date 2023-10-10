@@ -128,5 +128,6 @@ export const getPaymentLines = (state: TOrderState) => state.paymentLines
 export const getTotalPrice = (state: TOrderState) => state.totalPrice
 export const getPaymentData = (state: TOrderState) => state.payment
 export const getOrder = (state: TOrderState) => state
+export const getOrderShortId = (state: TOrderState) => (state.shortId)
 
 export const orderReducer = orderSlice.reducer

@@ -5,12 +5,12 @@ import {
   ECustomTextVariants,
   SafeAreaView,
 } from '../../components/common'
+import { PaymentLines } from '../../components/common/PaymentLines'
 import { daySchedulesAction } from '../../core/actions/daySchedules'
 import { ordersActions } from '../../core/actions/orders'
 import { usersActions } from '../../core/actions/users'
 import { useCallbackURL, useFirestoreDocument, useStripePaymentSheet } from '../../hooks'
 import { EFirestoreCollections } from '../../models/constants/EFirestoreCollections'
-import { EPaymentLineTypes } from '../../models/contracts/order'
 import { IUser } from '../../models/contracts/user'
 import { IOrderEntity } from '../../models/entities/order'
 import { getCurrentUser } from '../../state/slices/auth'
@@ -24,9 +24,7 @@ import {
 } from '../../state/slices/order'
 import { IAppState } from '../../state/store'
 import { formatPlaceAddress } from '../../utils/address'
-import { cn } from '../../utils/cn'
 import { EDateFormats, dayjs, dayjsToDate } from '../../utils/dayjs'
-import { getDisplayPrice } from '../../utils/price'
 import { router } from 'expo-router'
 import {
   ArrowRight as ArrowRightIcon,
@@ -74,6 +72,10 @@ export default function Checkout() {
   const { dayOfWeek } = dayjsToDate(appointmentTime)
 
   const formattedPlaceAddress = formatPlaceAddress(appointment.place)
+  const addressLine2 = [
+    formattedPlaceAddress.secondaryText,
+    appointment.addressDetails ? ` | ${appointment.addressDetails}` : '',
+  ].join('')
 
   const handleConfirmOrder = async () => {
     if (!order.duration) throw new Error('Order duration not specified.')
@@ -105,7 +107,7 @@ export default function Checkout() {
             <AppointmentCard
               Icon={<LocationIcon />}
               primaryText={formattedPlaceAddress.primaryText}
-              secondaryText={formattedPlaceAddress.secondaryText ?? undefined}
+              secondaryText={addressLine2}
             />
             <AppointmentCard
               Icon={<CalendarIcon />}
@@ -118,37 +120,7 @@ export default function Checkout() {
         <View className="px-4 py-8">
           <CustomText variant={ECustomTextVariants.HEADING3}>Resumo dos itens</CustomText>
           <View className="mt-4">
-            {(paymentLines ?? []).map((paymentLine, index) => {
-              const isSubtotal = paymentLine.type === EPaymentLineTypes.SUBTOTAL
-              const isTotal = paymentLine.type === EPaymentLineTypes.TOTAL
-
-              return (
-                <View
-                  key={paymentLine.id}
-                  className={cn(
-                    'flex-row justify-between',
-                    index > 0 && 'mt-2',
-                    isSubtotal && 'mt-4 border-t border-neutrals-200 pt-4',
-                  )}
-                >
-                  <CustomText
-                    variant={isTotal ? ECustomTextVariants.EXPRESSIVE3 : ECustomTextVariants.BODY3}
-                    customClassName="text-neutrals-900"
-                  >
-                    {paymentLine.name}
-                  </CustomText>
-                  <CustomText
-                    variant={isTotal ? ECustomTextVariants.EXPRESSIVE3 : ECustomTextVariants.BODY3}
-                    customClassName={cn(
-                      'text-right',
-                      isTotal ? 'text-neutrals-900' : 'text-neutrals-600',
-                    )}
-                  >
-                    {getDisplayPrice(paymentLine.price)}
-                  </CustomText>
-                </View>
-              )
-            })}
+            <PaymentLines paymentLines={paymentLines} />
           </View>
         </View>
       </View>

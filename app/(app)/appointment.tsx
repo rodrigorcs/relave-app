@@ -55,6 +55,7 @@ export default function Appointment() {
             placeholder="Ap. 602, Torre C..."
             value={addressDetails}
             handleValueChange={handleAddressDetailsChange}
+            autoCorrect={false}
             error=""
             customClassName="mt-2"
           />

@@ -1,5 +1,3 @@
-import MastercardLogo from '../../assets/vectors/card-logo-mastercard.svg'
-import VisaLogo from '../../assets/vectors/card-logo-visa.svg'
 import ConfirmedOrderIllustration from '../../assets/vectors/confirmed-order.svg'
 import {
   CustomButton,
@@ -7,14 +5,21 @@ import {
   ECustomTextVariants,
   SafeAreaView,
 } from '../../components/common'
-import { EPaymentLineTypes } from '../../models/contracts/order'
-import { getAppointment, getPaymentData, getPaymentLines } from '../../state/slices/order'
+import { PaymentLines } from '../../components/common/PaymentLines'
+import {
+  EPaymentMethods,
+  PaymentMethodCard,
+} from '../../components/orderConfirmation/PaymentMethodCard'
+import {
+  getAppointment,
+  getOrderShortId,
+  getPaymentData,
+  getPaymentLines,
+} from '../../state/slices/order'
 import { IAppState } from '../../state/store'
 import { theme } from '../../theme'
 import { formatPlaceAddress } from '../../utils/address'
-import { cn } from '../../utils/cn'
 import { EDateFormats, dayjs } from '../../utils/dayjs'
-import { getDisplayPrice } from '../../utils/price'
 import { router } from 'expo-router'
 import {
   IconoirProvider,
@@ -29,6 +34,7 @@ export default function OrderConfirmation() {
   const appointment = useSelector(({ order }: IAppState) => getAppointment(order))
   const paymentLines = useSelector(({ order }: IAppState) => getPaymentLines(order))
   const paymentData = useSelector(({ order }: IAppState) => getPaymentData(order))
+  const orderShortId = useSelector(({ order }: IAppState) => getOrderShortId(order))
 
   const formattedPlaceAddress = formatPlaceAddress(appointment.place)
 
@@ -41,7 +47,13 @@ export default function OrderConfirmation() {
       <ScrollView>
         <View className="py w-fit items-center border-b border-neutrals-200 px-3 py-8">
           <ConfirmedOrderIllustration height={150} pointerEvents="none" />
-          <CustomText variant={ECustomTextVariants.HEADING2} customClassName="mt-8">
+          <CustomText
+            variant={ECustomTextVariants.SUBHEADING3}
+            customClassName="mt-6 text-neutrals-400"
+          >
+            {`#${orderShortId}`}
+          </CustomText>
+          <CustomText variant={ECustomTextVariants.HEADING2} customClassName="mt-2">
             Pedido confirmado
           </CustomText>
           <CustomText
@@ -63,7 +75,7 @@ export default function OrderConfirmation() {
               }}
             >
               <View className="h-10 flex-row items-center">
-                <CalendarIcon />
+                <LocationIcon />
                 <View className="ml-3">
                   <CustomText variant={ECustomTextVariants.BODY3}>
                     {formattedPlaceAddress.primaryText}
@@ -77,7 +89,7 @@ export default function OrderConfirmation() {
                 </View>
               </View>
               <View className="mt-1 h-10 flex-row items-center">
-                <LocationIcon />
+                <CalendarIcon />
                 <CustomText variant={ECustomTextVariants.BODY3} customClassName="ml-3">
                   {dayjs.unix(appointment.time ?? 0).format(EDateFormats.READABLE_DATE_TIME)}
                 </CustomText>
@@ -88,52 +100,15 @@ export default function OrderConfirmation() {
         <View className="border-b border-neutrals-200 px-4 py-8">
           <CustomText variant={ECustomTextVariants.HEADING3}>Resumo dos itens</CustomText>
           <View className="mt-4">
-            {(paymentLines ?? []).map((paymentLine, index) => {
-              const isSubtotal = paymentLine.type === EPaymentLineTypes.SUBTOTAL
-              const isTotal = paymentLine.type === EPaymentLineTypes.TOTAL
-
-              return (
-                <View
-                  key={paymentLine.id}
-                  className={cn(
-                    'flex-row justify-between',
-                    index > 0 && 'mt-2',
-                    isSubtotal && 'mt-4 border-t border-neutrals-200 pt-4',
-                  )}
-                >
-                  <CustomText
-                    variant={isTotal ? ECustomTextVariants.EXPRESSIVE3 : ECustomTextVariants.BODY3}
-                    customClassName="text-neutrals-900"
-                  >
-                    {paymentLine.name}
-                  </CustomText>
-                  <CustomText
-                    variant={isTotal ? ECustomTextVariants.EXPRESSIVE3 : ECustomTextVariants.BODY3}
-                    customClassName={cn(
-                      'text-right',
-                      isTotal ? 'text-neutrals-900' : 'text-neutrals-600',
-                    )}
-                  >
-                    {getDisplayPrice(paymentLine.price)}
-                  </CustomText>
-                </View>
-              )
-            })}
+            <PaymentLines paymentLines={paymentLines} />
           </View>
         </View>
         <View className="px-4 py-8">
           <CustomText variant={ECustomTextVariants.HEADING3}>Pagamento</CustomText>
-          <View className="mt-4 flex-row items-center rounded-xl bg-neutrals-100 p-4">
-            <View className="w-9 rounded bg-neutrals-white">
-              {paymentData?.cardBrand === 'mastercard' && (
-                <MastercardLogo height={24} pointerEvents="none" />
-              )}
-              {paymentData?.cardBrand === 'visa' && <VisaLogo height={24} pointerEvents="none" />}
-            </View>
-            <CustomText variant={ECustomTextVariants.BODY3} customClassName="flex-1 ml-4">
-              {`**** ${paymentData?.lastDigits}`}
-            </CustomText>
-          </View>
+          <PaymentMethodCard
+            paymentMethod={paymentData?.cardBrand as EPaymentMethods}
+            cardLastDigits={paymentData?.lastDigits ?? undefined}
+          />
         </View>
       </ScrollView>
       <View className="border-t border-neutrals-200 px-4 pb-1 pt-6">
