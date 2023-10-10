@@ -46,6 +46,11 @@ export const sendOTPToken = (phoneNumber: string) => async () => {
   smsConfirmationObj = confirmation
 }
 
+export const resendOTPToken = (phoneNumber: string) => async () => {
+  const confirmation = await authActions.resendOTPToken(phoneNumber)
+  smsConfirmationObj = confirmation
+}
+
 export const confirmOTPToken = (code: string) => async () => {
   if (smsConfirmationObj) await authActions.confirmOTPToken(smsConfirmationObj, code)
 }

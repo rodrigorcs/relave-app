@@ -12,5 +12,9 @@ export const authActions = {
   ) => {
     return smsConfirmationObj?.confirm(code)
   },
+  resendOTPToken: async (phoneNumber: string): Promise<FirebaseAuthTypes.ConfirmationResult> => {
+    const phoneToSignIn = `+55 ${phoneNumber}`
+    return auth().signInWithPhoneNumber(phoneToSignIn, true)
+  },
   signOut: () => auth().signOut(),
 }

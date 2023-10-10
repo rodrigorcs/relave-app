@@ -6,13 +6,14 @@ import {
   SafeAreaView,
 } from '../../components/common'
 import { OTPInput } from '../../components/otpConfirmation'
-import { useKeyboardVisibility } from '../../hooks'
+import { useKeyboardVisibility, useTimer } from '../../hooks'
 import { EInputMasks } from '../../models/constants/EInputMasks'
-import { confirmOTPToken, getUserPhoneNumber } from '../../state/slices/auth'
+import { confirmOTPToken, getUserPhoneNumber, resendOTPToken } from '../../state/slices/auth'
 import { IAppState } from '../../state/store'
+import { cn } from '../../utils/cn'
 import { applyMask } from '../../utils/mask'
 import React, { useEffect, useRef, useState } from 'react'
-import { KeyboardAvoidingView, ScrollView, View } from 'react-native'
+import { KeyboardAvoidingView, ScrollView, TouchableOpacity, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import { AnyAction } from 'redux'
 
@@ -23,7 +24,10 @@ export default function OTPConfirmation() {
 
   const [otpToken, setOTPToken] = useState('')
   const [isTokenReady, setIsTokenReady] = useState(false)
-  const [showError, setShowError] = useState(false)
+  const [showOTPError, setShowOTPError] = useState(false)
+
+  const { timer: resendOTPTimer, startTimer } = useTimer(30)
+  const isResendOTPDisabled = resendOTPTimer > 0
 
   const isKeyboardOpen = useKeyboardVisibility()
 
@@ -32,17 +36,23 @@ export default function OTPConfirmation() {
   })
 
   const handleConfirmOTP = () => {
-    if (!isTokenReady) return setShowError(true)
+    if (!isTokenReady) return setShowOTPError(true)
     dispatch(confirmOTPToken(otpToken) as unknown as AnyAction)
   }
 
+  const handleResendOTP = () => {
+    if (!userPhoneNumber) throw new Error('Verifique o número de telefone.')
+    dispatch(resendOTPToken(userPhoneNumber) as unknown as AnyAction)
+    startTimer()
+  }
+
   useEffect(() => {
-    setShowError(false)
+    setShowOTPError(false)
   }, [otpToken])
 
   useEffect(() => {
     handleConfirmOTP()
-    setShowError(false)
+    setShowOTPError(false)
   }, [isTokenReady])
 
   return (
@@ -75,9 +85,9 @@ export default function OTPConfirmation() {
                 maximumLength={6}
                 setIsCodeReady={setIsTokenReady}
                 customClassName="mt-12"
-                showError={showError}
+                showError={showOTPError}
               />
-              {showError && (
+              {showOTPError && (
                 <CustomText
                   variant={ECustomTextVariants.HELPER2}
                   customClassName="mt-2 text-feedback-negative-300"
@@ -90,12 +100,22 @@ export default function OTPConfirmation() {
               <CustomText variant={ECustomTextVariants.BODY2} customClassName="text-neutrals-500">
                 Não recebeu?&nbsp;
               </CustomText>
-              <CustomText
-                variant={ECustomTextVariants.EXPRESSIVE2}
-                customClassName="text-brand-500"
-              >
-                Reenviar
-              </CustomText>
+              <TouchableOpacity onPress={handleResendOTP} disabled={isResendOTPDisabled}>
+                <CustomText
+                  variant={ECustomTextVariants.EXPRESSIVE2}
+                  customClassName={cn('text-brand-500', isResendOTPDisabled && 'text-neutrals-300')}
+                >
+                  Reenviar
+                </CustomText>
+              </TouchableOpacity>
+              {isResendOTPDisabled && (
+                <CustomText
+                  variant={ECustomTextVariants.EXPRESSIVE3}
+                  customClassName="text-neutrals-300"
+                >
+                  {` (${resendOTPTimer.toString().padStart(2, '0')})`}
+                </CustomText>
+              )}
             </View>
           </View>
         </ScrollView>
