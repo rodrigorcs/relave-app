@@ -76,7 +76,11 @@ export default function Checkout() {
   const formattedPlaceAddress = formatPlaceAddress(appointment.place)
 
   const handleConfirmOrder = async () => {
-    const timeIsAvailable = await daySchedulesAction.getTimeAvailability(appointmentTime)
+    if (!order.dateId || !order.duration) throw new Error('Order not found.')
+    const timeIsAvailable = await daySchedulesAction.getTimeAvailability(
+      order.dateId,
+      order.duration,
+    )
     if (!timeIsAvailable) throw new Error('Appointment time is no longer available.')
 
     openPaymentSheet()
