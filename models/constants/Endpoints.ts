@@ -1,8 +1,8 @@
+import { isAndroid } from '../../utils/platform'
 import { IOnboardingHint } from '../contracts/onboardingHint'
 import { IVehicleBrand } from '../contracts/vehicleBrand'
-import { Platform } from 'react-native'
 
-const LOCALHOST_URL = Platform.OS === 'android' ? 'http://10.0.2.2' : 'http://localhost'
+const LOCALHOST_URL = isAndroid ? 'http://10.0.2.2' : 'http://localhost'
 
 const BaseUrls = {
   GOOGLE_MAPS_API: 'https://maps.googleapis.com/maps/api',

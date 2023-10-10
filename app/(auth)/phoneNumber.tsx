@@ -10,6 +10,7 @@ import {
 import { useMaskedInput } from '../../hooks'
 import { EInputMasks } from '../../models/constants/EInputMasks'
 import { sendOTPToken, signOut, storePhoneNumberToOTP } from '../../state/slices/auth'
+import { isIOS } from '../../utils/platform'
 import { router } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import { KeyboardAvoidingView, View } from 'react-native'
@@ -35,7 +36,11 @@ export default function PhoneNumber() {
   }
 
   return (
-    <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={96} className="flex-1">
+    <KeyboardAvoidingView
+      behavior={isIOS ? 'padding' : 'height'}
+      keyboardVerticalOffset={96}
+      className="flex-1"
+    >
       <SafeAreaView customClassName="flex flex-1 bg-common-background">
         <HeaderProgressBar progress={1 / 3} />
         <View className="flex-1">

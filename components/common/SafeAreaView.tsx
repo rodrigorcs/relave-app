@@ -1,4 +1,5 @@
 import { cn } from '../../utils/cn'
+import { isAndroid } from '../../utils/platform'
 import React, { FC, ReactNode } from 'react'
 import {
   Dimensions,
@@ -6,7 +7,6 @@ import {
   SafeAreaView as RNSafeAreaView,
   StyleProp,
   ViewStyle,
-  Platform,
 } from 'react-native'
 import { ClassNameValue } from 'tailwind-merge'
 
@@ -29,10 +29,7 @@ export const SafeAreaView: FC<IProps> = ({ children, hiddenStatusBar, customClas
   }
 
   return (
-    <RNSafeAreaView
-      className={cn(customClassName)}
-      style={Platform.OS === 'android' && androidStyle}
-    >
+    <RNSafeAreaView className={cn(customClassName)} style={isAndroid && androidStyle}>
       {children}
     </RNSafeAreaView>
   )

@@ -5,7 +5,7 @@
   "scripts": {
     "clear": "rm -rf node_modules && yarn cache clean && yarn && rm -rf $TMPDIR/haste-map-* && rm -rf $TMPDIR/metro-cache",
     "start": "expo start",
-    "android": "expo run:android",
+    "android": "expo run:android --device Pixel_7_API_33",
     "ios": "expo run:ios",
     "ios:clear": "yarn clear && yarn ios --no-build-cache",
     "web": "expo start --web",

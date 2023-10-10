@@ -12,6 +12,7 @@ import { confirmOTPToken, getUserPhoneNumber, resendOTPToken } from '../../state
 import { IAppState } from '../../state/store'
 import { cn } from '../../utils/cn'
 import { applyMask } from '../../utils/mask'
+import { isIOS } from '../../utils/platform'
 import React, { useEffect, useRef, useState } from 'react'
 import { KeyboardAvoidingView, ScrollView, TouchableOpacity, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
@@ -56,7 +57,11 @@ export default function OTPConfirmation() {
   }, [isTokenReady])
 
   return (
-    <KeyboardAvoidingView behavior="padding" className="flex-1" keyboardVerticalOffset={96}>
+    <KeyboardAvoidingView
+      behavior={isIOS ? 'padding' : 'height'}
+      className="flex-1"
+      keyboardVerticalOffset={96}
+    >
       <SafeAreaView customClassName="flex flex-1 bg-common-background">
         <HeaderProgressBar progress={2 / 3} />
         <ScrollView

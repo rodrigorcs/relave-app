@@ -1,12 +1,7 @@
+import { isAndroid } from '../../utils/platform'
 import { SyncedScrollViewContext } from './SyncedScrollViewContext'
 import { Ref, RefObject, forwardRef, useContext, useEffect, useRef, useState } from 'react'
-import React, {
-  Animated,
-  LayoutChangeEvent,
-  Platform,
-  ScrollView,
-  ScrollViewProps,
-} from 'react-native'
+import React, { Animated, LayoutChangeEvent, ScrollView, ScrollViewProps } from 'react-native'
 
 // Code adapted from https://github.com/MaximilianDietel03/react-native-synced-scroll-views/
 
@@ -79,7 +74,7 @@ export const SyncedScrollView = forwardRef(
       // Depending on the orientation we scroll in, we need to use different properties
       [{ nativeEvent: { contentOffset: { [props.horizontal ? 'x' : 'y']: offset } } }],
       // FIXME: Use native driver on android
-      { useNativeDriver: Platform.OS !== 'android' },
+      { useNativeDriver: isAndroid },
     )
 
     offset.addListener(({ value }) => {

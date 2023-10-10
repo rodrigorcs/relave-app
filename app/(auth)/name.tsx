@@ -10,9 +10,10 @@ import {
 import { usersActions } from '../../core/actions/users'
 import { getCurrentUser, signOut, storeName } from '../../state/slices/auth'
 import { IAppState } from '../../state/store'
+import { isIOS } from '../../utils/platform'
 import { router } from 'expo-router'
 import React, { useEffect, useState } from 'react'
-import { View } from 'react-native'
+import { KeyboardAvoidingView, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import { AnyAction } from 'redux'
 
@@ -52,34 +53,40 @@ export default function Name() {
   }
 
   return (
-    <SafeAreaView customClassName="flex-1 bg-common-background">
-      <HeaderProgressBar progress={3 / 3} />
-      <View className="flex-1">
-        <View className="flex-1 px-4 py-12">
-          <CustomText variant={ECustomTextVariants.HEADING2}>Qual é o seu nome?</CustomText>
-          <CustomButton
-            onPress={() => dispatch(signOut as unknown as AnyAction)}
-            variant={ECustomButtonVariants.TERTIARY}
-            customClassName="mt-6"
-          >
-            Sair
-          </CustomButton>
-          <CustomInput
-            title="Nome e sobrenome"
-            error={error}
-            value={name}
-            handleValueChange={handleNameChange}
-            placeholder="Seu nome..."
-            keyboardType="name-phone-pad"
-            customClassName="mt-6"
-          />
+    <KeyboardAvoidingView
+      behavior={isIOS ? 'padding' : 'height'}
+      keyboardVerticalOffset={96}
+      className="flex-1"
+    >
+      <SafeAreaView customClassName="flex-1 bg-common-background">
+        <HeaderProgressBar progress={3 / 3} />
+        <View className="flex-1">
+          <View className="flex-1 px-4 py-12">
+            <CustomText variant={ECustomTextVariants.HEADING2}>Qual é o seu nome?</CustomText>
+            <CustomButton
+              onPress={() => dispatch(signOut as unknown as AnyAction)}
+              variant={ECustomButtonVariants.TERTIARY}
+              customClassName="mt-6"
+            >
+              Sair
+            </CustomButton>
+            <CustomInput
+              title="Nome e sobrenome"
+              error={error}
+              value={name}
+              handleValueChange={handleNameChange}
+              placeholder="Seu nome..."
+              keyboardType="name-phone-pad"
+              customClassName="mt-6"
+            />
+          </View>
         </View>
-      </View>
-      <View className="h-24 justify-center px-4">
-        <CustomButton isDisabled={name?.trim().length === 0} onPress={handleConfirmName}>
-          Continuar
-        </CustomButton>
-      </View>
-    </SafeAreaView>
+        <View className="h-24 justify-center px-4">
+          <CustomButton isDisabled={name?.trim().length === 0} onPress={handleConfirmName}>
+            Continuar
+          </CustomButton>
+        </View>
+      </SafeAreaView>
+    </KeyboardAvoidingView>
   )
 }
