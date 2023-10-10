@@ -55,6 +55,7 @@ export const AddServicesBottomSheet: FC<IProps> = ({ selectedServiceBundle, isOp
 
     dispatch(confirmSelectedServices({ additionalServices: selectedServices, duration }))
     router.push('/appointment')
+    close()
   }
 
   // TODO: Check all FlatLists and ScrollViews
