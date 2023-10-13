@@ -9,7 +9,8 @@ import {
   NavArrowUp as ChevronUpIcon,
 } from 'iconoir-react-native'
 import React, { Dispatch, FC, ReactNode, SetStateAction, useEffect, useRef, useState } from 'react'
-import { View, TouchableOpacity, TextInput, ScrollView, TextInputProps } from 'react-native'
+import { View, TouchableOpacity, TextInput, TextInputProps } from 'react-native'
+import { ScrollView } from 'react-native-gesture-handler'
 
 interface IDropdownExpandButtonProps {
   isDropdownOpen: boolean
@@ -148,7 +149,7 @@ export const Autocomplete = <T extends IOption>({
                   <CustomText variant={ECustomTextVariants.HELPER1}>Sem opções.</CustomText>
                 </View>
               ) : (
-                <ScrollView className="rounded-lg">
+                <ScrollView className="rounded-lg" nestedScrollEnabled>
                   {dropdownOptions.map((option) => {
                     const isSelected = selectedOption && option.id === selectedOption.id
                     return (
