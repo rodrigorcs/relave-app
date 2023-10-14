@@ -1,11 +1,11 @@
 export default {
   expo: {
     name: 'Relave',
-    slug: 'lavei-app',
+    slug: 'relave',
     version: '1.0.0',
     orientation: 'portrait',
     icon: './assets/images/icon.png',
-    scheme: 'laveiapp',
+    scheme: 'relave',
     userInterfaceStyle: 'automatic',
     splash: {
       image: './assets/images/splash.png',
@@ -14,19 +14,19 @@ export default {
     },
     assetBundlePatterns: ['**/*'],
     ios: {
-      bundleIdentifier: 'com.rodrigorcs.laveiapp',
+      bundleIdentifier: 'com.rodrigorcs.relave',
       googleServicesFile: './GoogleService-Info.plist',
       supportsTablet: true,
       infoPlist: {
         CFBundleDevelopmentRegion: 'pt_BR',
-        LSApplicationQueriesSchemes: ['laveiapp'],
+        LSApplicationQueriesSchemes: ['relave'],
         NSLocationWhenInUseUsageDescription: 'Allow $(PRODUCT_NAME) to use your location',
         NSLocationAlwaysUsageDescription: 'Allow $(PRODUCT_NAME) to use your location',
         NSLocationAlwaysAndWhenInUseUsageDescription: 'Allow $(PRODUCT_NAME) to use your location',
       },
     },
     android: {
-      package: 'com.rodrigorcs.laveiapp',
+      package: 'com.rodrigorcs.relave',
       googleServicesFile: './google-services.json',
       adaptiveIcon: {
         foregroundImage: './assets/images/adaptive-icon.png',

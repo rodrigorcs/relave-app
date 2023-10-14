@@ -25,7 +25,7 @@ export const useStripePaymentSheet = (
         customerId: customerId ?? undefined,
         customerEphemeralKeySecret,
         paymentIntentClientSecret: paymentIntentClientSecret as string,
-        returnURL: 'com.rodrigorcs.laveiapp://checkout',
+        returnURL: 'com.rodrigorcs.relave://checkout',
         style: 'alwaysLight',
         appearance: {
           colors: {
