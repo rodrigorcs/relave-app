@@ -11,8 +11,8 @@ export default function Layout() {
 
   return (
     <Stack>
-      <Stack.Screen name="index" options={{ title: 'Lavei', headerBackVisible: false }} />
-      <Stack.Screen name="appointment" options={{ title: 'Lavei' }} />
+      <Stack.Screen name="index" options={{ title: 'Relave', headerBackVisible: false }} />
+      <Stack.Screen name="appointment" options={{ title: 'Relave' }} />
       <Stack.Screen name="checkout" options={{ title: 'Resumo' }} />
       <Stack.Screen
         name="orderConfirmation"

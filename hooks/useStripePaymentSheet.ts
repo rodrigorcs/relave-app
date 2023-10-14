@@ -21,7 +21,7 @@ export const useStripePaymentSheet = (
         await paymentActions.createPaymentIntent(validStripeCustomerId, validOrderId, amount)
 
       await initPaymentSheet({
-        merchantDisplayName: 'Lavei',
+        merchantDisplayName: 'Relave',
         customerId: customerId ?? undefined,
         customerEphemeralKeySecret,
         paymentIntentClientSecret: paymentIntentClientSecret as string,

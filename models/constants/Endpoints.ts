@@ -1,12 +1,19 @@
-import { isAndroid } from '../../utils/platform'
+// import { isAndroid } from '../../utils/platform'
 import { IOnboardingHint } from '../contracts/onboardingHint'
 import { IVehicleBrand } from '../contracts/vehicleBrand'
 
-const LOCALHOST_URL = isAndroid ? 'http://10.0.2.2' : 'http://localhost'
+const REGION = 'southamerica-east1'
+const PROJECT_NAME = 'lavei-firebase'
+
+// const LOCALHOST_ADDRESS = isAndroid ? '10.0.2.2' : 'localhost'
+// const LOCALHOST_PORT = '5001'
+// const LOCALHOST_URL = `http://${LOCALHOST_ADDRESS}:${LOCALHOST_PORT}/${PROJECT_NAME}/${REGION}`
+
+const SANDBOX_URL = `https://${REGION}-${PROJECT_NAME}.cloudfunctions.net`
 
 const BaseUrls = {
   GOOGLE_MAPS_API: 'https://maps.googleapis.com/maps/api',
-  FIREBASE_CLOUD_FUNCTIONS: `${LOCALHOST_URL}:5001/lavei-firebase/southamerica-east1`,
+  FIREBASE_CLOUD_FUNCTIONS: SANDBOX_URL,
 }
 
 export const Endpoints = {

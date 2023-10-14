@@ -1,6 +1,6 @@
 export default {
   expo: {
-    name: 'Lavei',
+    name: 'Relave',
     slug: 'lavei-app',
     version: '1.0.0',
     orientation: 'portrait',
