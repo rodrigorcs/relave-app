@@ -1,4 +1,4 @@
-package com.rodrigorcs.laveiapp;
+package com.rodrigorcs.relave;
 
 import android.app.Application;
 import android.content.res.Configuration;

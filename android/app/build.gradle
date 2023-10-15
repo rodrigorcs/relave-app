@@ -81,9 +81,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace 'com.rodrigorcs.laveiapp'
+    namespace 'com.rodrigorcs.relave'
     defaultConfig {
-        applicationId 'com.rodrigorcs.laveiapp'
+        applicationId 'com.rodrigorcs.relave'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
