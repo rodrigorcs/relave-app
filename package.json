@@ -8,6 +8,7 @@
     "android": "expo run:android --device Pixel_7_API_33",
     "ios": "expo run:ios",
     "ios:clear": "yarn clear && yarn ios --no-build-cache",
+    "ios:device": "yarn ios --device 00008120-001254391EE3C01E",
     "web": "expo start --web",
     "test": "jest --watchAll",
     "lint": "eslint '**/*.{ts,tsx,json}'",

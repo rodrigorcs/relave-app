@@ -5,7 +5,7 @@ import { store } from '../state/store'
 import { useFonts } from 'expo-font'
 import { Slot } from 'expo-router'
 import React from 'react'
-import { LogBox } from 'react-native'
+import { LogBox, StatusBar } from 'react-native'
 import { Provider as ReduxProvider } from 'react-redux'
 
 export default function Layout() {
@@ -30,6 +30,8 @@ export default function Layout() {
     DMSansExtraLight: require('../assets/fonts/DMSans-ExtraLight.ttf'),
     DMSansThin: require('../assets/fonts/DMSans-Thin.ttf'),
   })
+
+  StatusBar.setBarStyle('dark-content')
 
   LogBox.ignoreLogs(['Image source "null" doesn\'t exist']) // Ignore android warning when image source is null (ex: placeholder)
 
