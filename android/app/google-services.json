@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:146340825006:android:1f8e1da7496e9da4efea3f",
         "android_client_info": {
-          "package_name": "com.rodrigorcs.laveiapp"
+          "package_name": "com.rodrigorcs.relave"
         }
       },
       "oauth_client": [
@@ -34,7 +34,7 @@
               "client_id": "146340825006-s8ja6h0nb4lucdl541otjn6f5nsmglnu.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.rodrigorcs.laveiapp"
+                "bundle_id": "com.rodrigorcs.relave"
               }
             }
           ]
