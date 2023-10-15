@@ -63,13 +63,17 @@ export default function Name() {
         <View className="flex-1">
           <View className="flex-1 px-4 py-12">
             <CustomText variant={ECustomTextVariants.HEADING2}>Qual é o seu nome?</CustomText>
-            <CustomButton
-              onPress={() => dispatch(signOut as unknown as AnyAction)}
-              variant={ECustomButtonVariants.TERTIARY}
-              customClassName="mt-6"
-            >
-              Sair
-            </CustomButton>
+            {false && (
+              <>
+                <CustomButton
+                  onPress={() => dispatch(signOut as unknown as AnyAction)}
+                  variant={ECustomButtonVariants.TERTIARY}
+                  customClassName="mt-6"
+                >
+                  Sair
+                </CustomButton>
+              </>
+            )}
             <CustomInput
               title="Nome e sobrenome"
               error={error}

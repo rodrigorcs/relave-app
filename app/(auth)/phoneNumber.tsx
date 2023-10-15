@@ -64,7 +64,7 @@ export default function PhoneNumber() {
               prefix="+55"
               customClassName="mt-6"
             />
-            {true && (
+            {false && (
               <>
                 <CustomButton
                   onPress={() => dispatch(signOut as unknown as AnyAction)}

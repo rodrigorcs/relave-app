@@ -73,7 +73,7 @@ export default {
         origin: false,
       },
       eas: {
-        projectId: '418938d2-991f-4103-9363-98969edccc5a',
+        projectId: 'a0ab0fa9-b6f8-49f8-b059-28a35479406a',
       },
     },
     owner: 'rodrigo.rcs',
