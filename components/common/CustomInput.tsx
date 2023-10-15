@@ -22,6 +22,7 @@ interface IProps {
   isDisabled?: boolean
   autoComplete?: TextInputProps['autoComplete']
   autoCorrect?: TextInputProps['autoCorrect']
+  autoFocus?: TextInputProps['autoFocus']
 }
 
 export const CustomInput: FC<IProps> = ({
@@ -40,6 +41,7 @@ export const CustomInput: FC<IProps> = ({
   isDisabled = false,
   autoComplete,
   autoCorrect,
+  autoFocus,
 }) => {
   const [isFocused, setIsFocused] = useState(false)
 
@@ -97,6 +99,7 @@ export const CustomInput: FC<IProps> = ({
               style={{ fontSize: 16 }} // TODO: Remove default lineHeight from tailwind so that `text-base` class can be used
               autoComplete={autoComplete}
               autoCorrect={autoCorrect}
+              autoFocus={autoFocus}
             />
           </View>
           {iconRight && iconRight}

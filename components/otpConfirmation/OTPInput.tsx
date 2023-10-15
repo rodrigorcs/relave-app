@@ -97,6 +97,8 @@ export const OTPInput: FC<IOTPInputProps> = ({
         ref={inputRef}
         onBlur={() => setIsInputBoxFocused(false)}
         className="absolute opacity-0"
+        autoFocus
+        keyboardType="number-pad"
       />
     </View>
   )

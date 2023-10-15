@@ -81,6 +81,9 @@ export default function Name() {
               handleValueChange={handleNameChange}
               placeholder="Seu nome..."
               keyboardType="name-phone-pad"
+              autoComplete="name"
+              autoCorrect
+              autoFocus
               customClassName="mt-6"
             />
           </View>
