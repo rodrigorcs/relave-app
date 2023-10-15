@@ -16,7 +16,7 @@ export default {
     ios: {
       bundleIdentifier: 'com.rodrigorcs.relave',
       googleServicesFile: './GoogleService-Info.plist',
-      supportsTablet: true,
+      supportsTablet: false,
       infoPlist: {
         CFBundleDevelopmentRegion: 'pt_BR',
         LSApplicationQueriesSchemes: ['relave'],
