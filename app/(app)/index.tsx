@@ -1,4 +1,10 @@
-import { CustomText, ECustomTextVariants, SafeAreaView } from '../../components/common'
+import {
+  CustomButton,
+  CustomText,
+  ECustomButtonVariants,
+  ECustomTextVariants,
+  SafeAreaView,
+} from '../../components/common'
 import {
   AddVehicleCard,
   AddVehicleBottomSheet,
@@ -15,7 +21,7 @@ import {
   IServiceBundleWithDetails,
 } from '../../models/contracts/serviceBundle'
 import { IVehicle } from '../../models/contracts/vehicle'
-import { getCurrentUser } from '../../state/slices/auth'
+import { getCurrentUser, signOut } from '../../state/slices/auth'
 import {
   getSelectedServiceBundle,
   getSelectedVehicle,
@@ -32,6 +38,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { KeyboardAvoidingView, View } from 'react-native'
 import { GestureHandlerRootView, ScrollView } from 'react-native-gesture-handler'
 import { useSelector, useDispatch } from 'react-redux'
+import { AnyAction } from 'redux'
 
 const TIER_ICONS = Object.freeze({
   [EServiceBundleTiers.SIMPLE]: <FlashIcon />,
@@ -105,6 +112,16 @@ export default function Home() {
       <GestureHandlerRootView style={{ flex: 1 }}>
         <SafeAreaView customClassName="flex flex-1 bg-brand-500">
           <View className="flex-1">
+            {false && (
+              <>
+                <CustomButton
+                  onPress={() => dispatch(signOut as unknown as AnyAction)}
+                  variant={ECustomButtonVariants.TERTIARY}
+                >
+                  Sair
+                </CustomButton>
+              </>
+            )}
             <View className="bg-common-background py-8">
               <CustomText variant={ECustomTextVariants.HEADING3} customClassName="ml-4">
                 Selecione seu carro

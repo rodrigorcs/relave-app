@@ -63,6 +63,7 @@ export default function PhoneNumber() {
               keyboardType="phone-pad"
               prefix="+55"
               customClassName="mt-6"
+              autoFocus
             />
             {false && (
               <>
