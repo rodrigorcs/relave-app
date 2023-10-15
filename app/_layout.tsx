@@ -4,12 +4,15 @@ import '../global.css'
 import { store } from '../state/store'
 import { useFonts } from 'expo-font'
 import { Slot } from 'expo-router'
-import React from 'react'
+import * as SplashScreen from 'expo-splash-screen'
+import React, { useEffect } from 'react'
 import { LogBox, StatusBar } from 'react-native'
 import { Provider as ReduxProvider } from 'react-redux'
 
 export default function Layout() {
-  useFonts({
+  SplashScreen.preventAutoHideAsync()
+
+  const [fontsLoaded, fontError] = useFonts({
     InterBlack: require('../assets/fonts/Inter-Black.ttf'),
     InterExtraBold: require('../assets/fonts/Inter-ExtraBold.ttf'),
     InterBold: require('../assets/fonts/Inter-Bold.ttf'),
@@ -30,6 +33,16 @@ export default function Layout() {
     DMSansExtraLight: require('../assets/fonts/DMSans-ExtraLight.ttf'),
     DMSansThin: require('../assets/fonts/DMSans-Thin.ttf'),
   })
+
+  useEffect(() => {
+    if (fontsLoaded || fontError) {
+      SplashScreen.hideAsync()
+    }
+  }, [fontsLoaded, fontError])
+
+  if (!fontsLoaded && !fontError) {
+    return null
+  }
 
   StatusBar.setBarStyle('dark-content')
 
