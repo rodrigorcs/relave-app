@@ -43,7 +43,3 @@ expo-env.d.ts
 
 # nativewind / tailwind
 output.css
-
-# firebase / rnfirebase //TODO: Hide already pushed files from commit history
-google-services.json
-GoogleService-Info.plist
