@@ -7,4 +7,5 @@ export const vehiclesActions = {
     const createdVehicle = await vehiclesService.createVehicle(vehicle)
     return createdVehicle
   },
+  deleteVehicleById: vehiclesService.deleteVehicleById
 }

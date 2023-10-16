@@ -51,6 +51,7 @@ export default function Home() {
 
   const [openAddVehicleBottomSheet, setOpenAddVehicleBottomSheet] = useState<boolean>(false)
   const [addedVehicle, setAddedVehicle] = useState<IVehicle | null>(null)
+  const [removedVehicleId, setRemovedVehicleId] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
 
   const currentUser = useSelector(({ auth }: IAppState) => getCurrentUser(auth))
@@ -61,7 +62,7 @@ export default function Home() {
 
   const [vehicles, isLoadingVehicles] = useAsyncData(
     () => vehiclesActions.getVehiclesByUserId(currentUser.id),
-    [addedVehicle],
+    [addedVehicle, removedVehicleId],
   )
   const [serviceBundles, isLoadingServiceBundles] = useAsyncData(() =>
     serviceBundlesActions.getAllWithDetails(),
@@ -88,6 +89,15 @@ export default function Home() {
 
   const handleAddVehicle = (vehicle: IVehicle) => {
     setAddedVehicle(vehicle)
+  }
+
+  const handleDeleteVehicle = async (vehicleId: IVehicle['id']) => {
+    try {
+      await vehiclesActions.deleteVehicleById(vehicleId)
+      setRemovedVehicleId(vehicleId)
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   const handleOpenAddVehicleBottomSheet = useCallback(() => {
@@ -144,6 +154,7 @@ export default function Home() {
                           key={vehicle.id}
                           vehicle={vehicle}
                           handleChangeVehicle={handleChangeVehicle}
+                          handleDeleteVehicle={handleDeleteVehicle}
                           isSelected={isSelected}
                           index={index}
                         />

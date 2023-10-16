@@ -5,7 +5,11 @@ import { theme } from '../../theme'
 import { cn } from '../../utils/cn'
 import { CustomText, ECustomTextVariants } from '../common'
 import { Skeleton } from '../common/Skeleton'
-import { Car as BrandFallbackIcon, Check as CheckIcon } from 'iconoir-react-native'
+import {
+  Car as BrandFallbackIcon,
+  Check as CheckIcon,
+  Cancel as CloseIcon,
+} from 'iconoir-react-native'
 import React, { FC, useEffect, useState } from 'react'
 import { View, TouchableOpacity, Image } from 'react-native'
 
@@ -59,6 +63,7 @@ interface IProps {
   index: number
   isSelected: boolean
   handleChangeVehicle: (vehicle: IVehicle) => void
+  handleDeleteVehicle: (vehicleId: IVehicle['id']) => void
 }
 
 export const UserVehicleCard: FC<IProps> = ({
@@ -66,6 +71,7 @@ export const UserVehicleCard: FC<IProps> = ({
   index,
   isSelected,
   handleChangeVehicle,
+  handleDeleteVehicle,
 }) => {
   const [brandLogoUrl, hasImageError] = useCloudImage(
     Endpoints.VEHICLE_BRANDS_LOGOS(vehicle.brandSlug),
@@ -99,6 +105,17 @@ export const UserVehicleCard: FC<IProps> = ({
           />
         </View>
       )}
+      <TouchableOpacity
+        className="absolute right-2 top-2 h-6 w-6 items-center justify-center rounded-full"
+        onPress={() => handleDeleteVehicle(vehicle.id)}
+      >
+        <CloseIcon
+          width={16}
+          height={16}
+          strokeWidth={2}
+          color={isSelected ? theme.colors['neutrals-200'] : theme.colors['neutrals-400']}
+        />
+      </TouchableOpacity>
     </View>
   )
 }

@@ -20,4 +20,5 @@ export const vehiclesService = {
 
     return createdVehicle
   },
+  deleteVehicleById: vehiclesRepository.deleteVehicleById
 }

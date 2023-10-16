@@ -17,4 +17,9 @@ export const vehiclesRepository = {
 
     return vehicle
   },
+  deleteVehicleById: async (vehicleId: IVehicle['id']) => {
+    await vehiclesCollection.doc(vehicleId).delete()
+
+    return vehicleId
+  },
 }
