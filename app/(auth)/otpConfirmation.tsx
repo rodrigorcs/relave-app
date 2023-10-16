@@ -64,12 +64,7 @@ export default function OTPConfirmation() {
     >
       <SafeAreaView customClassName="flex flex-1 bg-common-background">
         <HeaderProgressBar progress={2 / 3} />
-        <ScrollView
-          ref={scrollViewRef}
-          className="flex-1"
-          showsVerticalScrollIndicator={false}
-          scrollEnabled={false}
-        >
+        <ScrollView ref={scrollViewRef} className="flex-1" showsVerticalScrollIndicator={false}>
           <View className="flex-1 px-4 py-12">
             <CustomText variant={ECustomTextVariants.HEADING2}>
               Digite o código de 6 dígitos que enviamos por SMS

@@ -68,12 +68,7 @@ export default function Name() {
     >
       <SafeAreaView customClassName="flex-1 bg-common-background">
         <HeaderProgressBar progress={3 / 3} />
-        <ScrollView
-          ref={scrollViewRef}
-          className="flex-1"
-          showsVerticalScrollIndicator={false}
-          scrollEnabled={false}
-        >
+        <ScrollView ref={scrollViewRef} className="flex-1" showsVerticalScrollIndicator={false}>
           <View className="flex-1 px-4 py-12">
             <CustomText variant={ECustomTextVariants.HEADING2}>Qual é o seu nome?</CustomText>
             {false && (
