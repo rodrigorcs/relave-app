@@ -52,6 +52,8 @@ export const AddVehicleBottomSheet: FC<IProps> = ({ addVehicle, userId, isOpen, 
       modelName: selectedModel.name,
     })
     addVehicle(createdVehicle)
+    setSelectedBrand(null)
+    setSelectedModel(null)
     close()
   }
 

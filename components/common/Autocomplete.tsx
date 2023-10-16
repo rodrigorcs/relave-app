@@ -149,7 +149,11 @@ export const Autocomplete = <T extends IOption>({
                   <CustomText variant={ECustomTextVariants.HELPER1}>Sem opções.</CustomText>
                 </View>
               ) : (
-                <ScrollView className="rounded-lg" nestedScrollEnabled>
+                <ScrollView
+                  className="rounded-lg"
+                  nestedScrollEnabled
+                  keyboardShouldPersistTaps="always"
+                >
                   {dropdownOptions.map((option) => {
                     const isSelected = selectedOption && option.id === selectedOption.id
                     return (
