@@ -13,10 +13,11 @@ import { getCart } from '../../state/slices/cart'
 import { setAppointment, setItemsFromCart } from '../../state/slices/order'
 import { IAppState } from '../../state/store'
 import { dayjs, dayjsToDate } from '../../utils/dayjs'
+import { isIOS } from '../../utils/platform'
 import { router } from 'expo-router'
 import { ArrowRight as ArrowRightIcon } from 'iconoir-react-native'
 import React, { useState } from 'react'
-import { ScrollView, View } from 'react-native'
+import { KeyboardAvoidingView, ScrollView, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 
 export default function Appointment() {
@@ -46,54 +47,62 @@ export default function Appointment() {
   }
 
   return (
-    <SafeAreaView customClassName="flex flex-1 bg-common-background">
-      <ScrollView>
-        <View className="z-10 border-b border-neutrals-200 px-4 py-8">
-          <CustomText variant={ECustomTextVariants.HEADING3}>
-            Onde devemos realizar o serviço?
-          </CustomText>
-          <PlacesAutocomplete
-            selectedPlace={selectedPlace}
-            onChange={setSelectedPlace}
-            location={location}
-          />
-          <CustomInput
-            title="Complemento"
-            placeholder="Ap. 602, Torre C..."
-            value={addressDetails}
-            handleValueChange={handleAddressDetailsChange}
-            autoCorrect={false}
-            error=""
-            customClassName="mt-2"
-          />
-        </View>
-        <View className="flex-col py-8">
-          <View className="flex-row items-center justify-between px-4">
-            <CustomText variant={ECustomTextVariants.HEADING3}>Quando você precisa?</CustomText>
-            <CustomText variant={ECustomTextVariants.HEADING6} customClassName="text-brand-500">
-              ver mais
+    <KeyboardAvoidingView
+      behavior={isIOS ? 'padding' : 'height'}
+      keyboardVerticalOffset={96}
+      className="flex-1"
+    >
+      <SafeAreaView customClassName="flex flex-1 bg-common-background">
+        <ScrollView>
+          <View className="z-10 border-b border-neutrals-200 px-4 py-8">
+            <CustomText variant={ECustomTextVariants.HEADING3}>
+              Onde devemos realizar o serviço?
             </CustomText>
-          </View>
-          <DaysRail selectedDate={selectedDate} onChange={setSelectedDate} />
-          <View className="mx-4 mt-6">
-            <TimesGrid
-              selectedDate={selectedDate}
-              selectedTime={selectedTime}
-              onChange={setSelectedTime}
-              duration={cart.duration ?? 0}
+            <PlacesAutocomplete
+              selectedPlace={selectedPlace}
+              onChange={setSelectedPlace}
+              location={location}
+            />
+            <CustomInput
+              title="Complemento"
+              placeholder="Ap. 602, Torre C..."
+              value={addressDetails}
+              handleValueChange={handleAddressDetailsChange}
+              autoCorrect={false}
+              error=""
+              customClassName="mt-2"
             />
           </View>
+          <View className="flex-col py-8">
+            <View className="flex-row items-center justify-between px-4">
+              <CustomText variant={ECustomTextVariants.HEADING3}>Quando você precisa?</CustomText>
+              {false && (
+                <CustomText variant={ECustomTextVariants.HEADING6} customClassName="text-brand-500">
+                  ver mais
+                </CustomText>
+              )}
+            </View>
+            <DaysRail selectedDate={selectedDate} onChange={setSelectedDate} />
+            <View className="mx-4 mt-6">
+              <TimesGrid
+                selectedDate={selectedDate}
+                selectedTime={selectedTime}
+                onChange={setSelectedTime}
+                duration={cart.duration ?? 0}
+              />
+            </View>
+          </View>
+        </ScrollView>
+        <View className="border-t border-neutrals-200 px-4 pb-1 pt-6">
+          <CustomButton
+            onPress={onSubmit}
+            isDisabled={!selectedPlace || !selectedTime}
+            IconRight={<ArrowRightIcon />}
+          >
+            Continuar
+          </CustomButton>
         </View>
-      </ScrollView>
-      <View className="border-t border-neutrals-200 px-4 pb-1 pt-6">
-        <CustomButton
-          onPress={onSubmit}
-          isDisabled={!selectedPlace || !selectedTime}
-          IconRight={<ArrowRightIcon />}
-        >
-          Continuar
-        </CustomButton>
-      </View>
-    </SafeAreaView>
+      </SafeAreaView>
+    </KeyboardAvoidingView>
   )
 }

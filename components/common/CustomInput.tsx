@@ -23,6 +23,7 @@ interface IProps {
   autoComplete?: TextInputProps['autoComplete']
   autoCorrect?: TextInputProps['autoCorrect']
   autoFocus?: TextInputProps['autoFocus']
+  onLayout?: () => void
 }
 
 export const CustomInput: FC<IProps> = ({
@@ -42,6 +43,7 @@ export const CustomInput: FC<IProps> = ({
   autoComplete,
   autoCorrect,
   autoFocus,
+  onLayout,
 }) => {
   const [isFocused, setIsFocused] = useState(false)
 
@@ -100,6 +102,7 @@ export const CustomInput: FC<IProps> = ({
               autoComplete={autoComplete}
               autoCorrect={autoCorrect}
               autoFocus={autoFocus}
+              onLayout={onLayout}
             />
           </View>
           {iconRight && iconRight}

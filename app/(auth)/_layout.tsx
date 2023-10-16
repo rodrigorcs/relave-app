@@ -1,7 +1,7 @@
 import '../../global.css'
 import { getCurrentUser } from '../../state/slices/auth'
 import { IAppState } from '../../state/store'
-import { Redirect, Stack, usePathname } from 'expo-router'
+import { Stack, router, usePathname } from 'expo-router'
 import React from 'react'
 import { useSelector } from 'react-redux'
 
@@ -10,8 +10,8 @@ export default function Layout() {
   const currentRoute = usePathname()
 
   if (user && currentRoute !== '/name') {
-    if (!user.name) return <Redirect href="/name" />
-    return <Redirect href="/(app)" />
+    if (!user.name) return router.push('/name')
+    return router.push('/(app)')
   }
 
   return (

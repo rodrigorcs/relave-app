@@ -8,12 +8,13 @@ import {
   SafeAreaView,
 } from '../../components/common'
 import { usersActions } from '../../core/actions/users'
+import { useKeyboardVisibility } from '../../hooks'
 import { getCurrentUser, signOut, storeName } from '../../state/slices/auth'
 import { IAppState } from '../../state/store'
 import { isIOS } from '../../utils/platform'
 import { router } from 'expo-router'
-import React, { useEffect, useState } from 'react'
-import { KeyboardAvoidingView, View } from 'react-native'
+import React, { useEffect, useRef, useState } from 'react'
+import { KeyboardAvoidingView, View, ScrollView } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import { AnyAction } from 'redux'
 
@@ -52,6 +53,13 @@ export default function Name() {
     router.push('/(app)')
   }
 
+  const scrollViewRef = useRef<ScrollView | null>(null)
+  const isKeyboardOpen = useKeyboardVisibility()
+
+  useEffect(() => {
+    if (isKeyboardOpen) scrollViewRef.current?.scrollToEnd({ animated: true })
+  }, [])
+
   return (
     <KeyboardAvoidingView
       behavior={isIOS ? 'padding' : 'height'}
@@ -60,7 +68,12 @@ export default function Name() {
     >
       <SafeAreaView customClassName="flex-1 bg-common-background">
         <HeaderProgressBar progress={3 / 3} />
-        <View className="flex-1">
+        <ScrollView
+          ref={scrollViewRef}
+          className="flex-1"
+          showsVerticalScrollIndicator={false}
+          scrollEnabled={false}
+        >
           <View className="flex-1 px-4 py-12">
             <CustomText variant={ECustomTextVariants.HEADING2}>Qual é o seu nome?</CustomText>
             {false && (
@@ -87,7 +100,7 @@ export default function Name() {
               customClassName="mt-6"
             />
           </View>
-        </View>
+        </ScrollView>
         <View className="h-24 justify-center px-4">
           <CustomButton isDisabled={name?.trim().length === 0} onPress={handleConfirmName}>
             Continuar

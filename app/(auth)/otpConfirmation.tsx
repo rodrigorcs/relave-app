@@ -34,7 +34,7 @@ export default function OTPConfirmation() {
 
   useEffect(() => {
     if (isKeyboardOpen) scrollViewRef.current?.scrollToEnd({ animated: true })
-  })
+  }, [])
 
   const handleConfirmOTP = () => {
     if (!isTokenReady) return setShowOTPError(true)
