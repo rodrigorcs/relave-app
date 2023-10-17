@@ -91,6 +91,7 @@ export const ServiceBundleCard: FC<IProps> = ({
               color={theme.colors['brand-500']}
             />
           }
+          customClassName="bg-neutrals-white"
         >
           Escolher
         </CustomButton>
