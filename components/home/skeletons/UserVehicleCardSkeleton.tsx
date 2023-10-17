@@ -13,7 +13,7 @@ export const UserVehicleCardSkeleton: FC<IProps> = ({ index }) => {
       <View
         className={cn('mb-2 h-32 w-32 items-center justify-center rounded-2xl bg-neutrals-100')}
       >
-        <Skeleton customClassName="w-8 aspect-square" />
+        <Skeleton customClassName="w-10 aspect-square" />
         <Skeleton customClassName="w-20 h-4 mt-4" />
         <Skeleton customClassName="w-16 h-4 mt-1" />
       </View>
