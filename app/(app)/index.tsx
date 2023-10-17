@@ -143,7 +143,7 @@ export default function Home() {
                 </CustomButton>
               </>
             )}
-            <View className="bg-common-background py-8">
+            <View className="bg-common-background py-6">
               <CustomText variant={ECustomTextVariants.HEADING3} customClassName="ml-4">
                 Selecione seu carro
               </CustomText>

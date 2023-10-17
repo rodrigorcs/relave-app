@@ -25,7 +25,7 @@ import {
   PinAlt as LocationIcon,
 } from 'iconoir-react-native'
 import React, { useEffect, useState } from 'react'
-import { View } from 'react-native'
+import { ScrollView, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 
 export default function Checkout() {
@@ -95,7 +95,7 @@ export default function Checkout() {
 
   return (
     <SafeAreaView customClassName="flex flex-1 bg-common-background">
-      <View className="flex-1">
+      <ScrollView className="flex-1">
         <View className="border-b border-neutrals-200 px-4 py-8">
           <CustomText variant={ECustomTextVariants.HEADING3}>Informações do pedido</CustomText>
           <View className="mt-4 flex-row">
@@ -118,7 +118,7 @@ export default function Checkout() {
             <PaymentLines paymentLines={paymentLines} />
           </View>
         </View>
-      </View>
+      </ScrollView>
       <View className="border-t border-neutrals-200 px-4 pb-1 pt-6">
         <CustomButton
           onPress={() => handleConfirmOrder()}
