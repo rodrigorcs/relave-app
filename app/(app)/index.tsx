@@ -29,6 +29,7 @@ import {
   setSelectedVehicle,
 } from '../../state/slices/cart'
 import { IAppState } from '../../state/store'
+import { useIsFocused } from '@react-navigation/native'
 import {
   Flash as FlashIcon,
   Spark as SparkIcon,
@@ -48,8 +49,10 @@ const TIER_ICONS = Object.freeze({
 
 export default function Home() {
   const dispatch = useDispatch()
+  const isFocused = useIsFocused()
 
   const [openAddVehicleBottomSheet, setOpenAddVehicleBottomSheet] = useState<boolean>(false)
+  const [openAddServicesBottomSheet, setOpenAddServicesBottomSheet] = useState<boolean>(false)
   const [addedVehicle, setAddedVehicle] = useState<IVehicle | null>(null)
   const [removedVehicleId, setRemovedVehicleId] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
@@ -70,6 +73,10 @@ export default function Home() {
 
   const vehicleSkeletons = useSkeletonArray(3)
   const serviceBundleSkeletons = useSkeletonArray(3)
+
+  useEffect(() => {
+    if (openAddServicesBottomSheet) handleCloseAddServicesBottomSheet()
+  }, [isFocused])
 
   useEffect(() => {
     if (vehicles?.length === 1) dispatch(setSelectedVehicle(vehicles[0]))
@@ -109,12 +116,16 @@ export default function Home() {
   }, [])
 
   const handleCloseAddServicesBottomSheet = useCallback(() => {
-    dispatch(setSelectedServiceBundle(null))
+    setOpenAddServicesBottomSheet(false)
+  }, [])
+  const handleOpenAddServicesBottomSheet = useCallback(() => {
+    setOpenAddServicesBottomSheet(true)
   }, [])
 
   const handleChooseServiceBundle = (serviceBundle: IServiceBundleWithDetails) => {
     if (!selectedVehicle) return setError('Selecione o seu carro para fazer o pedido.')
     dispatch(setSelectedServiceBundle(serviceBundle))
+    handleOpenAddServicesBottomSheet()
   }
 
   return (
@@ -226,7 +237,7 @@ export default function Home() {
           />
           <AddServicesBottomSheet
             selectedServiceBundle={selectedServiceBundle}
-            isOpen={selectedServiceBundle !== null}
+            isOpen={openAddServicesBottomSheet}
             close={handleCloseAddServicesBottomSheet}
           />
         </SafeAreaView>
