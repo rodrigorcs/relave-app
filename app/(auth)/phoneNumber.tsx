@@ -102,6 +102,7 @@ export default function PhoneNumber() {
         <View className="h-24 justify-center px-4">
           <CustomButton
             isDisabled={!isPhoneNumberValid}
+            bypassDisabled
             onPress={handleReceiveOTP}
             isLoading={isLoading}
           >

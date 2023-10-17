@@ -25,6 +25,7 @@ interface IProps {
   IconRight?: ReactNode
   style?: StyleProp<ViewStyle>
   textStyle?: StyleProp<TextStyle>
+  bypassDisabled?: boolean
 }
 
 const ButtonContent: FC<
@@ -83,7 +84,12 @@ export const CustomButton: FC<IProps> = ({
   IconRight,
   style,
   textStyle,
+  bypassDisabled,
 }) => {
+  const handleOnPress = () => {
+    if ((bypassDisabled || !isDisabled) && !isLoading) return onPress()
+  }
+
   return (
     <TouchableOpacity
       className={cn(
@@ -92,7 +98,7 @@ export const CustomButton: FC<IProps> = ({
         isDisabled && 'bg-brand-300',
         customClassName,
       )}
-      onPress={onPress}
+      onPress={handleOnPress}
       activeOpacity={isDisabled ? 1 : 0.2}
       style={style}
     >

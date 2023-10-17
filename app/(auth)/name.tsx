@@ -97,7 +97,11 @@ export default function Name() {
           </View>
         </ScrollView>
         <View className="h-24 justify-center px-4">
-          <CustomButton isDisabled={name?.trim().length === 0} onPress={handleConfirmName}>
+          <CustomButton
+            isDisabled={name?.trim().length === 0}
+            bypassDisabled
+            onPress={handleConfirmName}
+          >
             Continuar
           </CustomButton>
         </View>
