@@ -7,13 +7,14 @@ import {
   ECustomTextVariants,
   SafeAreaView,
 } from '../../components/common'
-import { useDeviceLocation } from '../../hooks'
+import { useDeviceLocation, useKeyboardVisibility } from '../../hooks'
 import { TGoogleMapsPlaceResult } from '../../models/contracts/externalApi/googleMaps'
 import { getCart } from '../../state/slices/cart'
 import { setAppointment, setItemsFromCart } from '../../state/slices/order'
 import { IAppState } from '../../state/store'
+import { cn } from '../../utils/cn'
 import { dayjs, dayjsToDate } from '../../utils/dayjs'
-import { isIOS } from '../../utils/platform'
+import { isAndroid, isIOS } from '../../utils/platform'
 import { router } from 'expo-router'
 import { ArrowRight as ArrowRightIcon } from 'iconoir-react-native'
 import React, { useState } from 'react'
@@ -25,6 +26,7 @@ export default function Appointment() {
   const cart = useSelector(({ cart }: IAppState) => getCart(cart))
 
   const location = useDeviceLocation()
+  const isKeyboardOpen = useKeyboardVisibility()
 
   const [selectedPlace, setSelectedPlace] = useState<TGoogleMapsPlaceResult | null>(null)
   const [selectedDate, setSelectedDate] = useState<IDate>(dayjsToDate(dayjs()))
@@ -68,8 +70,6 @@ export default function Appointment() {
               placeholder="Ap. 602, Torre C..."
               value={addressDetails}
               handleValueChange={handleAddressDetailsChange}
-              autoCorrect={false}
-              error=""
               customClassName="mt-2"
             />
           </View>
@@ -93,7 +93,13 @@ export default function Appointment() {
             </View>
           </View>
         </ScrollView>
-        <View className="border-t border-neutrals-200 px-4 pb-1 pt-6">
+        <View
+          className={cn(
+            'border-t border-neutrals-200 px-4 pb-2 pt-6',
+            isKeyboardOpen && 'pb-4 pt-4',
+            isAndroid && 'pb-0',
+          )}
+        >
           <CustomButton
             onPress={onSubmit}
             isDisabled={!selectedPlace || !selectedTime}

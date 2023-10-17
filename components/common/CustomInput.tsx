@@ -7,7 +7,7 @@ import { View, TextInput, KeyboardTypeOptions, TextInputProps } from 'react-nati
 import { ClassNameValue } from 'tailwind-merge'
 
 interface IProps {
-  error: string | null
+  error?: string | null
   value: string
   handleValueChange: (text: string) => void
   placeholder: string

@@ -36,7 +36,7 @@ const BrandLogo: FC<IBrandLogoProps> = ({ imageUrl, hasImageUrlError }) => {
       <Image
         source={{ uri: imageUrl ?? undefined }}
         resizeMode="center"
-        className={cn('h-8 w-8')}
+        className={cn('h-10 w-10')}
         style={{
           position: imageState === EImageState.SUCCESS ? undefined : 'absolute',
           top: imageState === EImageState.SUCCESS ? undefined : -1000,
@@ -45,7 +45,7 @@ const BrandLogo: FC<IBrandLogoProps> = ({ imageUrl, hasImageUrlError }) => {
         onError={() => setImageState(EImageState.ERROR)}
       />
       {imageState === EImageState.ERROR && (
-        <View className="h-8 w-8 items-center justify-center">
+        <View className="h-10 w-10 items-center justify-center">
           <BrandFallbackIcon
             width={20}
             height={20}
@@ -88,7 +88,7 @@ export const UserVehicleCard: FC<IProps> = ({
         onPress={() => handleChangeVehicle(vehicle)}
       >
         <BrandLogo imageUrl={brandLogoUrl} hasImageUrlError={!!hasImageError} />
-        <CustomText variant={ECustomTextVariants.EYEBROW2} customClassName="mt-4">
+        <CustomText variant={ECustomTextVariants.EYEBROW2} customClassName="mt-3">
           {vehicle.brandName}
         </CustomText>
         <CustomText variant={ECustomTextVariants.BODY3} customClassName="text-neutrals-600">
