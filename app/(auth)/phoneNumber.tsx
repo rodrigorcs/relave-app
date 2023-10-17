@@ -7,9 +7,10 @@ import {
   HeaderProgressBar,
   SafeAreaView,
 } from '../../components/common'
+import { authActions } from '../../core/actions/auth'
 import { useKeyboardVisibility, useMaskedInput } from '../../hooks'
 import { EInputMasks } from '../../models/constants/EInputMasks'
-import { sendOTPToken, signOut, storePhoneNumberToOTP } from '../../state/slices/auth'
+import { signOut, storeConfirmationObj, storePhoneNumberToOTP } from '../../state/slices/auth'
 import { isIOS } from '../../utils/platform'
 import { router } from 'expo-router'
 import React, { useEffect, useRef, useState } from 'react'
@@ -31,8 +32,11 @@ export default function PhoneNumber() {
 
   const handleReceiveOTP = async () => {
     if (!isPhoneNumberValid) return setError('Número invalido, verifique.')
-    dispatch(sendOTPToken(unmaskedPhoneNumber) as unknown as AnyAction)
+
+    const otpConfirmationObj = await authActions.resendOTPToken(unmaskedPhoneNumber)
+    storeConfirmationObj(otpConfirmationObj)
     dispatch(storePhoneNumberToOTP(unmaskedPhoneNumber))
+
     router.push('/otpConfirmation')
   }
 

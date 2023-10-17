@@ -6,26 +6,30 @@ import {
   SafeAreaView,
 } from '../../components/common'
 import { OTPInput } from '../../components/otpConfirmation'
+import { authActions } from '../../core/actions/auth'
 import { useKeyboardVisibility, useTimer } from '../../hooks'
 import { EInputMasks } from '../../models/constants/EInputMasks'
-import { confirmOTPToken, getUserPhoneNumber, resendOTPToken } from '../../state/slices/auth'
+import { OOtpErrors } from '../../models/constants/OtpErrors'
+import {
+  getConfirmationObj,
+  getUserPhoneNumber,
+  storeConfirmationObj,
+} from '../../state/slices/auth'
 import { IAppState } from '../../state/store'
 import { cn } from '../../utils/cn'
 import { applyMask } from '../../utils/mask'
 import { isIOS } from '../../utils/platform'
 import React, { useEffect, useRef, useState } from 'react'
 import { KeyboardAvoidingView, ScrollView, TouchableOpacity, View } from 'react-native'
-import { useDispatch, useSelector } from 'react-redux'
-import { AnyAction } from 'redux'
+import { useSelector } from 'react-redux'
 
 export default function OTPConfirmation() {
-  const dispatch = useDispatch()
   const userPhoneNumber = useSelector(({ auth }: IAppState) => getUserPhoneNumber(auth))
   const scrollViewRef = useRef<ScrollView | null>(null)
 
   const [otpToken, setOTPToken] = useState('')
   const [isTokenReady, setIsTokenReady] = useState(false)
-  const [showOTPError, setShowOTPError] = useState(false)
+  const [otpError, setOTPError] = useState<string | null>(null)
 
   const { timer: resendOTPTimer, startTimer } = useTimer(30)
   const isResendOTPDisabled = resendOTPTimer > 0
@@ -36,24 +40,36 @@ export default function OTPConfirmation() {
     if (isKeyboardOpen) scrollViewRef.current?.scrollToEnd({ animated: true })
   }, [])
 
-  const handleConfirmOTP = () => {
-    if (!isTokenReady) return setShowOTPError(true)
-    dispatch(confirmOTPToken(otpToken) as unknown as AnyAction)
+  const handleConfirmOTP = async () => {
+    if (!isTokenReady) return setOTPError('O código deve conter 6 dígitos')
+    const otpConfirmationObj = getConfirmationObj()
+    if (!otpConfirmationObj) throw new Error('')
+
+    try {
+      await authActions.confirmOTPToken(otpConfirmationObj, otpToken)
+    } catch (error) {
+      // FIXME: Use firebase error types instead of any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const errorCode = (error as any).code as keyof typeof OOtpErrors
+      setOTPError(OOtpErrors[errorCode] ?? OOtpErrors['fallback'])
+    }
   }
 
-  const handleResendOTP = () => {
+  const handleResendOTP = async () => {
     if (!userPhoneNumber) throw new Error('Verifique o número de telefone.')
-    dispatch(resendOTPToken(userPhoneNumber) as unknown as AnyAction)
     startTimer()
+
+    const otpConfirmationObj = await authActions.resendOTPToken(userPhoneNumber)
+    storeConfirmationObj(otpConfirmationObj)
   }
 
   useEffect(() => {
-    setShowOTPError(false)
+    setOTPError(null)
   }, [otpToken])
 
   useEffect(() => {
     handleConfirmOTP()
-    setShowOTPError(false)
+    setOTPError(null)
   }, [isTokenReady])
 
   return (
@@ -85,14 +101,14 @@ export default function OTPConfirmation() {
                 maximumLength={6}
                 setIsCodeReady={setIsTokenReady}
                 customClassName="mt-12"
-                showError={showOTPError}
+                error={otpError}
               />
-              {showOTPError && (
+              {otpError && (
                 <CustomText
-                  variant={ECustomTextVariants.HELPER2}
+                  variant={ECustomTextVariants.HELPER1}
                   customClassName="mt-2 text-feedback-negative-300"
                 >
-                  {`O código deve conter 6 dígitos`}
+                  {otpError}
                 </CustomText>
               )}
             </View>

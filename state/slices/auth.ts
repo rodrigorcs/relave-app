@@ -41,18 +41,11 @@ export const { storeUser, clearCredentials, storePhoneNumberToOTP, storeName } =
 // TODO: Alternative - Can't put into slice as it's not serializable
 let smsConfirmationObj: FirebaseAuthTypes.ConfirmationResult | null = null
 
-export const sendOTPToken = (phoneNumber: string) => async () => {
-  const confirmation = await authActions.sendOTPToken(phoneNumber)
-  smsConfirmationObj = confirmation
+export const storeConfirmationObj = (confirmationObj: FirebaseAuthTypes.ConfirmationResult) => {
+  smsConfirmationObj = confirmationObj
 }
-
-export const resendOTPToken = (phoneNumber: string) => async () => {
-  const confirmation = await authActions.resendOTPToken(phoneNumber)
-  smsConfirmationObj = confirmation
-}
-
-export const confirmOTPToken = (code: string) => async () => {
-  if (smsConfirmationObj) await authActions.confirmOTPToken(smsConfirmationObj, code)
+export const getConfirmationObj = () => {
+  return smsConfirmationObj
 }
 
 export const signOut = () => authActions.signOut()

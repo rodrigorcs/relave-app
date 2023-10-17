@@ -36,7 +36,7 @@ interface IOTPInputProps {
   maximumLength: number
   setIsCodeReady: (isReady: boolean) => void
   customClassName?: ClassNameValue
-  showError?: boolean
+  error: string | null
 }
 
 // TODO: [FIX] When backspacing the parenthesis+space, it doesn't allow to delete the parenthesis
@@ -46,7 +46,7 @@ export const OTPInput: FC<IOTPInputProps> = ({
   maximumLength,
   setIsCodeReady,
   customClassName,
-  showError,
+  error,
 }) => {
   const singleDigitsArray = new Array(maximumLength).fill(null)
   const inputRef = useRef<TextInput | null>(null)
@@ -84,7 +84,7 @@ export const OTPInput: FC<IOTPInputProps> = ({
               isFocused={isValueFocused}
               customClassName={cn(
                 index < maximumLength - 1 && 'mr-2',
-                showError && 'border-feedback-negative-300',
+                error && 'border-feedback-negative-300',
               )}
             />
           )
