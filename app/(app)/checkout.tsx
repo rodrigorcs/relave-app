@@ -14,14 +14,7 @@ import { EFirestoreCollections } from '../../models/constants/EFirestoreCollecti
 import { IUser } from '../../models/contracts/user'
 import { IOrderEntity } from '../../models/entities/order'
 import { getCurrentUser } from '../../state/slices/auth'
-import {
-  getAppointment,
-  getOrder,
-  getPaymentLines,
-  getTotalPrice,
-  setOrderIds,
-  setPaymentFromDB,
-} from '../../state/slices/order'
+import { getOrder, setIds, setPaymentFromDB } from '../../state/slices/order'
 import { IAppState } from '../../state/store'
 import { formatPlaceAddress } from '../../utils/address'
 import { EDateFormats, dayjs, dayjsToDate } from '../../utils/dayjs'
@@ -40,10 +33,8 @@ export default function Checkout() {
   useCallbackURL()
 
   const currentUser = useSelector(({ auth }: IAppState) => getCurrentUser(auth))
-  const appointment = useSelector(({ order }: IAppState) => getAppointment(order))
-  const paymentLines = useSelector(({ order }: IAppState) => getPaymentLines(order))
-  const totalPrice = useSelector(({ order }: IAppState) => getTotalPrice(order))
   const order = useSelector(({ order }: IAppState) => getOrder(order))
+  const { totalPrice, appointment, paymentLines } = order
 
   const [stripeCustomerId, setStripeCustomerId] = useState<string | null>(null)
 
@@ -55,7 +46,7 @@ export default function Checkout() {
       const customerIdPromise = usersActions.getOrCreateStripeCustomer(currentUser as IUser)
       const [createdOrder, customerId] = await Promise.all([createOrderPromise, customerIdPromise])
 
-      dispatch(setOrderIds({ id: createdOrder.id, shortId: createdOrder.shortId }))
+      dispatch(setIds({ id: createdOrder.id, shortId: createdOrder.shortId }))
       setStripeCustomerId(customerId)
     }
 

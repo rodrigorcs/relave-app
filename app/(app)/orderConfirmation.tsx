@@ -10,12 +10,7 @@ import {
   EPaymentMethods,
   PaymentMethodCard,
 } from '../../components/orderConfirmation/PaymentMethodCard'
-import {
-  getAppointment,
-  getOrderShortId,
-  getPaymentData,
-  getPaymentLines,
-} from '../../state/slices/order'
+import { clear, getOrder } from '../../state/slices/order'
 import { IAppState } from '../../state/store'
 import { theme } from '../../theme'
 import { formatPlaceAddress } from '../../utils/address'
@@ -28,17 +23,18 @@ import {
 } from 'iconoir-react-native'
 import React from 'react'
 import { ScrollView, View } from 'react-native'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 
 export default function OrderConfirmation() {
-  const appointment = useSelector(({ order }: IAppState) => getAppointment(order))
-  const paymentLines = useSelector(({ order }: IAppState) => getPaymentLines(order))
-  const paymentData = useSelector(({ order }: IAppState) => getPaymentData(order))
-  const orderShortId = useSelector(({ order }: IAppState) => getOrderShortId(order))
+  const dispatch = useDispatch()
+
+  const order = useSelector(({ order }: IAppState) => getOrder(order))
+  const { appointment, paymentLines, payment, shortId } = order
 
   const formattedPlaceAddress = formatPlaceAddress(appointment.place)
 
   const handleReturnToHome = () => {
+    dispatch(clear())
     router.push('/(app)')
   }
 
@@ -51,7 +47,7 @@ export default function OrderConfirmation() {
             variant={ECustomTextVariants.SUBHEADING3}
             customClassName="mt-6 text-neutrals-400"
           >
-            {`#${orderShortId}`}
+            {`#${shortId}`}
           </CustomText>
           <CustomText variant={ECustomTextVariants.HEADING2} customClassName="mt-2">
             Pedido confirmado
@@ -106,8 +102,8 @@ export default function OrderConfirmation() {
         <View className="px-4 py-8">
           <CustomText variant={ECustomTextVariants.HEADING3}>Pagamento</CustomText>
           <PaymentMethodCard
-            paymentMethod={paymentData?.cardBrand as EPaymentMethods}
-            cardLastDigits={paymentData?.lastDigits ?? undefined}
+            paymentMethod={payment?.cardBrand as EPaymentMethods}
+            cardLastDigits={payment?.lastDigits ?? undefined}
           />
         </View>
       </ScrollView>

@@ -108,7 +108,7 @@ export const orderSlice = createSlice({
       state.totalPrice = totalPrice
       state.duration = duration
     },
-    setOrderIds: (state, action: PayloadAction<Pick<TOrderState, 'id' | 'shortId'>>) => {
+    setIds: (state, action: PayloadAction<Pick<TOrderState, 'id' | 'shortId'>>) => {
       state.id = action.payload.id
       state.shortId = action.payload.shortId
       state.status = EOrderStatus.CREATED
@@ -117,10 +117,13 @@ export const orderSlice = createSlice({
       state.payment = action.payload
       if (action.payload?.paidAt) state.status = EOrderStatus.PAID
     },
+    clear: () => {
+      return initialState;
+    },
   },
 })
 
-export const { setAppointment, setItemsFromCart, setOrderIds, setPaymentFromDB } =
+export const { setAppointment, setItemsFromCart, setIds, setPaymentFromDB, clear } =
   orderSlice.actions
 
 export const getAppointment = (state: TOrderState) => state.appointment
