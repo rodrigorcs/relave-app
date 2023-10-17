@@ -10,7 +10,7 @@ export default function Layout() {
   if (!userIsSignedIn) return <Redirect href="/(auth)" />
 
   return (
-    <Stack>
+    <Stack screenOptions={{ headerShadowVisible: false }}>
       <Stack.Screen name="index" options={{ title: 'Relave', headerBackVisible: false }} />
       <Stack.Screen name="appointment" options={{ title: 'Relave' }} />
       <Stack.Screen name="checkout" options={{ title: 'Resumo' }} />

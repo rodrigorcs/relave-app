@@ -18,11 +18,11 @@ export default function Layout() {
   }
 
   return (
-    <Stack>
+    <Stack screenOptions={{ headerShadowVisible: false }}>
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="phoneNumber" options={{ title: 'Seu número' }} />
       <Stack.Screen name="otpConfirmation" options={{ title: 'Código SMS' }} />
-      <Stack.Screen name="name" options={{ title: 'Seu nome' }} />
+      <Stack.Screen name="name" options={{ title: 'Seu nome', headerBackVisible: false }} />
     </Stack>
   )
 }

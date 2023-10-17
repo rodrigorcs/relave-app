@@ -29,7 +29,10 @@ export const SafeAreaView: FC<IProps> = ({ children, hiddenStatusBar, customClas
   }
 
   return (
-    <RNSafeAreaView className={cn(customClassName)} style={isAndroid && androidStyle}>
+    <RNSafeAreaView
+      className={cn('border-t border-t-neutrals-200', customClassName)}
+      style={isAndroid && androidStyle}
+    >
       {children}
     </RNSafeAreaView>
   )
