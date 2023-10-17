@@ -10,8 +10,11 @@ export default function Layout() {
   const currentRoute = usePathname()
 
   if (user && currentRoute !== '/name') {
-    if (!user.name) return router.push('/name')
-    return router.push('/(app)')
+    if (!user.name) {
+      router.push('/name')
+    } else {
+      router.push('/(app)')
+    }
   }
 
   return (

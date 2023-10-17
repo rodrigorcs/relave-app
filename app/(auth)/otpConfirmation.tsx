@@ -30,6 +30,7 @@ export default function OTPConfirmation() {
   const [otpToken, setOTPToken] = useState('')
   const [isTokenReady, setIsTokenReady] = useState(false)
   const [otpError, setOTPError] = useState<string | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
 
   const { timer: resendOTPTimer, startTimer } = useTimer(30)
   const isResendOTPDisabled = resendOTPTimer > 0
@@ -46,12 +47,15 @@ export default function OTPConfirmation() {
     if (!otpConfirmationObj) throw new Error('')
 
     try {
+      setIsLoading(true)
       await authActions.confirmOTPToken(otpConfirmationObj, otpToken)
     } catch (error) {
       // FIXME: Use firebase error types instead of any
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const errorCode = (error as any).code as keyof typeof OOtpErrors
       setOTPError(OOtpErrors[errorCode] ?? OOtpErrors['fallback'])
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -136,7 +140,7 @@ export default function OTPConfirmation() {
           </View>
         </ScrollView>
         <View className="h-24 justify-center px-4">
-          <CustomButton isDisabled={!isTokenReady} onPress={handleConfirmOTP}>
+          <CustomButton isDisabled={!isTokenReady} onPress={handleConfirmOTP} isLoading={isLoading}>
             Continuar
           </CustomButton>
         </View>

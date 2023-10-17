@@ -29,6 +29,7 @@ export const AddVehicleBottomSheet: FC<IProps> = ({ addVehicle, userId, isOpen, 
   const HEIGHT = 500
   const [selectedBrand, setSelectedBrand] = useState<IVehicleBrand | null>(null)
   const [selectedModel, setSelectedModel] = useState<IVehicleModel | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
 
   const isKeyboardVisible = useKeyboardVisibility()
   const [vehicleBrands] = useAsyncData(() => vehicleBrandsActions.getAll())
@@ -43,6 +44,8 @@ export const AddVehicleBottomSheet: FC<IProps> = ({ addVehicle, userId, isOpen, 
 
   const handleCreateVehicle = async () => {
     if (!selectedBrand || !selectedModel) return
+
+    setIsLoading(true)
     const createdVehicle = await vehiclesActions.createVehicle({
       ownerId: userId,
       brandId: selectedBrand.id,
@@ -54,6 +57,7 @@ export const AddVehicleBottomSheet: FC<IProps> = ({ addVehicle, userId, isOpen, 
     addVehicle(createdVehicle)
     setSelectedBrand(null)
     setSelectedModel(null)
+    setIsLoading(false)
     close()
   }
 
@@ -87,6 +91,7 @@ export const AddVehicleBottomSheet: FC<IProps> = ({ addVehicle, userId, isOpen, 
         <CustomButton
           onPress={handleCreateVehicle}
           customClassName={cn('w-full', isKeyboardVisible ? 'mt-8' : 'absolute bottom-0')}
+          isLoading={isLoading}
         >
           Confirmar escolha
         </CustomButton>

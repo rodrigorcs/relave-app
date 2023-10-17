@@ -25,6 +25,7 @@ export default function PhoneNumber() {
   const [maskedPhoneNumber, unmaskedPhoneNumber, handlePhoneNumberChange, isPhoneNumberValid] =
     useMaskedInput(EInputMasks.PHONE_NUMBER)
   const [error, setError] = useState<string | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     setError(null)
@@ -33,9 +34,11 @@ export default function PhoneNumber() {
   const handleReceiveOTP = async () => {
     if (!isPhoneNumberValid) return setError('Número invalido, verifique.')
 
-    const otpConfirmationObj = await authActions.resendOTPToken(unmaskedPhoneNumber)
+    setIsLoading(true)
+    const otpConfirmationObj = await authActions.sendOTPToken(unmaskedPhoneNumber)
     storeConfirmationObj(otpConfirmationObj)
     dispatch(storePhoneNumberToOTP(unmaskedPhoneNumber))
+    setIsLoading(false)
 
     router.push('/otpConfirmation')
   }
@@ -97,7 +100,11 @@ export default function PhoneNumber() {
           </View>
         </ScrollView>
         <View className="h-24 justify-center px-4">
-          <CustomButton isDisabled={!isPhoneNumberValid} onPress={handleReceiveOTP}>
+          <CustomButton
+            isDisabled={!isPhoneNumberValid}
+            onPress={handleReceiveOTP}
+            isLoading={isLoading}
+          >
             Receber SMS
           </CustomButton>
         </View>

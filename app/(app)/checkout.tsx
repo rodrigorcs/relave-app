@@ -37,6 +37,7 @@ export default function Checkout() {
   const { totalPrice, appointment, paymentLines } = order
 
   const [stripeCustomerId, setStripeCustomerId] = useState<string | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     if (!currentUser?.id) throw new Error('User is not logged in.')
@@ -53,7 +54,7 @@ export default function Checkout() {
     execute()
   }, [])
 
-  const [openPaymentSheet, isLoading, error] = useStripePaymentSheet(
+  const [openPaymentSheet, isConfiguringStripe, error] = useStripePaymentSheet(
     stripeCustomerId,
     order.id,
     totalPrice,
@@ -71,10 +72,13 @@ export default function Checkout() {
   const handleConfirmOrder = async () => {
     if (!order.duration) throw new Error('Order duration not specified.')
 
+    setIsLoading(true)
     const timeIsAvailable = await daySchedulesAction.getTimeAvailability(
       appointmentTime,
       order.duration,
     )
+    setIsLoading(false)
+
     if (!timeIsAvailable) throw new Error('Appointment time is no longer available.')
 
     openPaymentSheet()
@@ -118,7 +122,8 @@ export default function Checkout() {
       <View className="border-t border-neutrals-200 px-4 pb-1 pt-6">
         <CustomButton
           onPress={() => handleConfirmOrder()}
-          isDisabled={isLoading || !!error}
+          isDisabled={isLoading || isConfiguringStripe || !!error}
+          isLoading={isLoading}
           IconRight={<ArrowRightIcon />}
         >
           Pagar

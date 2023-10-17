@@ -1,6 +1,7 @@
 import { theme } from '../../theme'
 import { cn } from '../../utils/cn'
 import { CustomText, ECustomTextVariants } from './CustomText'
+import { LoadingSpinner } from './LoadingSpinner'
 import { IconoirProvider } from 'iconoir-react-native'
 import React, { FC, ReactNode } from 'react'
 import { StyleProp, TextStyle, TouchableOpacity, ViewStyle } from 'react-native'
@@ -18,6 +19,7 @@ interface IProps {
   children: ReactNode
   variant?: ECustomButtonVariants
   isDisabled?: boolean
+  isLoading?: boolean
   customClassName?: ClassNameValue
   IconLeft?: ReactNode
   IconRight?: ReactNode
@@ -25,29 +27,13 @@ interface IProps {
   textStyle?: StyleProp<TextStyle>
 }
 
-export const CustomButton: FC<IProps> = ({
-  onPress,
-  children,
-  variant = ECustomButtonVariants.PRIMARY,
-  isDisabled,
-  customClassName,
-  IconLeft,
-  IconRight,
-  style,
-  textStyle,
-}) => {
-  return (
-    <TouchableOpacity
-      className={cn(
-        'flex-row items-center justify-center rounded-full',
-        variant,
-        isDisabled && 'bg-brand-300',
-        customClassName,
-      )}
-      onPress={onPress}
-      activeOpacity={isDisabled ? 1 : 0.2}
-      style={style}
-    >
+const ButtonContent: FC<
+  Pick<IProps, 'variant' | 'IconLeft' | 'IconRight' | 'children' | 'textStyle' | 'isLoading'>
+> = ({ variant, children, IconLeft, IconRight, textStyle, isLoading }) => {
+  {
+    if (isLoading) return <LoadingSpinner color={theme.colors['neutrals-white']} size="small" />
+
+    return (
       <IconoirProvider
         iconProps={{
           width: 24,
@@ -82,6 +68,42 @@ export const CustomButton: FC<IProps> = ({
           </>
         )}
       </IconoirProvider>
+    )
+  }
+}
+
+export const CustomButton: FC<IProps> = ({
+  onPress,
+  children,
+  variant = ECustomButtonVariants.PRIMARY,
+  isDisabled,
+  isLoading,
+  customClassName,
+  IconLeft,
+  IconRight,
+  style,
+  textStyle,
+}) => {
+  return (
+    <TouchableOpacity
+      className={cn(
+        'flex-row items-center justify-center rounded-full',
+        variant,
+        isDisabled && 'bg-brand-300',
+        customClassName,
+      )}
+      onPress={onPress}
+      activeOpacity={isDisabled ? 1 : 0.2}
+      style={style}
+    >
+      <ButtonContent
+        variant={variant}
+        children={children}
+        IconLeft={IconLeft}
+        IconRight={IconRight}
+        textStyle={textStyle}
+        isLoading={isLoading}
+      />
     </TouchableOpacity>
   )
 }
