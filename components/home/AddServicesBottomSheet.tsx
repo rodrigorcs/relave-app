@@ -17,7 +17,7 @@ import {
 } from '../common'
 import { router } from 'expo-router'
 import { ArrowRight as ArrowRightIcon } from 'iconoir-react-native'
-import React, { FC, useRef } from 'react'
+import React, { FC, useEffect, useRef } from 'react'
 import { View, TouchableOpacity } from 'react-native'
 import { FlatList } from 'react-native-gesture-handler'
 import { useDispatch } from 'react-redux'
@@ -56,6 +56,11 @@ export const AddServicesBottomSheet: FC<IProps> = ({ selectedServiceBundle, isOp
     dispatch(confirmSelectedServices({ additionalServices: selectedServices, duration }))
     router.push('/appointment')
   }
+
+  useEffect(() => {
+    if (selectedServiceBundle && isOpen && avaliableServices.length === 0)
+      handleProceedWithSelection([])
+  }, [selectedServiceBundle])
 
   // TODO: Check all FlatLists and ScrollViews
   return (
