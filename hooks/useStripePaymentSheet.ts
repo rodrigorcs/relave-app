@@ -11,6 +11,7 @@ export const useStripePaymentSheet = (
   const { initPaymentSheet, presentPaymentSheet } = useStripe()
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<unknown>(false)
+  const [isWaitingConfirmation, setIsWaitingConfirmation] = useState(false)
 
   const initializePaymentSheet = async (validStripeCustomerId: string, validOrderId: string) => {
     setIsLoading(true)
@@ -62,7 +63,9 @@ export const useStripePaymentSheet = (
 
   const openPaymentSheet = async () => {
     try {
-      await presentPaymentSheet()
+
+      const result = await presentPaymentSheet()
+      if (!result.error) setIsWaitingConfirmation(true)
     } catch (error) {
       setError(error)
     }
@@ -70,5 +73,5 @@ export const useStripePaymentSheet = (
 
   if (error) console.error(error)
 
-  return [openPaymentSheet, isLoading, error] as const
+  return [openPaymentSheet, isLoading, isWaitingConfirmation, error] as const
 }

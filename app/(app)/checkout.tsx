@@ -54,11 +54,8 @@ export default function Checkout() {
     execute()
   }, [])
 
-  const [openPaymentSheet, isConfiguringStripe, error] = useStripePaymentSheet(
-    stripeCustomerId,
-    order.id,
-    totalPrice,
-  )
+  const [openPaymentSheet, isConfiguringStripe, isWaitingPaymentConfirmation, error] =
+    useStripePaymentSheet(stripeCustomerId, order.id, totalPrice)
 
   const appointmentTime = dayjs.unix(appointment.time ?? 0)
   const { dayOfWeek } = dayjsToDate(appointmentTime)
@@ -122,8 +119,8 @@ export default function Checkout() {
       <View className="border-t border-neutrals-200 px-4 pb-1 pt-6">
         <CustomButton
           onPress={() => handleConfirmOrder()}
-          isDisabled={isLoading || isConfiguringStripe || !!error}
-          isLoading={isLoading}
+          isDisabled={isLoading || isWaitingPaymentConfirmation || isConfiguringStripe || !!error}
+          isLoading={isLoading || isWaitingPaymentConfirmation}
           IconRight={<ArrowRightIcon />}
         >
           Pagar
