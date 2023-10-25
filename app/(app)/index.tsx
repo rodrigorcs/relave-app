@@ -123,7 +123,10 @@ export default function Home() {
   }, [])
 
   const handleChooseServiceBundle = (serviceBundle: IServiceBundleWithDetails) => {
-    if (!selectedVehicle) return setError('Selecione o seu carro para fazer o pedido.')
+    if (!selectedVehicle) {
+      if (vehicles?.length === 0) return setError('Adicione o seu carro para fazer o pedido.')
+      return setError('Selecione o seu carro para fazer o pedido.')
+    }
     dispatch(setSelectedServiceBundle(serviceBundle))
     handleOpenAddServicesBottomSheet()
   }
