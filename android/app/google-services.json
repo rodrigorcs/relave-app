@@ -1,43 +1,26 @@
 {
   "project_info": {
-    "project_number": "146340825006",
-    "project_id": "lavei-firebase",
-    "storage_bucket": "lavei-firebase.appspot.com"
+    "project_number": "995885532365",
+    "project_id": "relave-sandbox",
+    "storage_bucket": "relave-sandbox.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:146340825006:android:1f8e1da7496e9da4efea3f",
+        "mobilesdk_app_id": "1:995885532365:android:c4b95bb3bd48f3f2155584",
         "android_client_info": {
           "package_name": "com.rodrigorcs.relave"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "146340825006-vp4jtnapaf24lasi3ucmhc7ujgemliiv.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyA_V7JSN9QkcN4KPTE3viYqXBw4KyuK8_4"
+          "current_key": "AIzaSyAT4keZif3mpCo4BiG63HbvhHpK4AVroEI"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "146340825006-vp4jtnapaf24lasi3ucmhc7ujgemliiv.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "146340825006-s8ja6h0nb4lucdl541otjn6f5nsmglnu.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.rodrigorcs.relave"
-              }
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }

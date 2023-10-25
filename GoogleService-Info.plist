@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>API_KEY</key>
-	<string>AIzaSyBAbCi56W52BIwwvudKtLuWwUxIJcS31DU</string>
+	<string>AIzaSyC36jM3YBdzUyxv1CmTM131zjnTlI9q92k</string>
 	<key>GCM_SENDER_ID</key>
-	<string>146340825006</string>
+	<string>995885532365</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.rodrigorcs.relave</string>
 	<key>PROJECT_ID</key>
-	<string>lavei-firebase</string>
+	<string>relave-sandbox</string>
 	<key>STORAGE_BUCKET</key>
-	<string>lavei-firebase.appspot.com</string>
+	<string>relave-sandbox.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:146340825006:ios:4dc9fe9ba478e403efea3f</string>
+	<string>1:995885532365:ios:a641ff1aa83a83be155584</string>
 </dict>
 </plist>

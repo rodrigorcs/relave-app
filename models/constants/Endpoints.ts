@@ -3,7 +3,7 @@ import { IOnboardingHint } from '../contracts/onboardingHint'
 import { IVehicleBrand } from '../contracts/vehicleBrand'
 
 const REGION = 'southamerica-east1'
-const PROJECT_NAME = 'lavei-firebase'
+const PROJECT_NAME = 'relave-sandbox'
 
 // const LOCALHOST_ADDRESS = isAndroid ? '10.0.2.2' : 'localhost'
 // const LOCALHOST_PORT = '5001'
