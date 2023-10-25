@@ -10,6 +10,7 @@ import {
 import { authActions } from '../../core/actions/auth'
 import { useKeyboardVisibility, useMaskedInput } from '../../hooks'
 import { EInputMasks } from '../../models/constants/EInputMasks'
+import { OOtpErrors } from '../../models/constants/OtpErrors'
 import { signOut, storeConfirmationObj, storePhoneNumberToOTP } from '../../state/slices/auth'
 import { isIOS } from '../../utils/platform'
 import { router } from 'expo-router'
@@ -34,11 +35,19 @@ export default function PhoneNumber() {
   const handleReceiveOTP = async () => {
     if (!isPhoneNumberValid) return setError('Número invalido, verifique.')
 
-    setIsLoading(true)
-    const otpConfirmationObj = await authActions.sendOTPToken(unmaskedPhoneNumber)
-    storeConfirmationObj(otpConfirmationObj)
-    dispatch(storePhoneNumberToOTP(unmaskedPhoneNumber))
-    setIsLoading(false)
+    try {
+      setIsLoading(true)
+      const otpConfirmationObj = await authActions.sendOTPToken(unmaskedPhoneNumber)
+      storeConfirmationObj(otpConfirmationObj)
+      dispatch(storePhoneNumberToOTP(unmaskedPhoneNumber))
+    } catch (err) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const errorCode = (error as any).code as keyof typeof OOtpErrors
+      setError(OOtpErrors[errorCode] ?? OOtpErrors['fallback'])
+      console.error(errorCode)
+    } finally {
+      setIsLoading(false)
+    }
 
     router.push('/otpConfirmation')
   }

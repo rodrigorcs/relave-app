@@ -15,6 +15,7 @@ import { IAppState } from '../../state/store'
 import { theme } from '../../theme'
 import { formatPlaceAddress } from '../../utils/address'
 import { EDateFormats, dayjs } from '../../utils/dayjs'
+import { truncateText } from '../../utils/string'
 import { router } from 'expo-router'
 import {
   IconoirProvider,
@@ -80,7 +81,7 @@ export default function OrderConfirmation() {
                     variant={ECustomTextVariants.HELPER2}
                     customClassName="text-neutrals-500"
                   >
-                    {formattedPlaceAddress.secondaryText}
+                    {truncateText(formattedPlaceAddress.secondaryText ?? '', 48)}
                   </CustomText>
                 </View>
               </View>

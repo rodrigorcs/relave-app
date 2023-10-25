@@ -18,6 +18,7 @@ import { getOrder, setIds, setPaymentFromDB } from '../../state/slices/order'
 import { IAppState } from '../../state/store'
 import { formatPlaceAddress } from '../../utils/address'
 import { EDateFormats, dayjs, dayjsToDate } from '../../utils/dayjs'
+import { truncateText } from '../../utils/string'
 import { router } from 'expo-router'
 import {
   ArrowRight as ArrowRightIcon,
@@ -99,7 +100,7 @@ export default function Checkout() {
             <AppointmentCard
               Icon={<LocationIcon />}
               primaryText={formattedPlaceAddress.primaryText}
-              secondaryText={addressLine2}
+              secondaryText={truncateText(addressLine2, 56)}
             />
             <AppointmentCard
               Icon={<CalendarIcon />}
