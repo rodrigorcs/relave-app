@@ -104,5 +104,11 @@
 	<string>Automatic</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>CFBundleAllowMixedLocalizations</key>
+	<string>true</string>
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>pt</string>
+	</array>
 </dict>
 </plist>
