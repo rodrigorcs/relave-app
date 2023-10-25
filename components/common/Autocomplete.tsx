@@ -3,6 +3,7 @@ import { theme } from '../../theme'
 import { cn } from '../../utils/cn'
 import { CustomInput } from './CustomInput'
 import { CustomText, ECustomTextVariants } from './CustomText'
+import { LoadingSpinner } from './LoadingSpinner'
 import {
   Check as CheckIcon,
   NavArrowDown as ChevronDownIcon,
@@ -48,6 +49,7 @@ interface IProps<T extends IOption> {
   title?: string
   placeholder?: string
   isDisabled?: boolean
+  isLoading?: boolean
   children?: (option: IOption) => ReactNode
   large?: boolean
   autoComplete?: TextInputProps['autoComplete']
@@ -63,6 +65,7 @@ export const Autocomplete = <T extends IOption>({
   title,
   placeholder = '',
   isDisabled = false,
+  isLoading = false,
   children,
   large,
   autoComplete,
@@ -144,53 +147,61 @@ export const Autocomplete = <T extends IOption>({
             )}
           >
             <View className={cn(`mt-1 rounded-lg bg-neutrals-white shadow`)}>
-              {dropdownOptions.length === 0 ? (
-                <View className="flex-row items-center justify-between bg-neutrals-white px-4 py-3">
-                  <CustomText variant={ECustomTextVariants.HELPER1}>Sem opções.</CustomText>
+              {isLoading ? (
+                <View className="flex-row items-center justify-center bg-neutrals-white px-4 py-3">
+                  <LoadingSpinner color={theme.colors['neutrals-500']} />
                 </View>
               ) : (
-                <ScrollView
-                  className="rounded-lg"
-                  nestedScrollEnabled
-                  keyboardShouldPersistTaps="always"
-                >
-                  {dropdownOptions.map((option) => {
-                    const isSelected = selectedOption && option.id === selectedOption.id
-                    return (
-                      <TouchableOpacity
-                        key={option.id}
-                        onPress={() => handleChangeSelectedOption(option)}
-                        className={cn(
-                          'flex-row items-center justify-between border-b border-neutrals-100 bg-neutrals-white px-4 py-3',
-                          isSelected && 'bg-neutrals-100',
-                        )}
-                      >
-                        {children ? (
-                          children(option)
-                        ) : (
-                          <CustomText
-                            variant={
-                              isSelected
-                                ? ECustomTextVariants.EXPRESSIVE2
-                                : ECustomTextVariants.BODY2
-                            }
+                <>
+                  {dropdownOptions.length === 0 ? (
+                    <View className="flex-row items-center bg-neutrals-white px-4 py-3">
+                      <CustomText variant={ECustomTextVariants.HELPER1}>Sem opções.</CustomText>
+                    </View>
+                  ) : (
+                    <ScrollView
+                      className="rounded-lg"
+                      nestedScrollEnabled
+                      keyboardShouldPersistTaps="always"
+                    >
+                      {dropdownOptions.map((option) => {
+                        const isSelected = selectedOption && option.id === selectedOption.id
+                        return (
+                          <TouchableOpacity
+                            key={option.id}
+                            onPress={() => handleChangeSelectedOption(option)}
+                            className={cn(
+                              'flex-row items-center justify-between border-b border-neutrals-100 bg-neutrals-white px-4 py-3',
+                              isSelected && 'bg-neutrals-100',
+                            )}
                           >
-                            {option.name}
-                          </CustomText>
-                        )}
-                        {isSelected && (
-                          <CheckIcon
-                            width={24}
-                            height={24}
-                            strokeWidth={2}
-                            color={theme.colors['brand-500']}
-                            className="ml-2"
-                          />
-                        )}
-                      </TouchableOpacity>
-                    )
-                  })}
-                </ScrollView>
+                            {children ? (
+                              children(option)
+                            ) : (
+                              <CustomText
+                                variant={
+                                  isSelected
+                                    ? ECustomTextVariants.EXPRESSIVE2
+                                    : ECustomTextVariants.BODY2
+                                }
+                              >
+                                {option.name}
+                              </CustomText>
+                            )}
+                            {isSelected && (
+                              <CheckIcon
+                                width={24}
+                                height={24}
+                                strokeWidth={2}
+                                color={theme.colors['brand-500']}
+                                className="ml-2"
+                              />
+                            )}
+                          </TouchableOpacity>
+                        )
+                      })}
+                    </ScrollView>
+                  )}
+                </>
               )}
             </View>
           </View>

@@ -21,7 +21,7 @@ export const PlacesAutocomplete: FC<IProps> = ({ selectedPlace, onChange, locati
   const [input, setInput] = useState('')
   const debouncedInput = useDebounce(input, 500)
 
-  const [places] = useAsyncData(
+  const [places, isLoadingPlaces] = useAsyncData(
     () => locationActions.getNearbyPlaces(debouncedInput, location),
     [debouncedInput],
   )
@@ -63,6 +63,7 @@ export const PlacesAutocomplete: FC<IProps> = ({ selectedPlace, onChange, locati
         onChange={handleChangeAddress}
         onInputChange={setInput}
         filterOnType={false}
+        isLoading={isLoadingPlaces}
         large
       >
         {(option) => (
