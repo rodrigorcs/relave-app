@@ -55,7 +55,7 @@ export default function Appointment() {
       className="flex-1"
     >
       <SafeAreaView customClassName="flex flex-1 bg-common-background">
-        <ScrollView>
+        <ScrollView keyboardShouldPersistTaps="handled">
           <View className="z-10 border-b border-neutrals-200 px-4 py-8">
             <CustomText variant={ECustomTextVariants.HEADING3}>
               Onde devemos realizar o serviço?
