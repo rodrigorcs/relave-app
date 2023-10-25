@@ -10,7 +10,7 @@ import { onboardingHintsActions } from '../../core/actions/onboardingHints'
 import { useAsyncData, useCloudImage } from '../../hooks'
 import { Endpoints } from '../../models/constants/Endpoints'
 import { cn } from '../../utils/cn'
-import { isAndroid } from '../../utils/platform'
+import { isAndroid, isIOS } from '../../utils/platform'
 import { router } from 'expo-router'
 import React, { FC, useContext, useRef, useState } from 'react'
 import { View, Dimensions, ScrollView } from 'react-native'
@@ -100,6 +100,7 @@ export default function Onboarding() {
               snapToInterval={screenWidth}
               snapToAlignment="center"
               showsHorizontalScrollIndicator={false}
+              scrollEnabled={isIOS}
             >
               {hints.map((hint) => (
                 <View
