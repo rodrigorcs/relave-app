@@ -21,7 +21,8 @@ export const SafeAreaView: FC<IProps> = ({ children, hiddenStatusBar, customClas
   const STATUS_BAR_HEIGHT = StatusBar.currentHeight || 24
   const WINDOW_HEIGHT = Dimensions.get('window').height
 
-  const NAVIGATION_BAR_HEIGHT = SCREEN_HEIGHT - (WINDOW_HEIGHT + STATUS_BAR_HEIGHT)
+  const SYSTEM_NAVIGATION_BAR_HEIGHT = SCREEN_HEIGHT - (WINDOW_HEIGHT + STATUS_BAR_HEIGHT)
+  const NAVIGATION_BAR_HEIGHT = SYSTEM_NAVIGATION_BAR_HEIGHT > 0 ? SYSTEM_NAVIGATION_BAR_HEIGHT : 16
 
   const androidStyle: StyleProp<ViewStyle> = {
     paddingTop: hiddenStatusBar ? STATUS_BAR_HEIGHT : undefined,
