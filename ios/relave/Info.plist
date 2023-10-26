@@ -29,7 +29,10 @@
 			<array>
 				<string>myapp</string>
 				<string>com.rodrigorcs.relave</string>
+				<!-- relave-sandbox -->
 				<string>app-1-995885532365-ios-a641ff1aa83a83be155584</string>
+				<!-- relave-prod -->
+				<string>app-1-724385458760-ios-fc365cab7ef0589ac5067d</string>
 			</array>
 		</dict>
 		<dict>
@@ -38,6 +41,7 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>app-1-995885532365-ios-a641ff1aa83a83be155584</string>
+				<string>app-1-724385458760-ios-fc365cab7ef0589ac5067d</string>
 			</array>
 		</dict>
 		<dict>

@@ -15,7 +15,7 @@ export default {
     assetBundlePatterns: ['**/*'],
     ios: {
       bundleIdentifier: 'com.rodrigorcs.relave',
-      googleServicesFile: './GoogleService-Info.plist',
+      googleServicesFile: `./config/googleServices/${process.env.EXPO_PUBLIC_STAGE}/GoogleService-Info.plist`,
       supportsTablet: false,
       infoPlist: {
         CFBundleDevelopmentRegion: 'pt_BR',
@@ -27,7 +27,7 @@ export default {
     },
     android: {
       package: 'com.rodrigorcs.relave',
-      googleServicesFile: './google-services.json',
+      googleServicesFile: `./config/googleServices/${process.env.EXPO_PUBLIC_STAGE}/google-services.json`,
       adaptiveIcon: {
         foregroundImage: './assets/images/adaptive-icon.png',
         backgroundColor: '#ffffff',

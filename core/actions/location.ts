@@ -1,4 +1,4 @@
-import { Config } from '../../models/constants/Config'
+import { EnvVariables } from '../../models/constants/EnvVariables'
 import { Endpoints } from '../../models/constants/Endpoints'
 import { TGoogleMapsPlaceResult } from '../../models/contracts/externalApi/googleMaps'
 import { httpClient } from '../../utils/httpClient'
@@ -23,7 +23,7 @@ export const locationActions = {
         radius: '30000',
         language: 'pt-BR',
         region: 'br',
-        key: isIOS ? Config.GOOGLE_CLOUD_IOS_API_KEY : Config.GOOGLE_CLOUD_ANDROID_API_KEY,
+        key: isIOS ? EnvVariables.GOOGLE_CLOUD_IOS_API_KEY : EnvVariables.GOOGLE_CLOUD_ANDROID_API_KEY,
       },
     })) as AxiosResponse<{ results: TGoogleMapsPlaceResult[] }>
     return res.data.results

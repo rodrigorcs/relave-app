@@ -1,3 +1,4 @@
+import { Config } from '../../config/config'
 import '../../global.css'
 import { getIsUserSignedIn } from '../../state/slices/auth'
 import { IAppState } from '../../state/store'
@@ -11,7 +12,13 @@ export default function Layout() {
 
   return (
     <Stack screenOptions={{ headerShadowVisible: false }}>
-      <Stack.Screen name="index" options={{ title: 'Relave', headerBackVisible: false }} />
+      <Stack.Screen
+        name="index"
+        options={{
+          title: Config.IS_PROD ? 'Relave' : `Relave (${Config.STAGE})`,
+          headerBackVisible: false,
+        }}
+      />
       <Stack.Screen name="appointment" options={{ title: 'Relave' }} />
       <Stack.Screen name="checkout" options={{ title: 'Resumo' }} />
       <Stack.Screen

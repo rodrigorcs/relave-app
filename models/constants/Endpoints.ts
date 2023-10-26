@@ -1,19 +1,16 @@
-// import { isAndroid } from '../../utils/platform'
+import { isAndroid } from '../../utils/platform'
+import { Config } from '../../config/config'
 import { IOnboardingHint } from '../contracts/onboardingHint'
 import { IVehicleBrand } from '../contracts/vehicleBrand'
 
-const REGION = 'southamerica-east1'
-const PROJECT_NAME = 'relave-sandbox'
+const LOCALHOST_ADDRESS = isAndroid ? '10.0.2.2' : 'localhost'
+const LOCAL_CLOUD_FUNCTIONS_URL = `http://${LOCALHOST_ADDRESS}:5001/${Config.FIREBASE_PROJECT_ID}/${Config.REGION}`
 
-// const LOCALHOST_ADDRESS = isAndroid ? '10.0.2.2' : 'localhost'
-// const LOCALHOST_PORT = '5001'
-// const LOCALHOST_URL = `http://${LOCALHOST_ADDRESS}:${LOCALHOST_PORT}/${PROJECT_NAME}/${REGION}`
-
-const SANDBOX_URL = `https://${REGION}-${PROJECT_NAME}.cloudfunctions.net`
+const FIREBASE_CLOUD_FUNCTIONS_URL = `https://${Config.REGION}-${Config.FIREBASE_PROJECT_ID}.cloudfunctions.net`
 
 const BaseUrls = {
   GOOGLE_MAPS_API: 'https://maps.googleapis.com/maps/api',
-  FIREBASE_CLOUD_FUNCTIONS: SANDBOX_URL,
+  FIREBASE_CLOUD_FUNCTIONS: Config.IS_LOCAL ? LOCAL_CLOUD_FUNCTIONS_URL : FIREBASE_CLOUD_FUNCTIONS_URL,
 }
 
 export const Endpoints = {

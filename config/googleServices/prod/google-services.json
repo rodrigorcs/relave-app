@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "995885532365",
-    "project_id": "relave-sandbox",
-    "storage_bucket": "relave-sandbox.appspot.com"
+    "project_number": "724385458760",
+    "project_id": "relave-prod",
+    "storage_bucket": "relave-prod.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:995885532365:android:c4b95bb3bd48f3f2155584",
+        "mobilesdk_app_id": "1:724385458760:android:67e96260bc9e0761c5067d",
         "android_client_info": {
           "package_name": "com.rodrigorcs.relave"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAT4keZif3mpCo4BiG63HbvhHpK4AVroEI"
+          "current_key": "AIzaSyCsCcdQcdXTxcOLjvwB2W1NAco95ktNxg4"
         }
       ],
       "services": {
