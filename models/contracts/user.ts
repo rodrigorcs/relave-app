@@ -1,4 +1,5 @@
 import { FirebaseAuthTypes } from '@react-native-firebase/auth'
+import { TGoogleMapsPlaceResult } from './externalApi/googleMaps'
 
 type IFirebaseUser = Pick<
   FirebaseAuthTypes.User,
@@ -19,6 +20,7 @@ export interface IUser {
   name: string | null
   firebaseId: IFirebaseUser['uid']
   stripeId?: string
+  lastAddress: TGoogleMapsPlaceResult | null
   credentials: {
     isAnonymous: IFirebaseUser['isAnonymous']
     metadata: IFirebaseUser['metadata']

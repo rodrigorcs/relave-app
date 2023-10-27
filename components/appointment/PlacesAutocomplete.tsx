@@ -13,12 +13,18 @@ interface IPlaceOption {
 
 interface IProps {
   selectedPlace: TGoogleMapsPlaceResult | null
+  defaultPlace?: TGoogleMapsPlaceResult | null
   onChange: (selectedPlace: TGoogleMapsPlaceResult | null) => void
   location: never[] | readonly [number, number]
 }
 
-export const PlacesAutocomplete: FC<IProps> = ({ selectedPlace, onChange, location }) => {
-  const [input, setInput] = useState('')
+export const PlacesAutocomplete: FC<IProps> = ({
+  selectedPlace,
+  defaultPlace,
+  onChange,
+  location,
+}) => {
+  const [input, setInput] = useState(selectedPlace?.name ?? '')
   const debouncedInput = useDebounce(input, 500)
 
   const [places, isLoadingPlaces] = useAsyncData(
@@ -44,6 +50,7 @@ export const PlacesAutocomplete: FC<IProps> = ({ selectedPlace, onChange, locati
   const options = (places ?? []).map((place) => placeToOption(place)) ?? []
 
   const selectedOption = placeToOption(selectedPlace)
+  const defaultOption = placeToOption(defaultPlace ?? null)
 
   const handleChangeAddress = (place: IPlaceOption | null) => {
     if (!place?.id) return
@@ -64,6 +71,7 @@ export const PlacesAutocomplete: FC<IProps> = ({ selectedPlace, onChange, locati
         onInputChange={setInput}
         filterOnType={false}
         isLoading={isLoadingPlaces}
+        defaultOption={defaultOption}
         large
       >
         {(option) => (

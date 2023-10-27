@@ -1,4 +1,5 @@
 import { authActions } from '../../core/actions/auth'
+import { TGoogleMapsPlaceResult } from '../../models/contracts/externalApi/googleMaps'
 import { IUser } from '../../models/contracts/user'
 import { FirebaseAuthTypes } from '@react-native-firebase/auth'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
@@ -33,10 +34,13 @@ export const authSlice = createSlice({
     storeName: (state, action: PayloadAction<string>) => {
       state.user = { ...state.user, name: action.payload } as IUser
     },
+    storeLastAddress: (state, action: PayloadAction<TGoogleMapsPlaceResult>) => {
+      state.user = { ...state.user, lastAddress: action.payload } as IUser
+    },
   },
 })
 
-export const { storeUser, clearCredentials, storePhoneNumberToOTP, storeName } = authSlice.actions
+export const { storeUser, clearCredentials, storePhoneNumberToOTP, storeName, storeLastAddress } = authSlice.actions
 
 // TODO: Alternative - Can't put into slice as it's not serializable
 let smsConfirmationObj: FirebaseAuthTypes.ConfirmationResult | null = null

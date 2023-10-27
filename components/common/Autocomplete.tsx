@@ -43,6 +43,7 @@ interface IOption extends Record<string, unknown> {
 interface IProps<T extends IOption> {
   options: T[]
   selectedOption: T | null
+  defaultOption?: T | null
   onChange?: (selectedOption: T | null) => void
   onInputChange?: (input: string) => void
   filterOnType?: boolean
@@ -59,6 +60,7 @@ interface IProps<T extends IOption> {
 export const Autocomplete = <T extends IOption>({
   options,
   selectedOption,
+  defaultOption,
   onChange,
   onInputChange,
   filterOnType = true,
@@ -87,6 +89,10 @@ export const Autocomplete = <T extends IOption>({
       setIsDropdownOpen(false)
     }
   }, [selectedOption])
+
+  useEffect(() => {
+    if (defaultOption) setInput(defaultOption.name)
+  }, [])
 
   // FIXME: CustomInput overrides state input value, hasSelectedOption is an workaround
   const handleChangeSelectedOption = (option: T) => {

@@ -19,6 +19,7 @@ export const AuthProvider: FC<IProps> = ({ children }) => {
     const uncheckedUser: ICreateUser = {
       name: null,
       firebaseId: user.uid,
+      lastAddress: null,
       credentials: {
         isAnonymous: user.isAnonymous,
         metadata: user.metadata,

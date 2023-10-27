@@ -9,6 +9,7 @@ import {
 } from '../../components/common'
 import { useDeviceLocation, useKeyboardVisibility } from '../../hooks'
 import { TGoogleMapsPlaceResult } from '../../models/contracts/externalApi/googleMaps'
+import { getCurrentUser } from '../../state/slices/auth'
 import { getCart } from '../../state/slices/cart'
 import { setAppointment, setItemsFromCart } from '../../state/slices/order'
 import { IAppState } from '../../state/store'
@@ -17,12 +18,13 @@ import { dayjs, dayjsToDate } from '../../utils/dayjs'
 import { isAndroid, isIOS } from '../../utils/platform'
 import { router } from 'expo-router'
 import { ArrowRight as ArrowRightIcon } from 'iconoir-react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { KeyboardAvoidingView, ScrollView, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 
 export default function Appointment() {
   const dispatch = useDispatch()
+  const currentUser = useSelector(({ auth }: IAppState) => getCurrentUser(auth))
   const cart = useSelector(({ cart }: IAppState) => getCart(cart))
 
   const location = useDeviceLocation()
@@ -48,6 +50,10 @@ export default function Appointment() {
     router.push('/checkout')
   }
 
+  useEffect(() => {
+    if (currentUser?.lastAddress) setSelectedPlace(currentUser?.lastAddress)
+  }, [])
+
   return (
     <KeyboardAvoidingView
       behavior={isIOS ? 'padding' : 'height'}
@@ -62,6 +68,7 @@ export default function Appointment() {
             </CustomText>
             <PlacesAutocomplete
               selectedPlace={selectedPlace}
+              defaultPlace={currentUser?.lastAddress}
               onChange={setSelectedPlace}
               location={location}
             />

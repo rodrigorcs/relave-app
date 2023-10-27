@@ -13,7 +13,7 @@ import { useCallbackURL, useFirestoreDocument, useStripePaymentSheet } from '../
 import { EFirestoreCollections } from '../../models/constants/EFirestoreCollections'
 import { IUser } from '../../models/contracts/user'
 import { IOrderEntity } from '../../models/entities/order'
-import { getCurrentUser } from '../../state/slices/auth'
+import { getCurrentUser, storeLastAddress } from '../../state/slices/auth'
 import { getOrder, setIds, setPaymentFromDB } from '../../state/slices/order'
 import { IAppState } from '../../state/store'
 import { formatPlaceAddress } from '../../utils/address'
@@ -43,7 +43,7 @@ export default function Checkout() {
   useEffect(() => {
     if (!currentUser?.id) throw new Error('User is not logged in.')
 
-    const execute = async () => {
+    const createOrder = async () => {
       const createOrderPromise = ordersActions.createOrder(currentUser.id, order)
       const customerIdPromise = usersActions.getOrCreateStripeCustomer(currentUser as IUser)
       const [createdOrder, customerId] = await Promise.all([createOrderPromise, customerIdPromise])
@@ -52,7 +52,18 @@ export default function Checkout() {
       setStripeCustomerId(customerId)
     }
 
-    execute()
+    const updateUserLastAddress = () => {
+      const orderPlace = order.appointment.place
+      const savedPlace = currentUser.lastAddress
+
+      if (orderPlace?.place_id && orderPlace.place_id !== savedPlace?.place_id) {
+        usersActions.updateUser(currentUser.id, { lastAddress: orderPlace })
+        dispatch(storeLastAddress(orderPlace))
+      }
+    }
+
+    createOrder()
+    updateUserLastAddress()
   }, [])
 
   const [openPaymentSheet, isConfiguringStripe, isWaitingPaymentConfirmation, error] =
