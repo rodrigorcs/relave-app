@@ -28,6 +28,7 @@ export const useStripePaymentSheet = (
         paymentIntentClientSecret: paymentIntentClientSecret as string,
         returnURL: 'com.rodrigorcs.relave://checkout',
         style: 'alwaysLight',
+        applePay: { merchantCountryCode: 'BR' },
         appearance: {
           colors: {
             background: theme.colors['common-background'],
