@@ -43,3 +43,7 @@ expo-env.d.ts
 
 # nativewind / tailwind
 output.css
+
+# firebase native files (moved automatically from root)
+ios/**/GoogleService-Info.plist
+android/**/google-services.json

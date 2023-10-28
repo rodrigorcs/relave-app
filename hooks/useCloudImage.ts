@@ -14,7 +14,6 @@ export const useCloudImage = (imageEndpoint: string): [string | null, unknown | 
         setImageUrl(_imageUrl)
         if (_imageUrl === null) setError('Image does not exist')
       } catch (e) {
-        console.warn(e)
         setError(e)
       } finally {
         setLoading(false)
