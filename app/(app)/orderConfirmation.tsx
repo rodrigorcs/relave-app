@@ -4,12 +4,9 @@ import {
   CustomText,
   ECustomTextVariants,
   SafeAreaView,
+  PaymentLines,
 } from '../../components/common'
-import { PaymentLines } from '../../components/common/PaymentLines'
-import {
-  EPaymentMethods,
-  PaymentMethodCard,
-} from '../../components/orderConfirmation/PaymentMethodCard'
+import { EPaymentMethods, PaymentMethodCard } from '../../components/orderConfirmation'
 import { clear, getOrder } from '../../state/slices/order'
 import { IAppState } from '../../state/store'
 import { theme } from '../../theme'

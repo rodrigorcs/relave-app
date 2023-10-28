@@ -4,8 +4,8 @@ import {
   CustomText,
   ECustomTextVariants,
   SafeAreaView,
+  PaymentLines,
 } from '../../components/common'
-import { PaymentLines } from '../../components/common/PaymentLines'
 import { daySchedulesAction } from '../../core/actions/daySchedules'
 import { ordersActions } from '../../core/actions/orders'
 import { usersActions } from '../../core/actions/users'

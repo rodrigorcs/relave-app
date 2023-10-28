@@ -1,5 +1,4 @@
-import { AuthProvider } from '../components/providers/AuthProvider'
-import { PaymentsProvider } from '../components/providers/PaymentsProvider'
+import { AuthProvider, PaymentsProvider } from '../components/providers'
 import '../global.css'
 import { store } from '../state/store'
 import { useFonts } from 'expo-font'

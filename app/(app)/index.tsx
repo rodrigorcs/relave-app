@@ -10,9 +10,10 @@ import {
   AddVehicleBottomSheet,
   ServiceBundleCard,
   UserVehicleCard,
+  AddServicesBottomSheet,
+  ServiceBundleCardSkeleton,
+  UserVehicleCardSkeleton,
 } from '../../components/home'
-import { AddServicesBottomSheet } from '../../components/home/AddServicesBottomSheet'
-import { UserVehicleCardSkeleton, ServiceBundleCardSkeleton } from '../../components/home/skeletons'
 import { serviceBundlesActions } from '../../core/actions/serviceBundles'
 import { vehiclesActions } from '../../core/actions/vehicles'
 import { useAsyncData, useSkeletonArray } from '../../hooks'

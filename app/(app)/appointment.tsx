@@ -1,5 +1,4 @@
-import { DaysRail, IDate, PlacesAutocomplete } from '../../components/appointment'
-import { ITime, TimesGrid } from '../../components/appointment/TimesGrid'
+import { DaysRail, IDate, PlacesAutocomplete, TimesGrid, ITime } from '../../components/appointment'
 import {
   CustomButton,
   CustomInput,
