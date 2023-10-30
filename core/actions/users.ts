@@ -16,6 +16,7 @@ export const usersActions = {
     const customerId = (await usersService.createStripeCustomer(
       currentUser.id,
       currentUser.credentials.phoneNumber ?? '',
+      currentUser.name
     )) as string
 
     return customerId

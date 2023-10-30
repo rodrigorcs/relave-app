@@ -15,13 +15,14 @@ export const usersService = {
     return createdUser
   },
   updateUser: usersRepository.updateUser,
-  createStripeCustomer: async (userId: string, phoneNumber: string) => {
+  createStripeCustomer: async (userId: string, phoneNumber: string, name: string | null) => {
     const { data: customer } = await httpClient.post<
       ICreateCustomerRequestBody,
       AxiosResponse<unknown>
     >(Endpoints.CREATE_STRIPE_CUSTOMER, {
       userId,
       phoneNumber,
+      name
     })
 
     return customer

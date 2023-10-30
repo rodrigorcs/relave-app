@@ -15,4 +15,4 @@ export const Endpoints = {
   CREATE_STRIPE_PAYMENT_INTENT: `${BaseUrls.FIREBASE_CLOUD_FUNCTIONS}/createStripePaymentIntent`,
   CREATE_STRIPE_CUSTOMER: `${BaseUrls.FIREBASE_CLOUD_FUNCTIONS}/createStripeCustomer`,
   GET_ORDERS_AVAILABILITY: `${BaseUrls.FIREBASE_CLOUD_FUNCTIONS}/getOrdersAvailabilityByDate`,
-}
+} as const
