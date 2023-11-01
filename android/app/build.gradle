@@ -89,6 +89,13 @@ android {
         versionCode 1
         versionName "1.0.0"
 
+        configurations.all {
+            resolutionStrategy {
+                force("androidx.emoji2:emoji2-views-helper:1.3.0")
+                force("androidx.emoji2:emoji2:1.3.0")
+            }
+        }
+
         buildConfigField("boolean", "REACT_NATIVE_UNSTABLE_USE_RUNTIME_SCHEDULER_ALWAYS", (findProperty("reactNative.unstable_useRuntimeSchedulerAlways") ?: true).toString())
     }
     signingConfigs {
@@ -174,6 +181,9 @@ dependencies {
     } else {
         implementation jscFlavor
     }
+
+    // Stripe Google Pay
+    implementation("com.stripe:stripe-android:20.34.1")
 }
 
 apply from: new File(["node", "--print", "require.resolve('@react-native-community/cli-platform-android/package.json')"].execute(null, rootDir).text.trim(), "../native_modules.gradle");

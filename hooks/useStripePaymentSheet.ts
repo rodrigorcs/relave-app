@@ -1,3 +1,4 @@
+import { Config } from '../config/config'
 import { paymentActions } from '../core/actions/payments'
 import { theme } from '../theme'
 import { useStripe } from '@stripe/stripe-react-native'
@@ -27,8 +28,12 @@ export const useStripePaymentSheet = (
         customerEphemeralKeySecret,
         paymentIntentClientSecret: paymentIntentClientSecret as string,
         returnURL: 'com.rodrigorcs.relave://checkout',
-        style: 'alwaysLight',
         applePay: { merchantCountryCode: 'BR' },
+        googlePay: {
+          merchantCountryCode: 'BR',
+          testEnv: !Config.IS_PROD
+        },
+        style: 'alwaysLight',
         appearance: {
           colors: {
             background: theme.colors['common-background'],
