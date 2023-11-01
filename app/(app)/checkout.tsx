@@ -38,7 +38,7 @@ export default function Checkout() {
   const { totalPrice, appointment, paymentLines } = order
 
   const [stripeCustomerId, setStripeCustomerId] = useState<string | null>(null)
-  const [isLoading, setIsLoading] = useState(false)
+  const [isConfirmingAppointment, setIsConfirmingAppointment] = useState(false)
 
   useEffect(() => {
     if (!currentUser?.id) throw new Error('User is not logged in.')
@@ -81,12 +81,12 @@ export default function Checkout() {
   const handleConfirmOrder = async () => {
     if (!order.duration) throw new Error('Order duration not specified.')
 
-    setIsLoading(true)
+    setIsConfirmingAppointment(true)
     const timeIsAvailable = await daySchedulesAction.getTimeAvailability(
       appointmentTime,
       order.duration,
     )
-    setIsLoading(false)
+    setIsConfirmingAppointment(false)
 
     if (!timeIsAvailable) throw new Error('Appointment time is no longer available.')
 
@@ -101,6 +101,8 @@ export default function Checkout() {
     }
     return paymentIsSucceeded // Unsubscribe if succeeded
   })
+
+  const isLoading = isConfirmingAppointment || isWaitingPaymentConfirmation || isConfiguringStripe
 
   return (
     <SafeAreaView customClassName="flex flex-1 bg-common-background">
@@ -131,8 +133,8 @@ export default function Checkout() {
       <View className="border-t border-neutrals-200 px-4 pb-1 pt-6">
         <CustomButton
           onPress={() => handleConfirmOrder()}
-          isDisabled={isLoading || isWaitingPaymentConfirmation || isConfiguringStripe || !!error}
-          isLoading={isLoading || isWaitingPaymentConfirmation}
+          isDisabled={isLoading || !!error}
+          isLoading={isLoading}
           IconRight={<ArrowRightIcon />}
         >
           Pagar
