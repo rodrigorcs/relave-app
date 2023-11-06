@@ -2,6 +2,7 @@ import '../../global.css'
 import { getCurrentUser } from '../../state/slices/auth'
 import { IAppState } from '../../state/store'
 import { Stack, router, usePathname } from 'expo-router'
+import * as SplashScreen from 'expo-splash-screen'
 import React from 'react'
 import { useSelector } from 'react-redux'
 
@@ -15,6 +16,7 @@ export default function Layout() {
     } else {
       router.push('/(app)')
     }
+    SplashScreen.hideAsync()
   }
 
   return (

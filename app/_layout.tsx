@@ -4,7 +4,7 @@ import { store } from '../state/store'
 import { useFonts } from 'expo-font'
 import { Slot } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
-import React, { useEffect } from 'react'
+import React from 'react'
 import { LogBox, StatusBar } from 'react-native'
 import { Provider as ReduxProvider } from 'react-redux'
 
@@ -32,12 +32,6 @@ export default function Layout() {
     DMSansExtraLight: require('../assets/fonts/DMSans-ExtraLight.ttf'),
     DMSansThin: require('../assets/fonts/DMSans-Thin.ttf'),
   })
-
-  useEffect(() => {
-    if (fontsLoaded || fontError) {
-      SplashScreen.hideAsync()
-    }
-  }, [fontsLoaded, fontError])
 
   if (!fontsLoaded && !fontError) {
     return null
