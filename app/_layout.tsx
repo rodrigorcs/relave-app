@@ -4,8 +4,8 @@ import { store } from '../state/store'
 import { useFonts } from 'expo-font'
 import { Slot } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
-import React, { useEffect } from 'react'
-import { LogBox, StatusBar } from 'react-native'
+import React, { useCallback } from 'react'
+import { LogBox, StatusBar, View } from 'react-native'
 import { Provider as ReduxProvider } from 'react-redux'
 
 SplashScreen.preventAutoHideAsync()
@@ -33,19 +33,25 @@ export default function Layout() {
     DMSansThin: require('../assets/fonts/DMSans-Thin.ttf'),
   })
 
-  useEffect(() => {
-    if (!fontsLoaded || fontError) return
-    SplashScreen.hideAsync()
-  }, [fontsLoaded, fontError])
+  const appIsReady = fontsLoaded && !fontError
+
+  const onLayoutRootView = useCallback(async () => {
+    if (appIsReady) await SplashScreen.hideAsync()
+  }, [appIsReady])
 
   StatusBar.setBarStyle('dark-content')
-  LogBox.ignoreLogs(['Image source "null" doesn\'t exist']) // Ignore android warning when image source is null (ex: placeholder)
+  LogBox.ignoreLogs([`Image source "null" doesn't exist`]) // Ignore android warning when image source is null (ex: placeholder)
+
+  if (!appIsReady) return <View className="flex-1 bg-common-background" />
 
   return (
     <ReduxProvider store={store}>
       <AuthProvider>
         <PaymentsProvider>
-          <Slot />
+          <>
+            <View onLayout={onLayoutRootView} />
+            <Slot />
+          </>
         </PaymentsProvider>
       </AuthProvider>
     </ReduxProvider>
