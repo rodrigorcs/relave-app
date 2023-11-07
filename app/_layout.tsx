@@ -4,13 +4,13 @@ import { store } from '../state/store'
 import { useFonts } from 'expo-font'
 import { Slot } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { LogBox, StatusBar } from 'react-native'
 import { Provider as ReduxProvider } from 'react-redux'
 
-export default function Layout() {
-  SplashScreen.preventAutoHideAsync()
+SplashScreen.preventAutoHideAsync()
 
+export default function Layout() {
   const [fontsLoaded, fontError] = useFonts({
     InterBlack: require('../assets/fonts/Inter-Black.ttf'),
     InterExtraBold: require('../assets/fonts/Inter-ExtraBold.ttf'),
@@ -33,12 +33,12 @@ export default function Layout() {
     DMSansThin: require('../assets/fonts/DMSans-Thin.ttf'),
   })
 
-  if (!fontsLoaded && !fontError) {
-    return null
-  }
+  useEffect(() => {
+    if (!fontsLoaded || fontError) return
+    SplashScreen.hideAsync()
+  }, [fontsLoaded, fontError])
 
   StatusBar.setBarStyle('dark-content')
-
   LogBox.ignoreLogs(['Image source "null" doesn\'t exist']) // Ignore android warning when image source is null (ex: placeholder)
 
   return (
