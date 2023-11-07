@@ -32,7 +32,7 @@ const BrandLogo: FC<IBrandLogoProps> = ({ imageUrl, hasImageUrlError }) => {
   }, [hasImageUrlError])
 
   return (
-    <Skeleton customClassName="h-8 aspect-square" isLoaded={imageState !== EImageState.LOADING}>
+    <Skeleton customClassName="h-10 aspect-square" isLoaded={imageState !== EImageState.LOADING}>
       <Image
         source={{ uri: imageUrl ?? undefined }}
         resizeMode="center"
