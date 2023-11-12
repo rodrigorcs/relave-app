@@ -39,6 +39,7 @@ export default function Checkout() {
 
   const [stripeCustomerId, setStripeCustomerId] = useState<string | null>(null)
   const [isConfirmingAppointment, setIsConfirmingAppointment] = useState(false)
+  const [error, setError] = useState<Error | null>(null)
 
   useEffect(() => {
     if (!currentUser?.id) throw new Error('User is not logged in.')
@@ -66,7 +67,7 @@ export default function Checkout() {
     updateUserLastAddress()
   }, [])
 
-  const [openPaymentSheet, isConfiguringStripe, isWaitingPaymentConfirmation, error] =
+  const [openPaymentSheet, isConfiguringStripe, isWaitingPaymentConfirmation, paymentSheetError] =
     useStripePaymentSheet(stripeCustomerId, order.id, totalPrice)
 
   const appointmentTime = dayjs.unix(appointment.time ?? 0)
@@ -88,7 +89,10 @@ export default function Checkout() {
     )
     setIsConfirmingAppointment(false)
 
-    if (!timeIsAvailable) throw new Error('Appointment time is no longer available.')
+    if (!timeIsAvailable)
+      setError(
+        new Error('O horário solicitado não está mais disponível, por favor selecione um outro.'),
+      )
 
     openPaymentSheet()
   }
@@ -103,6 +107,7 @@ export default function Checkout() {
   })
 
   const isLoading = isConfirmingAppointment || isWaitingPaymentConfirmation || isConfiguringStripe
+  const hasError = !!paymentSheetError || !!error
 
   return (
     <SafeAreaView customClassName="flex flex-1 bg-common-background">
@@ -131,11 +136,20 @@ export default function Checkout() {
         </View>
       </ScrollView>
       <View className="border-t border-neutrals-200 px-4 pb-1 pt-6">
+        {error && (
+          <CustomText
+            variant={ECustomTextVariants.HELPER1}
+            customClassName="text-feedback-negative-300"
+          >
+            {error?.message}
+          </CustomText>
+        )}
         <CustomButton
           onPress={() => handleConfirmOrder()}
-          isDisabled={isLoading || !!error}
+          isDisabled={isLoading || hasError}
           isLoading={isLoading}
           IconRight={<ArrowRightIcon />}
+          customClassName="mt-4"
         >
           Pagar
         </CustomButton>
